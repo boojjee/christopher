@@ -1,12 +1,10 @@
 package main
 
 import (
-	"christopher/controllers"
-	// "database/sql"
 	"flag"
+	"github.com/boojjee/christopher/controllers"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	// "log"
 )
 
 // var DB *sql.DB

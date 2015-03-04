@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"christopher/models"
 	"encoding/json"
-	// "fmt"
+	"github.com/boojjee/christopher/models"
 	"github.com/gin-gonic/gin"
 	"log"
 )
