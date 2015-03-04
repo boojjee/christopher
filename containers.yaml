@@ -1,0 +1,8 @@
+version: v0.1
+containers:
+- name: ginkgo
+  image: adg1/ginkgo
+  ports:
+  - name: http
+    hostPort: 80
+    containerPort: 8080
