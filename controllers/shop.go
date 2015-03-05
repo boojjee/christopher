@@ -1,16 +1,19 @@
 package controllers
 
 import (
+	"christopher/models"
 	"encoding/json"
-	"github.com/boojjee/christopher/models"
 	"github.com/gin-gonic/gin"
 	"log"
+	"time"
 )
 
 type ShopCollection []map[string]string
 type Shops struct {
-	id    int
-	title string
+	id        int
+	title     string
+	create_at time.Time
+	update_at time.Time
 }
 
 type ShopForm struct {

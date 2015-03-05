@@ -13,16 +13,3 @@ func GetShopLists() string {
 	return shopList
 
 }
-
-func CreateShop() {
-	// ConnectDb()
-	// result, err := DB.Exec(
-	// 	"INSERT INTO shops (title, shop_name) VALUES (?, ?)",
-	// 	"gopher",
-	// 	27,
-	// )
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-
-}
