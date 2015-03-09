@@ -30,7 +30,7 @@ func GetMerchentLists(service_name string) (string, string) {
 	SELECT_QUERY := "SELECT * FROM " + table_name
 	merchentLists, err := gosqljson.QueryDbToMapJson(DB, "lower", SELECT_QUERY)
 
-	if err == nil {
+	if err != nil {
 		return "No DB", "err"
 	} else {
 		defer CloseDb()

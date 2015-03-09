@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"christopher/models"
 	"encoding/json"
-	"github.com/boojjee/christopher/models"
 	"github.com/gin-gonic/gin"
 	"log"
 	"strconv"
@@ -39,7 +39,7 @@ func ListMerchant(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
 
 	ss, errs := models.GetMerchentLists(SERVICE_NAME)
-
+	log.Println(ss)
 	if errs == "err" {
 		c.JSON(200, gin.H{
 			"status":  500,

@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"christopher/helpers"
+	"christopher/models"
 	"encoding/json"
-	"github.com/boojjee/christopher/helpers"
-	"github.com/boojjee/christopher/models"
 	"github.com/gin-gonic/gin"
 	"log"
 	// "strconv"

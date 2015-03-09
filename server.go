@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	// "github.com/boojjee/christopher/controllers"
-	"github.com/boojjee/christopher/controllers"
-	"github.com/boojjee/christopher/generate"
+	"christopher/controllers"
+	"christopher/generate"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
