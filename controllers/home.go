@@ -5,5 +5,5 @@ import (
 )
 
 func Home(c *gin.Context) {
-	c.JSON(200, gin.H{"status": "OK!"})
+	c.JSON(200, gin.H{"status": "OK!", "d": "2930293"})
 }

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/elgs/gosqljson"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -23,20 +24,29 @@ type Merchant struct {
 	Update_at        time.Time
 }
 
-func GetMerchentLists() string {
+func GetMerchentLists(service_name string) (string, string) {
 	ConnectDb()
-	merchentLists, _ := gosqljson.QueryDbToMapJson(DB, "lower", "SELECT * FROM merchants")
-	defer CloseDb()
-	return merchentLists
+	table_name := service_name + "_merchants"
+	SELECT_QUERY := "SELECT * FROM " + table_name
+	merchentLists, err := gosqljson.QueryDbToMapJson(DB, "lower", SELECT_QUERY)
+
+	if err == nil {
+		return "No DB", "err"
+	} else {
+		defer CloseDb()
+		return merchentLists, "ok"
+
+	}
 
 }
 
-func MerchantShowInfo(id string) string {
+func MerchantShowInfo(id string, service_name string) (string, string) {
 	ConnectDb()
-
-	rows, err := DB.Query("SELECT * FROM merchants WHERE id=?", id)
+	table_name := service_name + "_merchants"
+	SELECT_QUERY := "SELECT * FROM " + table_name + " WHERE id=?"
+	rows, err := DB.Query(SELECT_QUERY, id)
 	if err != nil {
-		log.Fatal(err)
+		return "No DB", "err"
 	}
 	defer rows.Close()
 
@@ -45,20 +55,20 @@ func MerchantShowInfo(id string) string {
 	for rows.Next() {
 		err := rows.Scan(&m.Id, &m.Username, &m.Name, &m.Password, &m.Email, &m.Shop_image, &m.Shop_avatar, &m.Shop_description, &m.Lat, &m.Lon, &m.Create_at, &m.Update_at)
 		if err != nil {
-			log.Fatal(err)
+			return "row error", "err"
 		}
 	}
 	s, _ := json.Marshal(m)
-	// log.Println(string(s))
 	err = rows.Err()
 	if err != nil {
-		log.Fatal(err)
+		return "row error", "err"
 	}
 
-	return string(s)
+	return strings.ToLower(string(s)), "ok"
 }
 
-func (m *Merchant) Save() error {
+func (m *Merchant) Save(service_name string) error {
+	table_name := service_name + "_merchants"
 	ConnectDb()
 	var (
 		err error
@@ -68,8 +78,10 @@ func (m *Merchant) Save() error {
 	if err != nil {
 		return err
 	}
-	SQL_INSERT_POST := "insert into merchants(username, name, password, email, shop_image, shop_avatar, shop_description, lat, lon, create_at, update_at) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	SQL_INSERT_POST := "insert into " + table_name + "(username, name, password, email, shop_image, shop_avatar, shop_description, lat, lon, create_at, update_at) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
 	result, err := tx.Exec(SQL_INSERT_POST, m.Username, m.Name, m.Password, m.Email, m.Shop_image, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Create_at, m.Update_at)
+
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -80,7 +92,8 @@ func (m *Merchant) Save() error {
 	return nil
 }
 
-func (m *Merchant) Update() error {
+func (m *Merchant) Update(service_name string) error {
+	table_name := service_name + "_merchants"
 	ConnectDb()
 	var (
 		err error
@@ -90,19 +103,20 @@ func (m *Merchant) Update() error {
 	if err != nil {
 		return err
 	}
-	SQL_UPDATE_MERCAHANT := "UPDATE merchants SET username=?, name=?,  email=?, shop_image=?, shop_avatar=?, shop_description=?, lat=?, lon=?, update_at=? WHERE id=?"
-	result, err := tx.Exec(SQL_UPDATE_MERCAHANT, m.Username, m.Name, m.Email, m.Shop_image, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Update_at, m.Id)
+
+	SQL_UPDATE_MERCAHANT := "UPDATE " + table_name + " SET username=?, name=?,  email=?, shop_image=?, shop_avatar=?, shop_description=?, lat=?, lon=?, update_at=? WHERE id=?"
+	_, err = tx.Exec(SQL_UPDATE_MERCAHANT, m.Username, m.Name, m.Email, m.Shop_image, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Update_at, m.Id)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 	tx.Commit()
-	log.Println(result)
 	defer CloseDb()
 	return nil
 }
 
-func (m *Merchant) Delete() error {
+func (m *Merchant) Delete(service_name string) error {
+	table_name := service_name + "_merchants"
 	ConnectDb()
 	var (
 		err error
@@ -112,7 +126,7 @@ func (m *Merchant) Delete() error {
 	if err != nil {
 		return err
 	}
-	SQL_DELETE_POST := "DELETE from merchants WHERE id=?"
+	SQL_DELETE_POST := "DELETE from " + table_name + " WHERE id=?"
 	_, err = tx.Exec(SQL_DELETE_POST, m.Id)
 	if err != nil {
 		tx.Rollback()

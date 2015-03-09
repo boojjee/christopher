@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"christopher/models"
 	"encoding/json"
-	"github.com/boojjee/christopher/models"
 	"github.com/gin-gonic/gin"
 	"log"
 	"strconv"
@@ -12,7 +12,17 @@ import (
 type MerchantCollection []map[string]string
 type MerchantSigle map[string]interface{}
 type MerchantForm struct {
-	Id               string `form:"id" binding:"required"`
+	Username         string `form:"username" binding:"required"`
+	Name             string `form:"name" binding:"required"`
+	Password         string `form:"password" binding:"required"`
+	Email            string `form:"email" binding:"required"`
+	Shop_image       string `form:"shop_image" binding:"required"`
+	Shop_avatar      string `form:"shop_avatar" binding:"required"`
+	Shop_description string `form:"shop_description" binding:"required"`
+	Lat              string `form:"lat" binding:"required"`
+	Lon              string `form:"lon" binding:"required"`
+}
+type MerchantFormEdit struct {
 	Username         string `form:"username" binding:"required"`
 	Name             string `form:"name" binding:"required"`
 	Password         string `form:"password" binding:"required"`
@@ -26,31 +36,61 @@ type MerchantForm struct {
 
 func ListMerchant(c *gin.Context) {
 	// list all shop
-	ss := models.GetMerchentLists()
-	var merchents MerchantCollection
-	file := []byte(ss)
+	SERVICE_NAME := c.Params.ByName("service_name")
 
-	err := json.Unmarshal(file, &merchents)
-	if err != nil {
-		log.Fatal(err)
+	ss, errs := models.GetMerchentLists(SERVICE_NAME)
+
+	if errs == "err" {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": "Somting wrong!",
+		})
+	} else {
+		var merchents MerchantCollection
+		file := []byte(ss)
+
+		err := json.Unmarshal(file, &merchents)
+		if err != nil {
+			log.Fatal(err)
+		}
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Sucess!",
+			"data":    merchents,
+		})
 	}
-	c.JSON(200, gin.H{"data": merchents})
+
 }
 
 func ViewMerchant(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
 	id_merchant := c.Params.ByName("id")
-	merchent_info := models.MerchantShowInfo(id_merchant)
-	var merchents MerchantSigle
-	file := []byte(merchent_info)
 
-	err := json.Unmarshal(file, &merchents)
-	if err != nil {
-		log.Fatal(err)
+	merchent_info, errs := models.MerchantShowInfo(id_merchant, SERVICE_NAME)
+	if errs == "err" {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": "Somting wrong!",
+		})
+	} else {
+		var merchents MerchantSigle
+		file := []byte(merchent_info)
+
+		err := json.Unmarshal(file, &merchents)
+		if err != nil {
+			log.Fatal(err)
+		}
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Created!",
+			"data":    merchents,
+		})
 	}
-	c.JSON(200, gin.H{"data": merchents})
+
 }
 
 func NewMerchant(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
 	var form MerchantForm
 	c.Bind(&form)
 	merchant := &models.Merchant{
@@ -66,14 +106,20 @@ func NewMerchant(c *gin.Context) {
 		Create_at:        time.Now(),
 		Update_at:        time.Now(),
 	}
-	merchant.Save()
-	c.JSON(200, gin.H{"status": "Created!"})
+	merchant.Save(SERVICE_NAME)
+
+	c.JSON(200, gin.H{
+		"status":  20,
+		"message": "Created!",
+	})
 }
 
 func UpdateMerchant(c *gin.Context) {
-	var form MerchantForm
+	SERVICE_NAME := c.Params.ByName("service_name")
+	id_merchant := c.Params.ByName("id")
+	id_int, _ := strconv.ParseInt(id_merchant, 0, 64)
+	var form MerchantFormEdit
 	c.Bind(&form)
-	id_int, _ := strconv.ParseInt(form.Id, 0, 64)
 	merchant := &models.Merchant{
 		Id:               id_int,
 		Username:         form.Username,
@@ -86,17 +132,40 @@ func UpdateMerchant(c *gin.Context) {
 		Lon:              form.Lon,
 		Update_at:        time.Now(),
 	}
-	merchant.Update()
-	c.JSON(200, gin.H{"status": "Updated!"})
+	err := merchant.Update(SERVICE_NAME)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": "Somting wrong!",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Updated",
+		})
+	}
+
 }
 
 func DeleteMerchant(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
 	id_merchant := c.Params.ByName("id")
 	id_int, _ := strconv.ParseInt(id_merchant, 0, 64)
 	merchant := &models.Merchant{
 		Id: id_int,
 	}
 
-	merchant.Delete()
-	c.JSON(200, gin.H{"status": "Deleted!"})
+	err := merchant.Delete(SERVICE_NAME)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": "Somting wrong!",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Deleted",
+		})
+	}
+
 }
