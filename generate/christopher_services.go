@@ -168,7 +168,6 @@ func Gen_table(c *gin.Context) {
 		CloseDb()
 		c.JSON(200, gin.H{"status": "Service Generated!"})
 
-		c.JSON(200, gin.H{"status": "Service Generated!"})
 	} else {
 
 		c.JSON(200, gin.H{"status": "Service is already!"})
