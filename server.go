@@ -1,9 +1,9 @@
 package main
 
 import (
-	"./controllers"
-	"./generate"
 	"flag"
+	"github.com/boojjee/christopher/controllers"
+	"github.com/boojjee/christopher/generate"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
