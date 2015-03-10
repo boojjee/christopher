@@ -112,7 +112,7 @@ func ViewMerchantName(c *gin.Context) {
 		}
 		c.JSON(200, gin.H{
 			"status":  200,
-			"message": "Created!",
+			"message": "Success!",
 			"data":    merchents,
 		})
 	}
