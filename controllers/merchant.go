@@ -33,6 +33,10 @@ type MerchantFormEdit struct {
 	Lat              string `form:"lat" binding:"required"`
 	Lon              string `form:"lon" binding:"required"`
 }
+type MerchantAuthenForm struct {
+	Username string `form:"username" binding:"required"`
+	Password string `form:"password" binding:"required"`
+}
 
 func ListMerchant(c *gin.Context) {
 	// list all shop
@@ -62,11 +66,37 @@ func ListMerchant(c *gin.Context) {
 
 }
 
-func ViewMerchant(c *gin.Context) {
-	SERVICE_NAME := c.Params.ByName("service_name")
-	id_merchant := c.Params.ByName("id")
+// func ViewMerchant(c *gin.Context) {
+// 	SERVICE_NAME := c.Params.ByName("service_name")
+// 	id_merchant := c.Params.ByName("id")
 
-	merchent_info, errs := models.MerchantShowInfo(id_merchant, SERVICE_NAME)
+// 	merchent_info, errs := models.MerchantShowInfo(id_merchant, SERVICE_NAME)
+// 	if errs == "err" {
+// 		c.JSON(200, gin.H{
+// 			"status":  500,
+// 			"message": "Somting wrong!",
+// 		})
+// 	} else {
+// 		var merchents MerchantSigle
+// 		file := []byte(merchent_info)
+
+// 		err := json.Unmarshal(file, &merchents)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		c.JSON(200, gin.H{
+// 			"status":  200,
+// 			"message": "Created!",
+// 			"data":    merchents,
+// 		})
+// 	}
+// }
+
+func ViewMerchantName(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	merchant_name := c.Params.ByName("name")
+
+	merchent_info, errs := models.MerchantShowInfoByName(merchant_name, SERVICE_NAME)
 	if errs == "err" {
 		c.JSON(200, gin.H{
 			"status":  500,
@@ -168,4 +198,31 @@ func DeleteMerchant(c *gin.Context) {
 		})
 	}
 
+}
+
+func AuthenMechant(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	var form MerchantAuthenForm
+	c.Bind(&form)
+	merchant := &models.Merchant{
+		Username: form.Username,
+		Password: form.Password,
+	}
+	msg, err := merchant.Authen(SERVICE_NAME)
+	if err != nil {
+		log.Println(err)
+	}
+	if msg == "fail" {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": "Authen Fail!",
+			"data":    0,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Success",
+			"data":    1,
+		})
+	}
 }

@@ -40,16 +40,45 @@ func GetMerchentLists(service_name string) (string, string) {
 
 }
 
-func MerchantShowInfo(id string, service_name string) (string, string) {
+// func MerchantShowInfo(id string, service_name string) (string, string) {
+// 	ConnectDb()
+// 	table_name := service_name + "_merchants"
+// 	SELECT_QUERY := "SELECT * FROM " + table_name + " WHERE id=?"
+// 	rows, err := DB.Query(SELECT_QUERY, id)
+// 	if err != nil {
+// 		return "No DB", "err"
+// 	}
+// 	defer rows.Close()
+
+// 	var m Merchant
+
+// 	for rows.Next() {
+// 		err := rows.Scan(&m.Id, &m.Username, &m.Name, &m.Password, &m.Email, &m.Shop_image, &m.Shop_avatar, &m.Shop_description, &m.Lat, &m.Lon, &m.Create_at, &m.Update_at)
+// 		if err != nil {
+// 			return "row error", "err"
+// 		}
+// 	}
+// 	s, _ := json.Marshal(m)
+// 	err = rows.Err()
+// 	if err != nil {
+// 		return "row error", "err"
+// 	}
+
+// 	return strings.ToLower(string(s)), "ok"
+// }
+
+func MerchantShowInfoByName(m_name string, service_name string) (string, string) {
 	ConnectDb()
+
 	table_name := service_name + "_merchants"
-	SELECT_QUERY := "SELECT * FROM " + table_name + " WHERE id=?"
-	rows, err := DB.Query(SELECT_QUERY, id)
+	SELECT_QUERY := "SELECT * FROM " + table_name + " WHERE name=?"
+
+	rows, err := DB.Query(SELECT_QUERY, m_name)
 	if err != nil {
 		return "No DB", "err"
 	}
 	defer rows.Close()
-
+	// rowCnt, err := rows.RowsAffected()
 	var m Merchant
 
 	for rows.Next() {
@@ -58,13 +87,23 @@ func MerchantShowInfo(id string, service_name string) (string, string) {
 			return "row error", "err"
 		}
 	}
-	s, _ := json.Marshal(m)
-	err = rows.Err()
-	if err != nil {
+
+	if m.Id == 0 {
 		return "row error", "err"
+	} else {
+		if err := rows.Err(); err != nil {
+			log.Println(err)
+			return "row error", "err"
+		}
+		s, _ := json.Marshal(m)
+		err = rows.Err()
+		if err != nil {
+			return "row error", "err"
+		}
+
+		return strings.ToLower(string(s)), "ok"
 	}
 
-	return strings.ToLower(string(s)), "ok"
 }
 
 func (m *Merchant) Save(service_name string) error {
@@ -135,4 +174,29 @@ func (m *Merchant) Delete(service_name string) error {
 	tx.Commit()
 	defer CloseDb()
 	return nil
+}
+
+func (m *Merchant) Authen(service_name string) (string, error) {
+	table_name := service_name + "_merchants"
+	ConnectDb()
+	var (
+		err error
+	)
+	SELECT_QUERY := "SELECT id FROM " + table_name + " WHERE username=? AND password=?"
+	rows, err := DB.Query(SELECT_QUERY, m.Username, m.Password)
+	if err != nil {
+		return "fail", err
+	}
+	for rows.Next() {
+		err := rows.Scan(&m.Id)
+		if err != nil {
+			return "fail", err
+		}
+	}
+	if m.Id == 0 {
+		return "fail", err
+	} else {
+		return "true", nil
+	}
+
 }

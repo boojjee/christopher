@@ -22,7 +22,9 @@ func main() {
 
 		// Merchant API RESTful
 		v1.GET("/:service_name/merchants", controllers.ListMerchant)
-		v1.GET("/:service_name/merchant/:id", controllers.ViewMerchant)
+		// v1.GET("/:service_name/merchant/:id", controllers.ViewMerchant)
+		v1.GET("/:service_name/merchant/:name", controllers.ViewMerchantName)
+		v1.POST("/:service_name/merchant/authen", controllers.AuthenMechant)
 		v1.POST("/:service_name/merchant", controllers.NewMerchant)
 		v1.PUT("/:service_name/merchant/:id", controllers.UpdateMerchant)
 		v1.DELETE("/:service_name/merchant/:id", controllers.DeleteMerchant)

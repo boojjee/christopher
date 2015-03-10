@@ -65,7 +65,7 @@ func Gen_table(c *gin.Context) {
 		var merchant_table = `CREATE TABLE ` + merchant + ` (
         id int(11) unsigned NOT NULL AUTO_INCREMENT,
         username varchar(200) DEFAULT NULL,
-        name varchar(200) DEFAULT NULL,
+        name varchar(200) DEFAULT NULL UNIQUE,
         password varchar(100) DEFAULT NULL,
         email varchar(100) DEFAULT NULL,
         shop_image varchar(200) DEFAULT NULL,
