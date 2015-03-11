@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+
+	_ "expvar"
 	// "github.com/boojjee/christopher/controllers"
 	"christopher/controllers"
 	"christopher/generate"
@@ -31,11 +33,11 @@ func main() {
 
 		// Offers API RESTful
 		v1.GET("/:service_name/offers", controllers.ListOffersAll)
-		v1.GET("/:service_name/offer_of_merchant/:id", controllers.ListOffersByMerchantID)
+		v1.GET("/:service_name/offer_of_merchant/:id/", controllers.ListOffersByMerchantID)
 		v1.GET("/:service_name/offer/:id", controllers.ViewOffer)
 		v1.POST("/:service_name/offer", controllers.CreateOffer)
 		v1.PUT("/:service_name/offer/:id", controllers.UpdateOffer)
-		v1.DELETE("/:service_name/offer/:id", controllers.DeleteMerchant)
+		v1.DELETE("/:service_name/offer/:id", controllers.DeleteOffer)
 
 	}
 

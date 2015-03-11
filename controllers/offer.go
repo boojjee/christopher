@@ -55,6 +55,7 @@ func ListOffersAll(c *gin.Context) {
 func ListOffersByMerchantID(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
 	id_merchant := c.Params.ByName("id")
+	log.Println("dddd")
 	listOfferAll := models.GetOfferListByMerchantID(id_merchant, SERVICE_NAME)
 	var offersList offerCollection
 	file := []byte(listOfferAll)
@@ -96,18 +97,27 @@ func CreateOffer(c *gin.Context) {
 		Condition_offer: form.Condition_offer,
 		Cat:             helpers.Convert_string_to_int(form.Cat),
 		Merchant_id:     helpers.Convert_string_to_int(form.Merchant_id),
-		Descrtion:       form.Description,
+		Description:     form.Description,
 		Used:            helpers.Convert_string_to_int(form.Used),
 		Qty:             helpers.Convert_string_to_int(form.Qty),
 		Create_at:       time.Now(),
 		Update_at:       time.Now(),
 	}
-	offer.Save(SERVICE_NAME)
+	err := offer.Save(SERVICE_NAME)
+	log.Println(err)
 
-	c.JSON(200, gin.H{
-		"status":  20,
-		"message": "Created!",
-	})
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Created!",
+		})
+	}
+
 }
 
 func UpdateOffer(c *gin.Context) {
@@ -122,28 +132,35 @@ func UpdateOffer(c *gin.Context) {
 		Condition_offer: form.Condition_offer,
 		Cat:             helpers.Convert_string_to_int(form.Cat),
 		Merchant_id:     helpers.Convert_string_to_int(form.Merchant_id),
-		Descrtion:       form.Description,
+		Description:     form.Description,
 		Used:            helpers.Convert_string_to_int(form.Used),
 		Qty:             helpers.Convert_string_to_int(form.Qty),
 		Update_at:       time.Now(),
 	}
-	offer.Update(SERVICE_NAME, id_offer)
+	err := offer.Update(SERVICE_NAME, id_offer)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Updated",
+		})
+	}
 
-	c.JSON(200, gin.H{
-		"status":  200,
-		"message": "Updated",
-	})
 }
 
 func DeleteOffer(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
-	id_merchant := c.Params.ByName("id")
-	id_int, _ := strconv.ParseInt(id_merchant, 0, 64)
-	merchant := &models.Merchant{
+	id_offer := c.Params.ByName("id")
+	id_int, _ := strconv.ParseInt(id_offer, 0, 64)
+	offer := &models.Offer{
 		Id: id_int,
 	}
+	err := offer.Delete(SERVICE_NAME)
 
-	err := merchant.Delete(SERVICE_NAME)
 	if err != nil {
 		c.JSON(200, gin.H{
 			"status":  500,
