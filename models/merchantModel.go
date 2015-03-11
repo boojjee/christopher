@@ -106,7 +106,7 @@ func MerchantShowInfoByName(m_name string, service_name string) (string, string)
 
 }
 
-func (m *Merchant) Save(service_name string) error {
+func (m *Merchant) Save(service_name string) (string, error) {
 	table_name := service_name + "_merchants"
 	ConnectDb()
 	var (
@@ -115,7 +115,7 @@ func (m *Merchant) Save(service_name string) error {
 
 	tx, err := DB.Begin()
 	if err != nil {
-		return err
+		return "err", err
 	}
 	SQL_INSERT_POST := "insert into " + table_name + "(username, name, password, email, shop_image, shop_avatar, shop_description, lat, lon, create_at, update_at) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
@@ -123,12 +123,12 @@ func (m *Merchant) Save(service_name string) error {
 
 	if err != nil {
 		tx.Rollback()
-		return err
+		return "err", err
 	}
 	log.Println(result)
 	tx.Commit()
 	defer CloseDb()
-	return nil
+	return "success", nil
 }
 
 func (m *Merchant) Update(service_name string) error {

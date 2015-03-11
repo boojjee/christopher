@@ -136,12 +136,21 @@ func NewMerchant(c *gin.Context) {
 		Create_at:        time.Now(),
 		Update_at:        time.Now(),
 	}
-	merchant.Save(SERVICE_NAME)
 
-	c.JSON(200, gin.H{
-		"status":  20,
-		"message": "Created!",
-	})
+	msg, err := merchant.Save(SERVICE_NAME)
+	log.Println(msg)
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Created!",
+		})
+	}
+
 }
 
 func UpdateMerchant(c *gin.Context) {

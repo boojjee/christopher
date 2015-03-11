@@ -76,7 +76,7 @@ func Gen_table(c *gin.Context) {
         create_at timestamp NULL DEFAULT NULL,
         update_at timestamp NULL DEFAULT '0000-00-00 00:00:00',
         PRIMARY KEY (id)
-        ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;`
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
 		result_merchant, err := DB.Exec(merchant_table)
 		log.Println(result_merchant)
@@ -87,17 +87,18 @@ func Gen_table(c *gin.Context) {
 		var offer_table = `CREATE TABLE ` + offer + ` (
     id int(11) unsigned NOT NULL AUTO_INCREMENT,
     name varchar(200) DEFAULT NULL,
-    point double(100,10) DEFAULT NULL,
+    offer_point double(100,10) DEFAULT NULL,
     condition_offer varchar(200) DEFAULT NULL,
     cat int(11) DEFAULT NULL,
     merchant_id int(11) DEFAULT NULL,
+    offer_image varchar(200) DEFAULT NULL,
     description text,
     used int(11) DEFAULT NULL,
     qty int(11) DEFAULT NULL,
     create_at timestamp NULL DEFAULT NULL,
     update_at timestamp NULL DEFAULT NULL,
     PRIMARY KEY (id)
-    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;`
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;`
 
 		result_offer, err := DB.Exec(offer_table)
 		log.Println(result_offer)
