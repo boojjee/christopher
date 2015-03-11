@@ -1,9 +1,13 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
+	"log"
 )
+
+type mytype []map[string]string
 
 func Home(c *gin.Context) {
 	var data mytype
