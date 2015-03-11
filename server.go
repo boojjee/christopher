@@ -1,9 +1,9 @@
 package main
 
 import (
-	"flag"
-
 	_ "expvar"
+	"flag"
+	// "fmt"
 	// "github.com/boojjee/christopher/controllers"
 	"christopher/controllers"
 	"christopher/generate"
@@ -12,10 +12,11 @@ import (
 )
 
 // var DB *sql.DB
+var minversion string
 
 func main() {
 	flag.Parse()
-
+	// fmt.Println(minversion)
 	router := gin.Default()
 	// Simple group: v1
 	v1 := router.Group("/v1")
