@@ -3,10 +3,9 @@ package models
 import (
 	// "errors"
 	"encoding/json"
-	"github.com/elgs/gosqljson"
+	// "github.com/elgs/gosqljson"
 	"log"
 	"strings"
-	"time"
 )
 
 type Merchant struct {
@@ -15,57 +14,44 @@ type Merchant struct {
 	Name             string
 	Password         string
 	Email            string
-	Shop_image       string
 	Shop_avatar      string
 	Shop_description string
 	Lat              string
 	Lon              string
-	Create_at        time.Time
-	Update_at        time.Time
+	Create_at        int64
+	Update_at        int64
 }
 
 func GetMerchentLists(service_name string) (string, string) {
 	ConnectDb()
 	table_name := service_name + "_merchants"
 	SELECT_QUERY := "SELECT * FROM " + table_name
-	merchentLists, err := gosqljson.QueryDbToMapJson(DB, "lower", SELECT_QUERY)
+	rows, err := DB.Query(SELECT_QUERY)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var m Merchant
+	Merchants := make([]*Merchant, 0, 11)
+	for rows.Next() {
+		err := rows.Scan(&m.Id, &m.Username, &m.Name, &m.Password, &m.Email, &m.Shop_avatar, &m.Shop_description, &m.Lat, &m.Lon, &m.Create_at, &m.Update_at)
+		if err != nil {
+			log.Fatal(err)
+		}
+		Merchants = append(Merchants, &Merchant{m.Id, m.Username, m.Name, m.Password, m.Email, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Create_at, m.Update_at})
+	}
+	s, _ := json.Marshal(Merchants)
+	merchentLists := strings.ToLower(string(s))
 
 	if err != nil {
 		return "No DB", "err"
 	} else {
 		defer CloseDb()
 		return merchentLists, "ok"
-
 	}
 
 }
-
-// func MerchantShowInfo(id string, service_name string) (string, string) {
-// 	ConnectDb()
-// 	table_name := service_name + "_merchants"
-// 	SELECT_QUERY := "SELECT * FROM " + table_name + " WHERE id=?"
-// 	rows, err := DB.Query(SELECT_QUERY, id)
-// 	if err != nil {
-// 		return "No DB", "err"
-// 	}
-// 	defer rows.Close()
-
-// 	var m Merchant
-
-// 	for rows.Next() {
-// 		err := rows.Scan(&m.Id, &m.Username, &m.Name, &m.Password, &m.Email, &m.Shop_image, &m.Shop_avatar, &m.Shop_description, &m.Lat, &m.Lon, &m.Create_at, &m.Update_at)
-// 		if err != nil {
-// 			return "row error", "err"
-// 		}
-// 	}
-// 	s, _ := json.Marshal(m)
-// 	err = rows.Err()
-// 	if err != nil {
-// 		return "row error", "err"
-// 	}
-
-// 	return strings.ToLower(string(s)), "ok"
-// }
 
 func MerchantShowInfoByName(m_name string, service_name string) (string, string) {
 	ConnectDb()
@@ -82,7 +68,7 @@ func MerchantShowInfoByName(m_name string, service_name string) (string, string)
 	var m Merchant
 
 	for rows.Next() {
-		err := rows.Scan(&m.Id, &m.Username, &m.Name, &m.Password, &m.Email, &m.Shop_image, &m.Shop_avatar, &m.Shop_description, &m.Lat, &m.Lon, &m.Create_at, &m.Update_at)
+		err := rows.Scan(&m.Id, &m.Username, &m.Name, &m.Password, &m.Email, &m.Shop_avatar, &m.Shop_description, &m.Lat, &m.Lon, &m.Create_at, &m.Update_at)
 		if err != nil {
 			return "row error", "err"
 		}
@@ -113,13 +99,14 @@ func (m *Merchant) Save(service_name string) (string, error) {
 		err error
 	)
 
+	log.Println(m)
 	tx, err := DB.Begin()
 	if err != nil {
 		return "err", err
 	}
-	SQL_INSERT_POST := "insert into " + table_name + "(username, name, password, email, shop_image, shop_avatar, shop_description, lat, lon, create_at, update_at) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-
-	result, err := tx.Exec(SQL_INSERT_POST, m.Username, m.Name, m.Password, m.Email, m.Shop_image, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Create_at, m.Update_at)
+	SQL_INSERT_POST := "insert into " + table_name + "(username, name, password, email , shop_avatar, shop_description, lat, lon, create_at, update_at) values(?, ?, ?,  ?, ?, ?, ?, ?, ?, ?)"
+	log.Println(m.Create_at)
+	result, err := tx.Exec(SQL_INSERT_POST, m.Username, m.Name, m.Password, m.Email, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Create_at, m.Update_at)
 
 	if err != nil {
 		tx.Rollback()
@@ -143,8 +130,13 @@ func (m *Merchant) Update(service_name string) error {
 		return err
 	}
 
-	SQL_UPDATE_MERCAHANT := "UPDATE " + table_name + " SET username=?, name=?,  email=?, shop_image=?, shop_avatar=?, shop_description=?, lat=?, lon=?, update_at=? WHERE id=?"
-	_, err = tx.Exec(SQL_UPDATE_MERCAHANT, m.Username, m.Name, m.Email, m.Shop_image, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Update_at, m.Id)
+	SQL_UPDATE_MERCAHANT := "UPDATE " + table_name + " SET username=?, name=?,  email=? , shop_avatar=?, shop_description=?, lat=?, lon=?, update_at=? WHERE id=?"
+	res, err2 := tx.Prepare(SQL_UPDATE_MERCAHANT)
+	if err2 != nil {
+		log.Println(err2)
+	}
+	log.Println(m)
+	_, err = res.Exec(SQL_UPDATE_MERCAHANT, m.Username, m.Name, m.Email, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Update_at, m.Id)
 	if err != nil {
 		tx.Rollback()
 		return err

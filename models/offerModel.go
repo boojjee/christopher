@@ -2,9 +2,9 @@ package models
 
 import (
 	"encoding/json"
-	"github.com/elgs/gosqljson"
+	// "github.com/elgs/gosqljson"
 	"log"
-	"time"
+	"strings"
 )
 
 type Offer struct {
@@ -12,22 +12,37 @@ type Offer struct {
 	Name            string
 	Offer_point     float64
 	Condition_offer string
-	Offer_image     string
 	Cat             int64
 	Merchant_id     int64
+	Offer_image     string
 	Description     string
 	Used            int64
 	Qty             int64
-	Create_at       time.Time
-	Update_at       time.Time
+	Create_at       int64
+	Update_at       int64
 }
 
 func GetOfferListAll(service_name string) string {
 	ConnectDb()
 	table_name := service_name + "_offers"
 	SELECT_QUERY := "SELECT * FROM " + table_name
-	offerListAll, _ := gosqljson.QueryDbToMapJson(DB, "lower", SELECT_QUERY)
-
+	rows, err := DB.Query(SELECT_QUERY)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var o Offer
+	Offers := make([]*Offer, 0, 11)
+	for rows.Next() {
+		err := rows.Scan(&o.Id, &o.Name, &o.Offer_point, &o.Condition_offer, &o.Cat, &o.Merchant_id, &o.Offer_image, &o.Description, &o.Used, &o.Qty, &o.Create_at, &o.Update_at)
+		if err != nil {
+			log.Fatal(err)
+		}
+		Offers = append(Offers, &Offer{o.Id, o.Name, o.Offer_point, o.Condition_offer, o.Cat, o.Merchant_id, o.Offer_image, o.Description, o.Used, o.Qty, o.Create_at, o.Update_at})
+	}
+	log.Println(Offers)
+	s, _ := json.Marshal(Offers)
+	offerListAll := strings.ToLower(string(s))
 	defer CloseDb()
 
 	return offerListAll
@@ -47,7 +62,7 @@ func GetOfferInfo(offer_id string, service_name string) string {
 	var o Offer
 
 	for rows.Next() {
-		err := rows.Scan(&o.Id, &o.Name, &o.Offer_point, &o.Condition_offer, &o.Cat, &o.Merchant_id, &o.Description, &o.Used, &o.Qty, &o.Create_at, &o.Update_at)
+		err := rows.Scan(&o.Id, &o.Name, &o.Offer_point, &o.Condition_offer, &o.Cat, &o.Merchant_id, &o.Offer_image, &o.Description, &o.Used, &o.Qty, &o.Create_at, &o.Update_at)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -66,9 +81,28 @@ func GetOfferListByMerchantID(merchant_id string, service_name string) string {
 	ConnectDb()
 	table_name := service_name + "_offers"
 	SQL_SELECT_OFFER := "SELECT * FROM " + table_name + " WHERE merchant_id = ?"
-	offerListByMerchantID, _ := gosqljson.QueryDbToMapJson(DB, "lower", SQL_SELECT_OFFER, merchant_id)
+
+	rows, err := DB.Query(SQL_SELECT_OFFER, merchant_id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var o Offer
+	Offers := make([]*Offer, 0, 11)
+	for rows.Next() {
+		err := rows.Scan(&o.Id, &o.Name, &o.Offer_point, &o.Condition_offer, &o.Cat, &o.Merchant_id, &o.Offer_image, &o.Description, &o.Used, &o.Qty, &o.Create_at, &o.Update_at)
+		if err != nil {
+			log.Fatal(err)
+		}
+		Offers = append(Offers, &Offer{o.Id, o.Name, o.Offer_point, o.Condition_offer, o.Cat, o.Merchant_id, o.Offer_image, o.Description, o.Used, o.Qty, o.Create_at, o.Update_at})
+	}
+	result_json, _ := json.Marshal(Offers)
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer CloseDb()
-	return offerListByMerchantID
+	return string(result_json)
 }
 
 func (o *Offer) Save(service_name string) error {

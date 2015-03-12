@@ -67,14 +67,13 @@ func Gen_table(c *gin.Context) {
         username varchar(200) DEFAULT NULL,
         name varchar(200) DEFAULT NULL UNIQUE,
         password varchar(100) DEFAULT NULL,
-        email varchar(100) DEFAULT NULL,
-        shop_image varchar(200) DEFAULT NULL,
+        email varchar(100) DEFAULT NULL, 
         shop_avatar varchar(200) DEFAULT NULL,
         shop_description text,
         lat varchar(100) DEFAULT NULL,
         lon varchar(100) DEFAULT NULL,
-        create_at timestamp NULL DEFAULT NULL,
-        update_at timestamp NULL DEFAULT '0000-00-00 00:00:00',
+        create_at varchar(20) NULL DEFAULT NULL,
+        update_at varchar(20) NULL DEFAULT NULL,
         PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
@@ -95,8 +94,8 @@ func Gen_table(c *gin.Context) {
     description text,
     used int(11) DEFAULT NULL,
     qty int(11) DEFAULT NULL,
-    create_at timestamp NULL DEFAULT NULL,
-    update_at timestamp NULL DEFAULT NULL,
+    create_at varchar(20) NULL DEFAULT NULL,
+    update_at varchar(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;`
 
@@ -110,8 +109,8 @@ func Gen_table(c *gin.Context) {
     id int(11) unsigned NOT NULL AUTO_INCREMENT,
     user_id int(11) DEFAULT NULL,
     point double(100,10) DEFAULT NULL,
-    create_at timestamp NULL DEFAULT NULL,
-    update_at timestamp NULL DEFAULT NULL,
+    create_at varchar(20) NULL DEFAULT NULL,
+    update_at varchar(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
@@ -129,8 +128,8 @@ func Gen_table(c *gin.Context) {
     code varchar(100) DEFAULT NULL,
     expiry_date datetime DEFAULT NULL,
     status int(11) DEFAULT NULL,
-    create_at timestamp NULL DEFAULT NULL,
-    update_at timestamp NULL DEFAULT NULL,
+    create_at varchar(20) NULL DEFAULT NULL,
+    update_at varchar(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 		result_redeem, err := DB.Exec(redeem_table)
@@ -145,8 +144,8 @@ func Gen_table(c *gin.Context) {
     distance double(100,10) DEFAULT NULL,
     status int(11) DEFAULT NULL,
     user_id int(11) DEFAULT NULL,
-    create_at timestamp NULL DEFAULT NULL,
-    update_at timestamp NULL DEFAULT NULL,
+    create_at varchar(20) NULL DEFAULT NULL,
+    update_at varchar(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 		result_activity, err := DB.Exec(activity_table)
@@ -159,8 +158,8 @@ func Gen_table(c *gin.Context) {
     id int(11) unsigned NOT NULL AUTO_INCREMENT,
     pin varchar(100) DEFAULT NULL,
     parse_id varchar(200) DEFAULT NULL,
-    create_at timestamp NULL DEFAULT NULL,
-    update_at timestamp NULL DEFAULT NULL,
+    create_at varchar(20) NULL DEFAULT NULL,
+    update_at varchar(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 		result_user, err := DB.Exec(user_table)

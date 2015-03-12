@@ -1,12 +1,13 @@
 package controllers
 
 import (
+	"christopher/helpers"
 	"christopher/models"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"log"
 	"strconv"
-	"time"
+	// "time"
 )
 
 type MerchantCollection []map[string]string
@@ -38,29 +39,50 @@ type MerchantAuthenForm struct {
 	Password string `form:"password" binding:"required"`
 }
 
+type Merchants struct {
+	Id               int    `json:"id, Number"`
+	Username         string `json:"username"`
+	Name             string `json:"name"`
+	Password         string `json:"password"`
+	Email            string `json:"email"`
+	Shop_image       string `json:"shop_image"`
+	Shop_avatar      string `json:"shop_avatar"`
+	Shop_description string `json:"shop_description"`
+	Lat              string `json:"lat"`
+	Lon              string `json:"lon"`
+	Create_at        int    `json:"create_at, Number"`
+	Update_at        int    `json:"update_at, Number"`
+}
+type PublicKey struct {
+	Id  int
+	Key string
+}
+
 func ListMerchant(c *gin.Context) {
 	// list all shop
 	SERVICE_NAME := c.Params.ByName("service_name")
 
-	ss, errs := models.GetMerchentLists(SERVICE_NAME)
-	log.Println(ss)
+	mercahnt_list_json, errs := models.GetMerchentLists(SERVICE_NAME)
+
 	if errs == "err" {
 		c.JSON(200, gin.H{
 			"status":  500,
 			"message": "Somting wrong!",
 		})
 	} else {
-		var merchents MerchantCollection
-		file := []byte(ss)
 
-		err := json.Unmarshal(file, &merchents)
-		if err != nil {
-			log.Fatal(err)
+		mercahnts := []byte(mercahnt_list_json)
+		merchant_slice := make([]Merchants, 0)
+		err_unmarshal := json.Unmarshal(mercahnts, &merchant_slice)
+
+		if err_unmarshal != nil {
+			log.Fatal(err_unmarshal)
 		}
+
 		c.JSON(200, gin.H{
 			"status":  200,
 			"message": "Sucess!",
-			"data":    merchents,
+			"data":    merchant_slice,
 		})
 	}
 
@@ -128,17 +150,16 @@ func NewMerchant(c *gin.Context) {
 		Name:             form.Name,
 		Password:         form.Password,
 		Email:            form.Email,
-		Shop_image:       form.Shop_image,
 		Shop_avatar:      form.Shop_avatar,
 		Shop_description: form.Shop_description,
 		Lat:              form.Lat,
 		Lon:              form.Lon,
-		Create_at:        time.Now(),
-		Update_at:        time.Now(),
+		Create_at:        helpers.Unix_milisec_time_now(),
+		Update_at:        helpers.Unix_milisec_time_now(),
 	}
 
 	msg, err := merchant.Save(SERVICE_NAME)
-	log.Println(msg)
+
 	if msg == "err" {
 		c.JSON(200, gin.H{
 			"status": 500,
@@ -164,12 +185,11 @@ func UpdateMerchant(c *gin.Context) {
 		Username:         form.Username,
 		Name:             form.Name,
 		Email:            form.Email,
-		Shop_image:       form.Shop_image,
 		Shop_avatar:      form.Shop_avatar,
 		Shop_description: form.Shop_description,
 		Lat:              form.Lat,
 		Lon:              form.Lon,
-		Update_at:        time.Now(),
+		Update_at:        helpers.Unix_milisec_time_now(),
 	}
 	err := merchant.Update(SERVICE_NAME)
 	if err != nil {

@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"strconv"
-	"time"
+	// "time"
 )
 
 type offerCollection []map[string]string
@@ -36,38 +36,60 @@ type OfferFormEdit struct {
 	Qty             string `form:"qty" binding:"required"`
 }
 
+type Offers struct {
+	Id              int     `json:"id, Number"`
+	Name            string  `json:"name, string"`
+	Offer_point     float64 `json:"offer_point, Number"`
+	Condition_offer string  `json:"condition_offer, string"`
+	Offer_image     string  `json:"offer_image, string"`
+	Cat             int     `json:"cat, Number"`
+	Merchant_id     int     `json:"merchant_id, Number"`
+	Description     string  `json:"merchant_id, string"`
+	Used            int     `json:"used, Number"`
+	Qty             int     `json:"qty, Number"`
+	Create_at       int     `json:"create_at, Number"`
+	Update_at       int     `json:"update_at, Number"`
+}
+
 func ListOffersAll(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
 	listOfferAll := models.GetOfferListAll(SERVICE_NAME)
-	var offersAll offerCollection
-	file := []byte(listOfferAll)
-	err := json.Unmarshal(file, &offersAll)
+	log.Println(listOfferAll)
+	offerall := []byte(listOfferAll)
+	offer_slice := make([]Offers, 0)
+	err := json.Unmarshal(offerall, &offer_slice)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 	c.JSON(200, gin.H{
 		"status":  200,
 		"message": "Sucess!",
-		"data":    offersAll,
+		"data":    offer_slice,
 	})
 }
 
 func ListOffersByMerchantID(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
 	id_merchant := c.Params.ByName("id")
-	log.Println("dddd")
+
 	listOfferAll := models.GetOfferListByMerchantID(id_merchant, SERVICE_NAME)
-	var offersList offerCollection
 	file := []byte(listOfferAll)
-	err := json.Unmarshal(file, &offersList)
+	var offersAll offerCollection
+	err := json.Unmarshal(file, &offersAll)
 	if err != nil {
-		log.Fatal(err)
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": "Somting wrong!",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Sucess!",
+			"data":    offersAll,
+		})
 	}
-	c.JSON(200, gin.H{
-		"status":  200,
-		"message": "Sucess!",
-		"data":    offersList,
-	})
+
 }
 func ViewOffer(c *gin.Context) {
 	id_offer := c.Params.ByName("id")
@@ -77,13 +99,18 @@ func ViewOffer(c *gin.Context) {
 	file := []byte(offerInfo)
 	err := json.Unmarshal(file, &offerSigle)
 	if err != nil {
-		log.Fatal(err)
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": "Somting wrong!",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Sucess!",
+			"data":    offerSigle,
+		})
 	}
-	c.JSON(200, gin.H{
-		"status":  200,
-		"message": "Sucess!",
-		"data":    offerSigle,
-	})
+
 }
 
 func CreateOffer(c *gin.Context) {
@@ -100,8 +127,8 @@ func CreateOffer(c *gin.Context) {
 		Description:     form.Description,
 		Used:            helpers.Convert_string_to_int(form.Used),
 		Qty:             helpers.Convert_string_to_int(form.Qty),
-		Create_at:       time.Now(),
-		Update_at:       time.Now(),
+		Create_at:       helpers.Unix_milisec_time_now(),
+		Update_at:       helpers.Unix_milisec_time_now(),
 	}
 	err := offer.Save(SERVICE_NAME)
 	log.Println(err)
@@ -135,7 +162,7 @@ func UpdateOffer(c *gin.Context) {
 		Description:     form.Description,
 		Used:            helpers.Convert_string_to_int(form.Used),
 		Qty:             helpers.Convert_string_to_int(form.Qty),
-		Update_at:       time.Now(),
+		Update_at:       helpers.Unix_milisec_time_now(),
 	}
 	err := offer.Update(SERVICE_NAME, id_offer)
 	if err != nil {
