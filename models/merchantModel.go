@@ -99,20 +99,18 @@ func (m *Merchant) Save(service_name string) (string, error) {
 		err error
 	)
 
-	log.Println(m)
 	tx, err := DB.Begin()
 	if err != nil {
 		return "err", err
 	}
 	SQL_INSERT_POST := "insert into " + table_name + "(username, name, password, email , shop_avatar, shop_description, lat, lon, create_at, update_at) values(?, ?, ?,  ?, ?, ?, ?, ?, ?, ?)"
-	log.Println(m.Create_at)
-	result, err := tx.Exec(SQL_INSERT_POST, m.Username, m.Name, m.Password, m.Email, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Create_at, m.Update_at)
 
+	result, err := tx.Exec(SQL_INSERT_POST, m.Username, m.Name, m.Password, m.Email, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Create_at, m.Update_at)
+	log.Println(result)
 	if err != nil {
 		tx.Rollback()
 		return "err", err
 	}
-	log.Println(result)
 	tx.Commit()
 	defer CloseDb()
 	return "success", nil
