@@ -135,7 +135,7 @@ func (m *Merchant) Update(service_name string) error {
 	if err2 != nil {
 		log.Println(err2)
 	}
-	log.Println(m)
+
 	_, err = res.Exec(SQL_UPDATE_MERCAHANT, m.Username, m.Name, m.Email, m.Shop_avatar, m.Shop_description, m.Lat, m.Lon, m.Update_at, m.Id)
 	if err != nil {
 		tx.Rollback()

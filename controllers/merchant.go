@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"strconv"
-	// "time"
 )
 
 type MerchantCollection []map[string]string
@@ -17,22 +16,20 @@ type MerchantForm struct {
 	Name             string `form:"name" binding:"required"`
 	Password         string `form:"password" binding:"required"`
 	Email            string `form:"email" binding:"required"`
-	Shop_image       string `form:"shop_image" binding:"required"`
 	Shop_avatar      string `form:"shop_avatar" binding:"required"`
 	Shop_description string `form:"shop_description" binding:"required"`
 	Lat              string `form:"lat" binding:"required"`
 	Lon              string `form:"lon" binding:"required"`
 }
 type MerchantFormEdit struct {
-	Username         string `form:"username" binding:"required"`
-	Name             string `form:"name" binding:"required"`
-	Password         string `form:"password" binding:"required"`
-	Email            string `form:"email" binding:"required"`
-	Shop_image       string `form:"shop_image" binding:"required"`
-	Shop_avatar      string `form:"shop_avatar" binding:"required"`
-	Shop_description string `form:"shop_description" binding:"required"`
-	Lat              string `form:"lat" binding:"required"`
-	Lon              string `form:"lon" binding:"required"`
+	Username         string `form:"username"`
+	Name             string `form:"name"`
+	Password         string `form:"password"`
+	Email            string `form:"email"`
+	Shop_avatar      string `form:"shop_avatar"`
+	Shop_description string `form:"shop_description"`
+	Lat              string `form:"lat"`
+	Lon              string `form:"lon"`
 }
 type MerchantAuthenForm struct {
 	Username string `form:"username" binding:"required"`
@@ -45,7 +42,6 @@ type Merchants struct {
 	Name             string `json:"name"`
 	Password         string `json:"password"`
 	Email            string `json:"email"`
-	Shop_image       string `json:"shop_image"`
 	Shop_avatar      string `json:"shop_avatar"`
 	Shop_description string `json:"shop_description"`
 	Lat              string `json:"lat"`
@@ -87,32 +83,6 @@ func ListMerchant(c *gin.Context) {
 	}
 
 }
-
-// func ViewMerchant(c *gin.Context) {
-// 	SERVICE_NAME := c.Params.ByName("service_name")
-// 	id_merchant := c.Params.ByName("id")
-
-// 	merchent_info, errs := models.MerchantShowInfo(id_merchant, SERVICE_NAME)
-// 	if errs == "err" {
-// 		c.JSON(200, gin.H{
-// 			"status":  500,
-// 			"message": "Somting wrong!",
-// 		})
-// 	} else {
-// 		var merchents MerchantSigle
-// 		file := []byte(merchent_info)
-
-// 		err := json.Unmarshal(file, &merchents)
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-// 		c.JSON(200, gin.H{
-// 			"status":  200,
-// 			"message": "Created!",
-// 			"data":    merchents,
-// 		})
-// 	}
-// }
 
 func ViewMerchantName(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")

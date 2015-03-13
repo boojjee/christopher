@@ -82,6 +82,22 @@ func Gen_table(c *gin.Context) {
 		checkErr(err)
 		//------------------------------------------------------
 
+		//Merchant
+		var merchant_gallery = prefix + "_" + "merchants_photo_gallery"
+		var merchants_photo_gallery_table = `CREATE TABLE ` + merchant_gallery + ` (
+        id int(11) unsigned NOT NULL AUTO_INCREMENT,
+        photo_url varchar(200) DEFAULT NULL UNIQUE,
+        merchant_id int(11) DEFAULT NULL , 
+        create_at varchar(20) NULL DEFAULT NULL,
+        update_at varchar(20) NULL DEFAULT NULL,
+        PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
+
+		result_merchants_photo_gallery_table, err := DB.Exec(merchants_photo_gallery_table)
+		log.Println(result_merchants_photo_gallery_table)
+		checkErr(err)
+		//------------------------------------------------------
+
 		var offer = prefix + "_" + "offers"
 		var offer_table = `CREATE TABLE ` + offer + ` (
     id int(11) unsigned NOT NULL AUTO_INCREMENT,

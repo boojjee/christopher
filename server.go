@@ -32,9 +32,13 @@ func main() {
 		v1.PUT("/:service_name/merchant/:id", controllers.UpdateMerchant)
 		v1.DELETE("/:service_name/merchant/:id", controllers.DeleteMerchant)
 
+		v1.POST("/:service_name/merchant_gallery", controllers.NewMerchantGaller)
+		v1.PUT("/:service_name/merchant_gallery/:id", controllers.UpdateMerchantGaller)
+		v1.DELETE("/:service_name/merchant_gallery/:id", controllers.DeleteMerchantGaller)
+
 		// Offers API RESTful
 		v1.GET("/:service_name/offers", controllers.ListOffersAll)
-		v1.GET("/:service_name/offer_of_merchant/:id/", controllers.ListOffersByMerchantID)
+		v1.GET("/:service_name/offer_of_merchant/:id", controllers.ListOffersByMerchantID)
 		v1.GET("/:service_name/offer/:id", controllers.ViewOffer)
 		v1.POST("/:service_name/offer", controllers.CreateOffer)
 		v1.PUT("/:service_name/offer/:id", controllers.UpdateOffer)
