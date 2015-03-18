@@ -4,23 +4,23 @@ import (
 	"christopher/helpers"
 	"christopher/models"
 	"github.com/gin-gonic/gin"
-	"log"
+	// "log"
 	"strconv"
 )
 
 type MerchantGallery struct {
-	Id          int64  `json:"id, Number"`
-	Photo_url   string `json:"photo_url"`
-	Merchant_id int64  `json:"merchant_id, Number"`
-	Create_at   int64  `json:"create_at, Number"`
-	Update_at   int64  `json:"update_at, Number"`
+	Id           int64  `json:"id, Number"`
+	Photo_url    string `json:"photo_url"`
+	Merchant_uid string `json:"merchant_uid"`
+	Create_at    int64  `json:"create_at, Number"`
+	Update_at    int64  `json:"update_at, Number"`
 }
 type MerchantGalleryForm struct {
-	Id          int64  `form:"id"`
-	Photo_url   string `form:"photo_url"`
-	Merchant_id int64  `form:"merchant_id"`
-	Create_at   int64  `form:"create_at"`
-	Update_at   int64  `form:"update_at"`
+	Id           int64  `form:"id"`
+	Photo_url    string `form:"photo_url"`
+	Merchant_uid string `form:"merchant_uid"`
+	Create_at    int64  `form:"create_at"`
+	Update_at    int64  `form:"update_at"`
 }
 
 // get merchant info with image gallery
@@ -32,12 +32,11 @@ func NewMerchantGaller(c *gin.Context) {
 	c.Bind(&form)
 
 	merchantGallery := &models.MerchantGallery{
-		Photo_url:   form.Photo_url,
-		Merchant_id: form.Merchant_id,
-		Create_at:   helpers.Unix_milisec_time_now(),
-		Update_at:   helpers.Unix_milisec_time_now(),
+		Photo_url:    form.Photo_url,
+		Merchant_uid: form.Merchant_uid,
+		Create_at:    helpers.Unix_milisec_time_now(),
+		Update_at:    helpers.Unix_milisec_time_now(),
 	}
-	log.Println(merchantGallery)
 	msg, err := merchantGallery.Save(SERVICE_NAME)
 	if msg == "err" {
 		c.JSON(200, gin.H{
@@ -60,10 +59,10 @@ func UpdateMerchantGaller(c *gin.Context) {
 	c.Bind(&form)
 
 	merchantGallery := &models.MerchantGallery{
-		Photo_url:   form.Photo_url,
-		Merchant_id: form.Merchant_id,
-		Create_at:   helpers.Unix_milisec_time_now(),
-		Update_at:   helpers.Unix_milisec_time_now(),
+		Photo_url:    form.Photo_url,
+		Merchant_uid: form.Merchant_uid,
+		Create_at:    helpers.Unix_milisec_time_now(),
+		Update_at:    helpers.Unix_milisec_time_now(),
 	}
 	msg, err := merchantGallery.Update(SERVICE_NAME, photo_id)
 	if msg == "err" {

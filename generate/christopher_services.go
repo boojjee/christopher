@@ -60,36 +60,59 @@ func Gen_table(c *gin.Context) {
 		log.Println(result_insert_service)
 		checkErr(err)
 
-		//Merchant
-		var merchant = prefix + "_" + "merchants"
-		var merchant_table = `CREATE TABLE ` + merchant + ` (
-        id int(11) unsigned NOT NULL AUTO_INCREMENT,
-        username varchar(200) DEFAULT NULL,
-        name varchar(200) DEFAULT NULL UNIQUE,
-        password varchar(100) DEFAULT NULL,
-        email varchar(100) DEFAULT NULL, 
+		//Merchant Meta
+		var mmerchant_metachant = prefix + "_" + "merchant_meta"
+		var merchant_meta_table = `CREATE TABLE ` + mmerchant_metachant + ` (
+        id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+        merchant_uid varchar(255) DEFAULT NULL UNIQUE,  
+        username varchar(255) DEFAULT NULL,
+        password varchar(255) DEFAULT NULL,
+        email varchar(255) DEFAULT NULL,
         shop_avatar varchar(200) DEFAULT NULL,
-        shop_description text,
-        lat varchar(100) DEFAULT NULL,
-        lon varchar(100) DEFAULT NULL,
-        create_at varchar(20) NULL DEFAULT NULL,
-        update_at varchar(20) NULL DEFAULT NULL,
+        lat varchar(255) DEFAULT NULL,
+        lon varchar(255) DEFAULT NULL,
+        phone_1 varchar(255) DEFAULT NULL,
+        phone_2 varchar(255) DEFAULT NULL,
+        fax varchar(255) DEFAULT NULL,
+        line_id varchar(255) DEFAULT NULL,
+        facebook_link varchar(255) DEFAULT NULL,
+        website_link varchar(255) DEFAULT NULL, 
+        merchant_status varchar(255) DEFAULT NULL, 
+        create_at BIGINT(20) NULL DEFAULT NULL,
+        update_at BIGINT(20) NULL DEFAULT NULL,
         PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
-		result_merchant, err := DB.Exec(merchant_table)
-		log.Println(result_merchant)
+		result_merchant_meta, err := DB.Exec(merchant_meta_table)
+		log.Println(result_merchant_meta)
+		checkErr(err)
+		//------------------------------------------------------
+		//Merchant
+		var merchant_content = prefix + "_" + "merchant_content"
+		var merchant_content_table = `CREATE TABLE ` + merchant_content + ` (
+        id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+        merchant_uid varchar(255) DEFAULT NULL, 
+        name varchar(255) DEFAULT NULL ,
+        shop_description LONGTEXT,  
+        lang varchar(10) DEFAULT NULL,
+        create_at BIGINT(20) NULL DEFAULT NULL,
+        update_at BIGINT(20) NULL DEFAULT NULL,
+        PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
+
+		result_merchant_content, err := DB.Exec(merchant_content_table)
+		log.Println(result_merchant_content)
 		checkErr(err)
 		//------------------------------------------------------
 
 		//Merchant
 		var merchant_gallery = prefix + "_" + "merchants_photo_gallery"
 		var merchants_photo_gallery_table = `CREATE TABLE ` + merchant_gallery + ` (
-        id int(11) unsigned NOT NULL AUTO_INCREMENT,
-        photo_url varchar(200) DEFAULT NULL UNIQUE,
-        merchant_id int(11) DEFAULT NULL , 
-        create_at varchar(20) NULL DEFAULT NULL,
-        update_at varchar(20) NULL DEFAULT NULL,
+        id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+        photo_url varchar(255) DEFAULT NULL UNIQUE,
+        merchant_uid varchar(255) DEFAULT NULL , 
+        create_at BIGINT(20) NULL DEFAULT NULL,
+        update_at BIGINT(20) NULL DEFAULT NULL,
         PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
@@ -98,21 +121,39 @@ func Gen_table(c *gin.Context) {
 		checkErr(err)
 		//------------------------------------------------------
 
-		var offer = prefix + "_" + "offers"
+		// Offer Meta
+		var offer_meta = prefix + "_" + "offer_meta"
+		var offer_meta_table = `CREATE TABLE ` + offer_meta + ` (
+    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT, 
+    offer_id BIGINT(20) NULL DEFAULT NULL,
+    create_at BIGINT(20) NULL DEFAULT NULL,
+    update_at BIGINT(20) NULL DEFAULT NULL,
+    PRIMARY KEY (id)
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;`
+
+		result_offer_meta, err := DB.Exec(offer_meta_table)
+		log.Println(result_offer_meta)
+		checkErr(err)
+		//------------------------------------------------------
+
+		// Offer
+		var offer = prefix + "_" + "offer_content"
 		var offer_table = `CREATE TABLE ` + offer + ` (
-    id int(11) unsigned NOT NULL AUTO_INCREMENT,
+    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+    offer_meta_id BIGINT(20) NULL DEFAULT NULL,
     name varchar(200) DEFAULT NULL,
     offer_point double(100,10) DEFAULT NULL,
     condition_offer varchar(200) DEFAULT NULL,
-    cat int(11) DEFAULT NULL,
-    merchant_id int(11) DEFAULT NULL,
+    cat BIGINT(20) DEFAULT NULL,
+    merchant_id BIGINT(20) DEFAULT NULL,
     offer_image_banner varchar(200) DEFAULT NULL,
     offer_image_poster varchar(200) DEFAULT NULL,
-    description text,
-    used int(11) DEFAULT NULL,
-    qty int(11) DEFAULT NULL,
-    create_at varchar(20) NULL DEFAULT NULL,
-    update_at varchar(20) NULL DEFAULT NULL,
+    description LONGTEXT,
+    used BIGINT(20) DEFAULT NULL,
+    qty BIGINT(20) DEFAULT NULL,
+    lang varchar(10) DEFAULT NULL,
+    create_at BIGINT(20) NULL DEFAULT NULL,
+    update_at BIGINT(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;`
 
@@ -123,11 +164,11 @@ func Gen_table(c *gin.Context) {
 
 		var point = prefix + "_" + "point"
 		var point_table = `CREATE TABLE ` + point + ` (
-    id int(11) unsigned NOT NULL AUTO_INCREMENT,
-    user_id int(11) DEFAULT NULL,
+    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+    user_id BIGINT(20) DEFAULT NULL,
     point double(100,10) DEFAULT NULL,
-    create_at varchar(20) NULL DEFAULT NULL,
-    update_at varchar(20) NULL DEFAULT NULL,
+    create_at BIGINT(20) NULL DEFAULT NULL,
+    update_at BIGINT(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 
@@ -138,15 +179,15 @@ func Gen_table(c *gin.Context) {
 
 		var redeem = prefix + "_" + "redeem"
 		var redeem_table = `CREATE TABLE ` + redeem + ` (
-    id int(11) unsigned NOT NULL AUTO_INCREMENT,
-    offer_id int(11) DEFAULT NULL,
-    user_id int(11) DEFAULT NULL,
+    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+    offer_id BIGINT(20) DEFAULT NULL,
+    user_id BIGINT(20) DEFAULT NULL,
     redeem_point double(100,10) DEFAULT NULL,
     code varchar(100) DEFAULT NULL,
     expiry_date datetime DEFAULT NULL,
-    status int(11) DEFAULT NULL,
-    create_at varchar(20) NULL DEFAULT NULL,
-    update_at varchar(20) NULL DEFAULT NULL,
+    status BIGINT(20) DEFAULT NULL,
+    create_at BIGINT(20) NULL DEFAULT NULL,
+    update_at BIGINT(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 		result_redeem, err := DB.Exec(redeem_table)
@@ -156,13 +197,13 @@ func Gen_table(c *gin.Context) {
 
 		var activity = prefix + "_" + "activity"
 		var activity_table = `CREATE TABLE ` + activity + ` ( 
-    id int(11) unsigned NOT NULL AUTO_INCREMENT,
+    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
     activity_id varchar(200) DEFAULT NULL,
     distance double(100,10) DEFAULT NULL,
-    status int(11) DEFAULT NULL,
-    user_id int(11) DEFAULT NULL,
-    create_at varchar(20) NULL DEFAULT NULL,
-    update_at varchar(20) NULL DEFAULT NULL,
+    status BIGINT(20) DEFAULT NULL,
+    user_id BIGINT(20) DEFAULT NULL,
+    create_at BIGINT(20) NULL DEFAULT NULL,
+    update_at BIGINT(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 		result_activity, err := DB.Exec(activity_table)
@@ -172,11 +213,11 @@ func Gen_table(c *gin.Context) {
 
 		var user = prefix + "_" + "user"
 		var user_table = `CREATE TABLE ` + user + ` (  
-    id int(11) unsigned NOT NULL AUTO_INCREMENT,
+    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
     pin varchar(100) DEFAULT NULL,
     parse_id varchar(200) DEFAULT NULL,
-    create_at varchar(20) NULL DEFAULT NULL,
-    update_at varchar(20) NULL DEFAULT NULL,
+    create_at BIGINT(20) NULL DEFAULT NULL,
+    update_at BIGINT(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;`
 		result_user, err := DB.Exec(user_table)

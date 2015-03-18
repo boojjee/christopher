@@ -23,26 +23,31 @@ func main() {
 	{
 		v1.GET("/", controllers.Home)
 
-		// Merchant API RESTful
-		v1.GET("/:service_name/merchants", controllers.ListMerchant)
-		// v1.GET("/:service_name/merchant/:id", controllers.ViewMerchant)
-		v1.GET("/:service_name/merchant/:name", controllers.ViewMerchantName)
-		v1.POST("/:service_name/merchant/authen", controllers.AuthenMechant)
-		v1.POST("/:service_name/merchant", controllers.NewMerchant)
-		v1.PUT("/:service_name/merchant/:id", controllers.UpdateMerchant)
-		v1.DELETE("/:service_name/merchant/:id", controllers.DeleteMerchant)
+		//# for Back End
+		// Ready
+		v1.GET("/:service_name/merchantinfo/:uid", controllers.GetMerchantInfo)                          // done
+		v1.POST("/:service_name/merchant", controllers.NewMerchant)                                      // done
+		v1.PUT("/:service_name/merchant/:uid", controllers.UpdateMerchant)                               // done
+		v1.DELETE("/:service_name/merchant/:uid", controllers.DeleteMerchant)                            // done
+		v1.POST("/:service_name/merchant_authen", controllers.AuthenMechant)                             // done
+		v1.GET("/:service_name/merchantlists", controllers.GetMerchantsLists_All)                        // done
+		v1.GET("/:service_name/merchantlists_withgallery", controllers.GetMerchantsListsWithGallery_All) // done
+		v1.POST("/:service_name/merchant_gallery", controllers.NewMerchantGaller)                        // done
+		v1.PUT("/:service_name/merchant_gallery/:uid", controllers.UpdateMerchantGaller)                 // done
+		v1.DELETE("/:service_name/merchant_gallery/:uid", controllers.DeleteMerchantGaller)              // done
 
-		v1.POST("/:service_name/merchant_gallery", controllers.NewMerchantGaller)
-		v1.PUT("/:service_name/merchant_gallery/:id", controllers.UpdateMerchantGaller)
-		v1.DELETE("/:service_name/merchant_gallery/:id", controllers.DeleteMerchantGaller)
+		//# for Client iOS, Android
+		v1.GET("/:service_name/merchantinfo/:uid/:lang", controllers.GetMerchantInfoByLang)                             // done
+		v1.GET("/:service_name/merchantlistsbylang/:lang", controllers.GetMerchantsListsByLang)                         // done
+		v1.GET("/:service_name/merchantlists_withgallery_bylang/:lang", controllers.GetMerchantsListsWithGalleryByLang) // done
 
-		// Offers API RESTful
-		v1.GET("/:service_name/offers", controllers.ListOffersAll)
-		v1.GET("/:service_name/offer_of_merchant/:id", controllers.ListOffersByMerchantID)
-		v1.GET("/:service_name/offer/:id", controllers.ViewOffer)
-		v1.POST("/:service_name/offer", controllers.CreateOffer)
-		v1.PUT("/:service_name/offer/:id", controllers.UpdateOffer)
-		v1.DELETE("/:service_name/offer/:id", controllers.DeleteOffer)
+		//# Offers API RESTful
+		// v1.GET("/:service_name/offers", controllers.ListOffersAll)
+		// v1.GET("/:service_name/offer_of_merchant/:id", controllers.ListOffersByMerchantID)
+		// v1.GET("/:service_name/offer/:id", controllers.ViewOffer)
+		// v1.POST("/:service_name/offer", controllers.CreateOffer)
+		// v1.PUT("/:service_name/offer/:id", controllers.UpdateOffer)
+		// v1.DELETE("/:service_name/offer/:id", controllers.DeleteOffer)
 
 	}
 
@@ -50,8 +55,8 @@ func main() {
 	{
 		gen.PUT("/service/:service_name", generate.Gen_table)
 	}
-	// CORS middleware
 
+	// CORS middleware
 	router.Use(CORSMiddleware())
 	router.Run(":8080")
 }
