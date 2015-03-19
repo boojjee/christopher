@@ -156,7 +156,7 @@ func NewMerchant(c *gin.Context) {
 
 func UpdateMerchant(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
-	uid_merchant := c.Params.ByName("id")
+	uid_merchant := c.Params.ByName("uid")
 	var form MerchantFormAllLang
 	c.Bind(&form)
 	merchant := &models.MerchantMeta{
@@ -197,7 +197,7 @@ func UpdateMerchant(c *gin.Context) {
 
 func DeleteMerchant(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
-	uid_merchant := c.Params.ByName("id")
+	uid_merchant := c.Params.ByName("uid")
 	merchant := &models.MerchantMeta{
 		Merchant_uid: uid_merchant,
 	}
