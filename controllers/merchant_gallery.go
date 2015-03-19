@@ -3,11 +3,13 @@ package controllers
 import (
 	"christopher/helpers"
 	"christopher/models"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
-	// "log"
+	"log"
 	"strconv"
 )
 
+type MerchantGallerySigle map[string]interface{}
 type MerchantGallery struct {
 	Id           int64  `json:"id, Number"`
 	Photo_url    string `json:"photo_url"`
@@ -97,6 +99,42 @@ func DeleteMerchantGaller(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  200,
 			"message": "Deleted",
+		})
+	}
+}
+
+func GetMerchantsGallery(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	merchant_uid := c.Params.ByName("uid")
+	merchant := &models.MerchantMeta{
+		Merchant_uid: merchant_uid,
+	}
+
+	data, msg, err := merchant.MerchantShowGallery(SERVICE_NAME)
+
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": err,
+		})
+	} else {
+		log.Println(data)
+
+		mercahnts := []byte(data)
+		// res := &MerchantGallery{}
+		merchant_slice := make([]MerchantGallerySigle, 0)
+		err_unmarshal := json.Unmarshal(mercahnts, &merchant_slice)
+
+		if err_unmarshal != nil {
+			c.JSON(200, gin.H{
+				"status":  500,
+				"message": "json error",
+			})
+		}
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Success!",
+			"data":    merchant_slice,
 		})
 	}
 }

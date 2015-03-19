@@ -125,7 +125,14 @@ func Gen_table(c *gin.Context) {
 		var offer_meta = prefix + "_" + "offer_meta"
 		var offer_meta_table = `CREATE TABLE ` + offer_meta + ` (
     id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT, 
-    offer_id BIGINT(20) NULL DEFAULT NULL,
+    offer_uid varchar(255) DEFAULT NULL UNIQUE, 
+    offer_point double(100,10) DEFAULT NULL,
+    merchant_uid varchar(255) DEFAULT NULL,
+    offer_cat_id BIGINT(20) DEFAULT NULL,
+    offer_image_banner varchar(200) DEFAULT NULL,
+    offer_image_poster varchar(200) DEFAULT NULL,
+    used BIGINT(20) DEFAULT NULL,
+    qty BIGINT(20) DEFAULT NULL,
     create_at BIGINT(20) NULL DEFAULT NULL,
     update_at BIGINT(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
@@ -136,21 +143,14 @@ func Gen_table(c *gin.Context) {
 		checkErr(err)
 		//------------------------------------------------------
 
-		// Offer
+		// Offer Content
 		var offer = prefix + "_" + "offer_content"
 		var offer_table = `CREATE TABLE ` + offer + ` (
-    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
-    offer_meta_id BIGINT(20) NULL DEFAULT NULL,
+    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT, 
+    offer_uid varchar(255) DEFAULT NULL,
     name varchar(200) DEFAULT NULL,
-    offer_point double(100,10) DEFAULT NULL,
-    condition_offer varchar(200) DEFAULT NULL,
-    cat BIGINT(20) DEFAULT NULL,
-    merchant_id BIGINT(20) DEFAULT NULL,
-    offer_image_banner varchar(200) DEFAULT NULL,
-    offer_image_poster varchar(200) DEFAULT NULL,
-    description LONGTEXT,
-    used BIGINT(20) DEFAULT NULL,
-    qty BIGINT(20) DEFAULT NULL,
+    condition_offer varchar(200) DEFAULT NULL, 
+    description LONGTEXT, 
     lang varchar(10) DEFAULT NULL,
     create_at BIGINT(20) NULL DEFAULT NULL,
     update_at BIGINT(20) NULL DEFAULT NULL,
@@ -159,6 +159,21 @@ func Gen_table(c *gin.Context) {
 
 		result_offer, err := DB.Exec(offer_table)
 		log.Println(result_offer)
+		checkErr(err)
+		//------------------------------------------------------
+		// Offer Catagory
+		var offer_catagory = prefix + "_" + "offer_catagory"
+		var offer_catagory_table = `CREATE TABLE ` + offer_catagory + ` (
+    id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT, 
+    offer_catagory_name varchar(200) DEFAULT NULL, 
+    slug varchar(200) DEFAULT NULL, 
+    create_at BIGINT(20) NULL DEFAULT NULL,
+    update_at BIGINT(20) NULL DEFAULT NULL,
+    PRIMARY KEY (id)
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;`
+
+		result_offer_catagory, err := DB.Exec(offer_catagory_table)
+		log.Println(result_offer_catagory)
 		checkErr(err)
 		//------------------------------------------------------
 

@@ -32,9 +32,11 @@ func main() {
 		v1.POST("/:service_name/merchant_authen", controllers.AuthenMechant)                             // done
 		v1.GET("/:service_name/merchantlists", controllers.GetMerchantsLists_All)                        // done
 		v1.GET("/:service_name/merchantlists_withgallery", controllers.GetMerchantsListsWithGallery_All) // done
-		v1.POST("/:service_name/merchant_gallery", controllers.NewMerchantGaller)                        // done
-		v1.PUT("/:service_name/merchant_gallery/:uid", controllers.UpdateMerchantGaller)                 // done
-		v1.DELETE("/:service_name/merchant_gallery/:uid", controllers.DeleteMerchantGaller)              // done
+
+		v1.GET("/:service_name/merchant_gallery/:uid", controllers.GetMerchantsGallery)     // done
+		v1.POST("/:service_name/merchant_gallery", controllers.NewMerchantGaller)           // done
+		v1.PUT("/:service_name/merchant_gallery/:uid", controllers.UpdateMerchantGaller)    // done
+		v1.DELETE("/:service_name/merchant_gallery/:uid", controllers.DeleteMerchantGaller) // done
 
 		//# for Client iOS, Android
 		v1.GET("/:service_name/merchantinfo/:uid/:lang", controllers.GetMerchantInfoByLang)                             // done
@@ -45,7 +47,7 @@ func main() {
 		// v1.GET("/:service_name/offers", controllers.ListOffersAll)
 		// v1.GET("/:service_name/offer_of_merchant/:id", controllers.ListOffersByMerchantID)
 		// v1.GET("/:service_name/offer/:id", controllers.ViewOffer)
-		// v1.POST("/:service_name/offer", controllers.CreateOffer)
+		v1.POST("/:service_name/offer", controllers.NewOffer) // doing
 		// v1.PUT("/:service_name/offer/:id", controllers.UpdateOffer)
 		// v1.DELETE("/:service_name/offer/:id", controllers.DeleteOffer)
 

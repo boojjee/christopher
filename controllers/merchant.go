@@ -70,6 +70,49 @@ type Merchants struct {
 	Create_at        int    `json:"create_at, Number"`
 	Update_at        int    `json:"update_at, Number"`
 }
+type MerchantFormAllLangJson struct {
+	Id                  int    `json:"id, Number"`
+	Username            string `json:"username"`
+	Password            string `json:"password"`
+	Email               string `json:"email"`
+	Shop_avatar         string `json:"shop_avatar"`
+	Lat                 string `json:"lat"`
+	Lon                 string `json:"lon"`
+	Phone_1             string `json:"phone_1"`
+	Phone_2             string `json:"phone_2"`
+	Fax                 string `json:"fax"`
+	Line_id             string `json:"line_id"`
+	Facebook_link       string `json:"facebook_link"`
+	Website_link        string `json:"website_link"`
+	Name_en             string `json:"name_en"`
+	Name_th             string `json:"name_th"`
+	Shop_description_en string `json:"shop_description_en"`
+	Shop_description_th string `json:"shop_description_th"`
+	Merchant_status     string `json:"merchant_status"`
+	Create_at           int    `json:"create_at, Number"`
+	Update_at           int    `json:"update_at, Number"`
+}
+
+type MerchantFormByLangJson struct {
+	Id               int    `json:"id, Number"`
+	Username         string `json:"username"`
+	Password         string `json:"password"`
+	Email            string `json:"email"`
+	Shop_avatar      string `json:"shop_avatar"`
+	Lat              string `json:"lat"`
+	Lon              string `json:"lon"`
+	Phone_1          string `json:"phone_1"`
+	Phone_2          string `json:"phone_2"`
+	Fax              string `json:"fax"`
+	Line_id          string `json:"line_id"`
+	Facebook_link    string `json:"facebook_link"`
+	Website_link     string `json:"website_link"`
+	Name             string `json:"name"`
+	Shop_description string `json:"shop_description"`
+	Merchant_status  string `json:"merchant_status"`
+	Create_at        int    `json:"create_at, Number"`
+	Update_at        int    `json:"update_at, Number"`
+}
 
 type MerchantMetaJSON struct {
 	Username         string `json:"username"`
@@ -256,17 +299,15 @@ func GetMerchantInfo(c *gin.Context) {
 	data, msg, err := merchant.MerchantShowInfoAllLang(SERVICE_NAME)
 
 	if msg == "err" {
-		log.Println(err)
-		log.Println(msg)
 		c.JSON(200, gin.H{
 			"status":  500,
 			"message": err,
 		})
 	} else {
-		// log.Println(data)
+		log.Println(data)
 		mercahnts := []byte(data)
-		merchant_slice := make([]MerchantSigle, 0)
-		err_unmarshal := json.Unmarshal(mercahnts, &merchant_slice)
+		res := &MerchantFormAllLangJson{}
+		err_unmarshal := json.Unmarshal(mercahnts, &res)
 
 		if err_unmarshal != nil {
 			c.JSON(200, gin.H{
@@ -277,7 +318,7 @@ func GetMerchantInfo(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  200,
 			"message": "Success!",
-			"data":    merchant_slice,
+			"data":    res,
 		})
 	}
 }
@@ -301,8 +342,8 @@ func GetMerchantInfoByLang(c *gin.Context) {
 	} else {
 		// log.Println(data)
 		mercahnts := []byte(data)
-		merchant_slice := make([]MerchantSigle, 0)
-		err_unmarshal := json.Unmarshal(mercahnts, &merchant_slice)
+		res := &MerchantFormByLangJson{}
+		err_unmarshal := json.Unmarshal(mercahnts, &res)
 
 		if err_unmarshal != nil {
 			c.JSON(200, gin.H{
@@ -313,7 +354,7 @@ func GetMerchantInfoByLang(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  200,
 			"message": "Success!",
-			"data":    merchant_slice,
+			"data":    res,
 		})
 	}
 }

@@ -2,6 +2,8 @@ package models
 
 import (
 	// "strings"
+	// "christopher/helpers"
+	"encoding/json"
 	"log"
 )
 
@@ -80,4 +82,39 @@ func (m *MerchantGallery) Delete(service_name string) error {
 	tx.Commit()
 	defer CloseDb()
 	return nil
+}
+
+func (m *MerchantMeta) MerchantShowGallery(service_name string) (string, string, error) {
+	// merchant_meta := service_name + "_merchant_meta"
+	// merchant_content := service_name + "_merchant_content"
+	merchant_photo_gallery := service_name + "_merchants_photo_gallery"
+	ConnectDb()
+	var (
+		err error
+	)
+
+	SELECT_QUERY := "SELECT * FROM " + merchant_photo_gallery + " WHERE merchant_uid = '" + m.Merchant_uid + "'"
+	rows, err := DB.Query(SELECT_QUERY)
+
+	if err != nil {
+		return "", "err", err
+	}
+	var g MerAllGallery
+
+	mGallery := make([]*MerAllGallery, 0, 4)
+
+	for rows.Next() {
+		err := rows.Scan(&g.Id, &g.Photo_url, &g.Merchant_id, &g.Create_at, &g.Update_at)
+		if err != nil {
+			return "", "err", err
+		}
+		mGallery = append(mGallery, &MerAllGallery{g.Id, g.Photo_url, g.Merchant_id, g.Create_at, g.Update_at})
+
+	}
+
+	s, _ := json.Marshal(mGallery)
+	mGalleryResult := string(s)
+	log.Println(mGalleryResult)
+	return mGalleryResult, "success", nil
+
 }
