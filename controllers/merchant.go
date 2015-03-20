@@ -76,6 +76,7 @@ type MerchantFormAllLangJson struct {
 	Password            string `json:"password"`
 	Email               string `json:"email"`
 	Shop_avatar         string `json:"shop_avatar"`
+	Merchant_uid        string `json:"merchant_uid"`
 	Lat                 string `json:"lat"`
 	Lon                 string `json:"lon"`
 	Phone_1             string `json:"phone_1"`
