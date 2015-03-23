@@ -44,12 +44,17 @@ func main() {
 		v1.GET("/:service_name/merchantlists_withgallery_bylang/:lang", controllers.GetMerchantsListsWithGalleryByLang) // done
 
 		//# Offers API RESTful
-		// v1.GET("/:service_name/offers", controllers.ListOffersAll)
-		v1.GET("/:service_name/offer/:uid", controllers.ViewOffer)                               //doing
-		v1.GET("/:service_name/offermerchant/:merchant_uid", controllers.ListOffersByMerchantID) //done
+		v1.GET("/:service_name/offers", controllers.ListOffersAll)                               // done
+		v1.GET("/:service_name/offer/:uid", controllers.ViewOffer)                               // done
+		v1.GET("/:service_name/offermerchant/:merchant_uid", controllers.ListOffersByMerchantID) // done
 		v1.POST("/:service_name/offer", controllers.NewOffer)                                    // done
 		v1.PUT("/:service_name/offer/:uid", controllers.UpdateOffer)                             // done
 		v1.DELETE("/:service_name/offer/:uid", controllers.DeleteOffer)                          // done
+
+		v1.GET("/:service_name/offer_catagories", controllers.ListAllCatagoriesOffer)          // done
+		v1.POST("/:service_name/offer_catagory", controllers.NewCatagoriesOffer)               // done
+		v1.PUT("/:service_name/offer_catagory/:cat_id", controllers.UpdateCatagoriesOffer)     // done
+		v1.DELETE("/:service_name/offer_catagory/:cat_id", controllers.DelelteCatagoriesOffer) // done
 
 	}
 
