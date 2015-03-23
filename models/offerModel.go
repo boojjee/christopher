@@ -8,6 +8,7 @@ import (
 )
 
 type OfferAllContent struct {
+	Id                 string
 	Offer_uid          string
 	Merchant_uid       string
 	Offer_point        float64
@@ -22,7 +23,6 @@ type OfferAllContent struct {
 	Condition_offer_th string
 	Description_en     string
 	Description_th     string
-	Lang               string
 	Create_at          int64
 	Update_at          int64
 }
@@ -174,70 +174,57 @@ func (offer *OfferAllContent) Delete(service_name string) (string, error) {
 }
 
 func (offer *OfferAllContent) ListsOfferByMerchant(service_name string) (string, string, error) {
-	// offerMeta_table := service_name + "_offer_meta"
-	// offerContent_table := service_name + "_offer_content"
-	merchant_meta := service_name + "_merchant_meta"
-	merchant_content := service_name + "_merchant_content"
+	offerMeta_table := service_name + "_offer_meta"
+	offerContent_table := service_name + "_offer_content"
 	ConnectDb()
-	// var (
-	// 	err error
-	// )
-
-	// tx, err := DB.Begin()
-	// if err != nil {
-	// 	return "", "err", err
-	// }
-	SQL_SELECT_MERCHANT := "SELECT * FROM " + merchant_meta + " WHERE merchant_uid=?"
-	rows, err := DB.Query(SQL_SELECT_MERCHANT, offer.Merchant_uid)
+	var oac OfferAllContent
+	SQL_DELETE_OFFERMETA := "SELECT * FROM " + offerMeta_table + " WHERE merchant_uid=?"
+	rows, err := DB.Query(SQL_DELETE_OFFERMETA, offer.Merchant_uid)
 	if err != nil {
 		return "", "err", err
 	}
-	var m_meta MerchantMeta
-	var m_meta_content_en MerchantContentEN
-	var m_meta_content_th MerchantContentTH
-	Merchants := make([]*MerchantMeta, 0, 19)
 	for rows.Next() {
-		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar,
-			&m_meta.Lat, &m_meta.Lon, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
-			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Create_at, &m_meta.Update_at)
+		err := rows.Scan(&oac.Id, &oac.Offer_uid, &oac.Offer_point, &oac.Merchant_uid,
+			&oac.Offer_cat_id, &oac.Offer_image_banner, &oac.Offer_image_poster,
+			&oac.Used, &oac.Quantity, &oac.Create_at, &oac.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
-
-		SELECT_QUERY_MCONTENT_TH := "SELECT name, shop_description FROM " + merchant_content + " WHERE lang='th' AND merchant_uid = '" + offer.Merchant_uid + "'"
-		rows2, err := DB.Query(SELECT_QUERY_MCONTENT_TH)
-		if err != nil {
-			return "", "err", err
-		}
-		for rows2.Next() {
-			err := rows2.Scan(&m_meta_content_th.Name_th, &m_meta_content_th.Shop_description_th)
-			if err != nil {
-				return "", "err", err
-			}
-		}
-
-		SELECT_QUERY_MCONTENT_EN := "SELECT name, shop_description FROM " + merchant_content + " WHERE lang='en' AND merchant_uid = '" + offer.Merchant_uid + "'"
-		rows3, err := DB.Query(SELECT_QUERY_MCONTENT_EN)
-		if err != nil {
-			return "", "err", err
-		}
-		for rows3.Next() {
-			err := rows3.Scan(&m_meta_content_en.Name_en, &m_meta_content_en.Shop_description_en)
-			if err != nil {
-				return "", "err", err
-			}
-		}
-
-		Merchants = append(Merchants, &MerchantMeta{
-			m_meta.Id, m_meta.Username, m_meta.Password, m_meta.Email, m_meta.Shop_avatar, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Phone_1, m_meta.Phone_2,
-			m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, m_meta_content_en.Name_en, m_meta_content_th.Name_th,
-			m_meta_content_en.Shop_description_en, m_meta_content_th.Shop_description_th, m_meta.Create_at, m_meta.Update_at,
-		})
-
 	}
 
-	s, _ := json.Marshal(Merchants)
-	log.Println(s)
-	log.Println(Merchants)
-	return "", "success", nil
+	SQL_DELETE_OFFER_TH := "SELECT name, condition_offer, description FROM " + offerContent_table + " WHERE offer_uid=? AND lang=?"
+	rows1, err := DB.Query(SQL_DELETE_OFFER_TH, oac.Offer_uid, "th")
+	log.Println(SQL_DELETE_OFFER_TH)
+	if err != nil {
+		return "", "err", err
+	}
+	for rows1.Next() {
+		err := rows.Scan(&oac.Name_th, &oac.Condition_offer_th, &oac.Description_th)
+		if err != nil {
+			return "", "err", err
+		}
+	}
+
+	SQL_DELETE_OFFER_EN := "SELECT name, condition_offer, description FROM " + offerContent_table + " WHERE offer_uid=? AND lang=?"
+	rows2, err := DB.Query(SQL_DELETE_OFFER_EN, offer.Merchant_uid, "en")
+	log.Println(rows2)
+	if err != nil {
+		return "", "err", err
+	}
+	for rows2.Next() {
+		err := rows.Scan(&oac.Name_en, &oac.Condition_offer_en, &oac.Description_en)
+		if err != nil {
+			return "", "err", err
+		}
+	}
+	log.Println(oac)
+	result := OfferAllContent{
+		oac.Id, oac.Offer_uid, oac.Merchant_uid, oac.Offer_point, oac.Offer_cat_id, oac.Offer_image_banner, oac.Offer_image_poster,
+		oac.Used, oac.Quantity, oac.Name_en, oac.Name_th, oac.Condition_offer_en, oac.Condition_offer_th,
+		oac.Description_en, oac.Description_th, oac.Create_at, oac.Update_at,
+	}
+	s, _ := json.Marshal(result)
+	offers_of_merchant := string(s)
+	log.Println(string(s))
+	return offers_of_merchant, "err", err
 }

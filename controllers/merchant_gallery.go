@@ -83,7 +83,7 @@ func UpdateMerchantGaller(c *gin.Context) {
 // delete
 func DeleteMerchantGaller(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
-	id_photo := c.Params.ByName("id")
+	id_photo := c.Params.ByName("uid")
 	id_int, _ := strconv.ParseInt(id_photo, 0, 64)
 	merchantGallery := &models.MerchantGallery{
 		Id: id_int,
