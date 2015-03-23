@@ -99,16 +99,15 @@ func (m *MerchantMeta) MerchantShowGallery(service_name string) (string, string,
 	if err != nil {
 		return "", "err", err
 	}
-	var g MerAllGallery
-
-	mGallery := make([]*MerAllGallery, 0, 4)
+	var g MerchantGallery
+	mGallery := make([]*MerchantGallery, 0, 4)
 
 	for rows.Next() {
-		err := rows.Scan(&g.Id, &g.Photo_url, &g.Merchant_id, &g.Create_at, &g.Update_at)
+		err := rows.Scan(&g.Id, &g.Photo_url, &g.Merchant_uid, &g.Create_at, &g.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
-		mGallery = append(mGallery, &MerAllGallery{g.Id, g.Photo_url, g.Merchant_id, g.Create_at, g.Update_at})
+		mGallery = append(mGallery, &MerchantGallery{g.Id, g.Photo_url, g.Merchant_uid, g.Create_at, g.Update_at})
 
 	}
 

@@ -45,11 +45,11 @@ func main() {
 
 		//# Offers API RESTful
 		// v1.GET("/:service_name/offers", controllers.ListOffersAll)
-		// v1.GET("/:service_name/offer_of_merchant/:id", controllers.ListOffersByMerchantID)
 		// v1.GET("/:service_name/offer/:id", controllers.ViewOffer)
-		v1.POST("/:service_name/offer", controllers.NewOffer) // doing
-		// v1.PUT("/:service_name/offer/:id", controllers.UpdateOffer)
-		// v1.DELETE("/:service_name/offer/:id", controllers.DeleteOffer)
+		v1.GET("/:service_name/offermerchant/:merchant_uid", controllers.ListOffersByMerchantID) //doing
+		v1.POST("/:service_name/offer", controllers.NewOffer)                                    // done
+		v1.PUT("/:service_name/offer/:uid", controllers.UpdateOffer)                             // done
+		v1.DELETE("/:service_name/offer/:uid", controllers.DeleteOffer)                          // done
 
 	}
 

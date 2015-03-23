@@ -132,7 +132,8 @@ func Gen_table(c *gin.Context) {
     offer_image_banner varchar(200) DEFAULT NULL,
     offer_image_poster varchar(200) DEFAULT NULL,
     used BIGINT(20) DEFAULT NULL,
-    qty BIGINT(20) DEFAULT NULL,
+    quantity BIGINT(20) DEFAULT NULL,
+    total BIGINT(20) DEFAULT NULL,
     create_at BIGINT(20) NULL DEFAULT NULL,
     update_at BIGINT(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
