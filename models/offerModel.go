@@ -8,7 +8,7 @@ import (
 )
 
 type OfferAllContent struct {
-	Id                 string
+	Id                 int64
 	Offer_uid          string
 	Merchant_uid       string
 	Offer_point        float64
@@ -183,6 +183,68 @@ func (offer *OfferAllContent) ListsOfferByMerchant(service_name string) (string,
 	if err != nil {
 		return "", "err", err
 	}
+
+	offers := make([]*OfferAllContent, 0, 17)
+	for rows.Next() {
+		err := rows.Scan(&oac.Id, &oac.Offer_uid, &oac.Offer_point, &oac.Merchant_uid,
+			&oac.Offer_cat_id, &oac.Offer_image_banner, &oac.Offer_image_poster,
+			&oac.Used, &oac.Quantity, &oac.Create_at, &oac.Update_at)
+		if err != nil {
+			return "", "err", err
+		}
+
+		SQL_SELECT_OFFER_TH := "SELECT name, condition_offer, description FROM " + offerContent_table + " WHERE offer_uid=? AND lang=?"
+		rows1, err := DB.Query(SQL_SELECT_OFFER_TH, oac.Offer_uid, "th")
+		if err != nil {
+			return "", "err", err
+		}
+		for rows1.Next() {
+			err := rows1.Scan(&oac.Name_th, &oac.Condition_offer_th, &oac.Description_th)
+			if err != nil {
+				return "", "err", err
+			}
+		}
+
+		SQL_SELECT_OFFER_EN := "SELECT name, condition_offer, description FROM " + offerContent_table + " WHERE offer_uid=? AND lang=?"
+		rows2, err := DB.Query(SQL_SELECT_OFFER_EN, oac.Offer_uid, "en")
+		if err != nil {
+			return "", "err", err
+		}
+		for rows2.Next() {
+			err := rows2.Scan(&oac.Name_en, &oac.Condition_offer_en, &oac.Description_en)
+			if err != nil {
+				return "", "err", err
+			}
+		}
+
+		offers = append(offers, &OfferAllContent{
+			oac.Id, oac.Offer_uid, oac.Merchant_uid, oac.Offer_point, oac.Offer_cat_id, oac.Offer_image_banner, oac.Offer_image_poster,
+			oac.Used, oac.Quantity, oac.Name_en, oac.Name_th, oac.Condition_offer_en, oac.Condition_offer_th,
+			oac.Description_en, oac.Description_th, oac.Create_at, oac.Update_at,
+		})
+	}
+	log.Println(offers)
+	s, _ := json.Marshal(offers)
+	offers_of_merchant := string(s)
+	return offers_of_merchant, "success", err
+}
+
+func (offer *OfferAllContent) ShowOfferInfo(service_name string) (string, string, error) {
+	offerMeta_table := service_name + "_offer_meta"
+	offerContent_table := service_name + "_offer_content"
+	ConnectDb()
+	var (
+		err error
+	)
+
+	var oac OfferAllContent
+	SQL_SELECT_OFFERMETA := "SELECT * FROM " + offerMeta_table + " WHERE offer_uid=?"
+	rows, err := DB.Query(SQL_SELECT_OFFERMETA, offer.Offer_uid)
+	if err != nil {
+		return "", "err", err
+	}
+
+	// offers := make([]*OfferAllContent, 0, 17)
 	for rows.Next() {
 		err := rows.Scan(&oac.Id, &oac.Offer_uid, &oac.Offer_point, &oac.Merchant_uid,
 			&oac.Offer_cat_id, &oac.Offer_image_banner, &oac.Offer_image_poster,
@@ -192,39 +254,37 @@ func (offer *OfferAllContent) ListsOfferByMerchant(service_name string) (string,
 		}
 	}
 
-	SQL_DELETE_OFFER_TH := "SELECT name, condition_offer, description FROM " + offerContent_table + " WHERE offer_uid=? AND lang=?"
-	rows1, err := DB.Query(SQL_DELETE_OFFER_TH, oac.Offer_uid, "th")
-	log.Println(SQL_DELETE_OFFER_TH)
+	SQL_SELECT_OFFER_TH := "SELECT name, condition_offer, description FROM " + offerContent_table + " WHERE offer_uid=? AND lang=?"
+	rows1, err := DB.Query(SQL_SELECT_OFFER_TH, oac.Offer_uid, "th")
 	if err != nil {
 		return "", "err", err
 	}
 	for rows1.Next() {
-		err := rows.Scan(&oac.Name_th, &oac.Condition_offer_th, &oac.Description_th)
+		err := rows1.Scan(&oac.Name_th, &oac.Condition_offer_th, &oac.Description_th)
 		if err != nil {
 			return "", "err", err
 		}
 	}
 
-	SQL_DELETE_OFFER_EN := "SELECT name, condition_offer, description FROM " + offerContent_table + " WHERE offer_uid=? AND lang=?"
-	rows2, err := DB.Query(SQL_DELETE_OFFER_EN, offer.Merchant_uid, "en")
-	log.Println(rows2)
+	SQL_SELECT_OFFER_EN := "SELECT name, condition_offer, description FROM " + offerContent_table + " WHERE offer_uid=? AND lang=?"
+	rows2, err := DB.Query(SQL_SELECT_OFFER_EN, oac.Offer_uid, "en")
 	if err != nil {
 		return "", "err", err
 	}
 	for rows2.Next() {
-		err := rows.Scan(&oac.Name_en, &oac.Condition_offer_en, &oac.Description_en)
+		err := rows2.Scan(&oac.Name_en, &oac.Condition_offer_en, &oac.Description_en)
 		if err != nil {
 			return "", "err", err
 		}
 	}
-	log.Println(oac)
+
 	result := OfferAllContent{
 		oac.Id, oac.Offer_uid, oac.Merchant_uid, oac.Offer_point, oac.Offer_cat_id, oac.Offer_image_banner, oac.Offer_image_poster,
 		oac.Used, oac.Quantity, oac.Name_en, oac.Name_th, oac.Condition_offer_en, oac.Condition_offer_th,
 		oac.Description_en, oac.Description_th, oac.Create_at, oac.Update_at,
 	}
 	s, _ := json.Marshal(result)
-	offers_of_merchant := string(s)
-	log.Println(string(s))
-	return offers_of_merchant, "err", err
+	offers_info := string(s)
+	// log.Println(string(s))
+	return offers_info, "success", err
 }

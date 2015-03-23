@@ -305,7 +305,7 @@ func GetMerchantInfo(c *gin.Context) {
 			"message": err,
 		})
 	} else {
-		log.Println(data)
+		// log.Println(data)
 		mercahnts := []byte(data)
 		res := &MerchantFormAllLangJson{}
 		err_unmarshal := json.Unmarshal(mercahnts, &res)

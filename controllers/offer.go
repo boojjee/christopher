@@ -3,7 +3,7 @@ package controllers
 import (
 	"christopher/helpers"
 	"christopher/models"
-	// "encoding/json"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	// "log"
 
@@ -26,6 +26,25 @@ type offerFormAllLang struct {
 	Description_en     string `form:"description_en" `
 	Description_th     string `form:"description_en"`
 	Lang               string `form:"lang"`
+}
+type offerFormAllLang2 struct {
+	Id                 int    `json:"id", Number`
+	Offer_uid          string `json:"offer_uid"`
+	Merchant_uid       string `json:"merchant_uid"`
+	Offer_point        int    `json:"offer_point", Number`
+	Offer_cat_id       int    `json:"offer_cat_id", Number`
+	Offer_image_banner string `json:"offer_image_banner"`
+	Offer_image_poster string `json:"offer_image_poster"`
+	Used               int    `json:"used", Number`
+	Quantity           int    `json:"quantity", Number`
+	Name_en            string `json:"name_en"`
+	Name_th            string `json:"name_th" `
+	Condition_offer_en string `json:"condition_offer_en"`
+	Condition_offer_th string `json:"condition_offer_th"`
+	Description_en     string `json:"description_en" `
+	Description_th     string `json:"description_en"`
+	Create_at          int    `json:"Create_at"`
+	Update_at          int    `json:"Update_at"`
 }
 
 func NewOffer(c *gin.Context) {
@@ -132,17 +151,58 @@ func ListOffersByMerchantID(c *gin.Context) {
 		Merchant_uid: Merchant_uid,
 	}
 	data, msg, err := offer.ListsOfferByMerchant(SERVICE_NAME)
-
 	if msg == "err" {
 		c.JSON(200, gin.H{
-			"status": 500,
-			"error":  err,
+			"status":  500,
+			"message": err,
 		})
 	} else {
+		offers := []byte(data)
+		OfferSlice := make([]OfferSingle, 0)
+		err_unmarshal := json.Unmarshal(offers, &OfferSlice)
+		if err_unmarshal != nil {
+			c.JSON(200, gin.H{
+				"status": 500,
+				"error":  err,
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"status":  200,
+				"message": "Success!",
+				"data":    OfferSlice,
+			})
+		}
+	}
+}
+
+func ViewOffer(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	offer_uid := c.Params.ByName("uid")
+	offer := &models.OfferAllContent{
+		Offer_uid: offer_uid,
+	}
+	data, msg, err := offer.ShowOfferInfo(SERVICE_NAME)
+	if msg == "err" {
 		c.JSON(200, gin.H{
-			"status":  200,
-			"message": "Deleted!",
-			"data":    data,
+			"status":  500,
+			"message": err,
 		})
+	} else {
+		offers := []byte(data)
+		res := &offerFormAllLang2{}
+		err_unmarshal := json.Unmarshal(offers, &res)
+
+		if err_unmarshal != nil {
+			c.JSON(200, gin.H{
+				"status": 500,
+				"error":  err,
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"status":  200,
+				"message": "Success!",
+				"data":    res,
+			})
+		}
 	}
 }
