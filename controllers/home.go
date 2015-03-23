@@ -19,5 +19,5 @@ func Home(c *gin.Context) {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
-	c.JSON(200, gin.H{"status": "OK!", "build": "2332"})
+	c.JSON(200, gin.H{"status": "OK!", "build": "0.123"})
 }
