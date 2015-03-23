@@ -163,18 +163,18 @@ func Gen_table(c *gin.Context) {
 		checkErr(err)
 		//------------------------------------------------------
 		// Offer Catagory
-		var offer_catagory = prefix + "_" + "offer_catagory"
-		var offer_catagory_table = `CREATE TABLE ` + offer_catagory + ` (
+		var offer_category = prefix + "_" + "offer_category"
+		var offer_category_table = `CREATE TABLE ` + offer_category + ` (
     id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT, 
-    offer_catagory_name varchar(200) DEFAULT NULL, 
+    offer_category_name varchar(200) DEFAULT NULL, 
     slug varchar(200) DEFAULT NULL, 
     create_at BIGINT(20) NULL DEFAULT NULL,
     update_at BIGINT(20) NULL DEFAULT NULL,
     PRIMARY KEY (id)
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;`
 
-		result_offer_catagory, err := DB.Exec(offer_catagory_table)
-		log.Println(result_offer_catagory)
+		result_offer_category, err := DB.Exec(offer_category_table)
+		log.Println(result_offer_category)
 		checkErr(err)
 		//------------------------------------------------------
 

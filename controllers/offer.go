@@ -24,7 +24,7 @@ type offerFormAllLang struct {
 	Condition_offer_en string `form:"condition_offer_en"`
 	Condition_offer_th string `form:"condition_offer_th"`
 	Description_en     string `form:"description_en" `
-	Description_th     string `form:"description_en"`
+	Description_th     string `form:"description_th"`
 	Lang               string `form:"lang"`
 }
 type offerFormAllLang2 struct {
@@ -42,7 +42,7 @@ type offerFormAllLang2 struct {
 	Condition_offer_en string `json:"condition_offer_en"`
 	Condition_offer_th string `json:"condition_offer_th"`
 	Description_en     string `json:"description_en" `
-	Description_th     string `json:"description_en"`
+	Description_th     string `json:"description_th"`
 	Create_at          int    `json:"Create_at"`
 	Update_at          int    `json:"Update_at"`
 }

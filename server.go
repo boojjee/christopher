@@ -51,10 +51,10 @@ func main() {
 		v1.PUT("/:service_name/offer/:uid", controllers.UpdateOffer)                             // done
 		v1.DELETE("/:service_name/offer/:uid", controllers.DeleteOffer)                          // done
 
-		v1.GET("/:service_name/offer_catagories", controllers.ListAllCatagoriesOffer)          // done
-		v1.POST("/:service_name/offer_catagory", controllers.NewCatagoriesOffer)               // done
-		v1.PUT("/:service_name/offer_catagory/:cat_id", controllers.UpdateCatagoriesOffer)     // done
-		v1.DELETE("/:service_name/offer_catagory/:cat_id", controllers.DelelteCatagoriesOffer) // done
+		v1.GET("/:service_name/offer_categories", controllers.ListAllCategoriesOffer)          // done
+		v1.POST("/:service_name/offer_category", controllers.NewCategoriesOffer)               // done
+		v1.PUT("/:service_name/offer_category/:cat_id", controllers.UpdateCategoriesOffer)     // done
+		v1.DELETE("/:service_name/offer_category/:cat_id", controllers.DelelteCategoriesOffer) // done
 
 	}
 
