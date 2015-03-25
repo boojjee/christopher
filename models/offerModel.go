@@ -72,7 +72,7 @@ func (offer *OfferAllContent) Save(service_name string) (string, error) {
 	(name, offer_uid, condition_offer, description, lang, create_at, update_at) 
 	VALUES (?, ?, ?, ?, ?, ?, ?)
 	`
-	_, err3 := tx.Exec(SQL_INSERT_OFCONTENT_TH, offer.Name_en, offer.Offer_uid, offer.Condition_offer_th,
+	_, err3 := tx.Exec(SQL_INSERT_OFCONTENT_TH, offer.Name_th, offer.Offer_uid, offer.Condition_offer_th,
 		offer.Description_th, "th", offer.Create_at, offer.Update_at)
 	log.Println(err3)
 	if err3 != nil {
@@ -128,7 +128,7 @@ func (offer *OfferAllContent) Update(service_name string) (string, error) {
 	name=?, condition_offer=?, description=?, update_at=? WHERE offer_uid=? AND lang='th'`
 
 	_, err3 := tx.Exec(UPDATE_OFFER_CONTENT_TH,
-		offer.Name_en, offer.Condition_offer_en, offer.Description_en, offer.Update_at, offer.Offer_uid)
+		offer.Name_th, offer.Condition_offer_th, offer.Description_th, offer.Update_at, offer.Offer_uid)
 
 	if err3 != nil {
 		tx.Rollback()
