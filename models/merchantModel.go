@@ -4,95 +4,110 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
-	// "strings"
 )
 
 type MerchantMeta struct {
-	Id                  int64  `json:"id"`
-	Username            string `json:"username"`
-	Password            string `json:"password"`
-	Email               string `json:"email"`
-	Shop_avatar         string `json:"shop_avatar"`
-	Merchant_uid        string `json:"merchant_uid"`
-	Lat                 string `json:"lat"`
-	Lon                 string `json:"lon"`
-	Phone_1             string `json:"phone_1"`
-	Phone_2             string `json:"phone_2"`
-	Fax                 string `json:"fax"`
-	Line_id             string `json:"line_id"`
-	Facebook_link       string `json:"facebook_link"`
-	Website_link        string `json:"website_link"`
-	Merchant_status     string `json:"merchant_status"`
-	Name_en             string `json:"name_en"`
-	Name_th             string `json:"name_th"`
-	Shop_description_en string `json:"shop_description_en"`
-	Shop_description_th string `json:"shop_description_th"`
-	Create_at           int64  `json:"create_at"`
-	Update_at           int64  `json:"update_at"`
+	Id                   int64  `json:"id"`
+	Username             string `json:"username"`
+	Password             string `json:"password"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Merchant_uid         string `json:"merchant_uid"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `json:"province"`
+	Phone_1              string `json:"phone_1"`
+	Phone_2              string `json:"phone_2"`
+	Fax                  string `json:"fax"`
+	Line_id              string `json:"line_id"`
+	Facebook_link        string `json:"facebook_link"`
+	Website_link         string `json:"website_link"`
+	Merchant_status      string `json:"merchant_status"`
+	Merchant_category_id int64  `json:"merchant_category_id", Number`
+	Merchant_province    string `json:"merchant_province"`
+	Name_en              string `json:"name_en"`
+	Name_th              string `json:"name_th"`
+	Shop_description_en  string `json:"shop_description_en"`
+	Shop_description_th  string `json:"shop_description_th"`
+	Create_at            int64  `json:"create_at"`
+	Update_at            int64  `json:"update_at"`
 }
 type MerchantMetaGalley struct {
-	Id                  int64  `json:"id"`
-	Username            string `json:"username"`
-	Password            string `json:"password"`
-	Email               string `json:"email"`
-	Shop_avatar         string `json:"shop_avatar"`
-	Merchant_uid        string `json:"merchant_uid"`
-	Lat                 string `json:"lat"`
-	Lon                 string `json:"lon"`
-	Phone_1             string `json:"phone_1"`
-	Phone_2             string `json:"phone_2"`
-	Fax                 string `json:"fax"`
-	Line_id             string `json:"line_id"`
-	Facebook_link       string `json:"facebook_link"`
-	Website_link        string `json:"website_link"`
-	Merchant_status     string `json:"merchant_status"`
-	Name_en             string `json:"name_en"`
-	Name_th             string `json:"name_th"`
-	Shop_description_en string `json:"shop_description_en"`
-	Shop_description_th string `json:"shop_description_th"`
-	Gallery             []*MGallery
-	Create_at           int64 `json:"create_at"`
-	Update_at           int64 `json:"update_at"`
+	Id                   int64  `json:"id, Number"`
+	Username             string `json:"username"`
+	Password             string `json:"password"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Merchant_uid         string `json:"merchant_uid"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `json:"province"`
+	Phone_1              string `json:"phone_1"`
+	Phone_2              string `json:"phone_2"`
+	Fax                  string `json:"fax"`
+	Line_id              string `json:"line_id"`
+	Facebook_link        string `json:"facebook_link"`
+	Website_link         string `json:"website_link"`
+	Merchant_status      string `json:"merchant_status"`
+	Merchant_category_id int64  `json:"merchant_category_id", Number`
+	Merchant_province    string `json:"merchant_province"`
+	Name_en              string `json:"name_en"`
+	Name_th              string `json:"name_th"`
+	Shop_description_en  string `json:"shop_description_en"`
+	Shop_description_th  string `json:"shop_description_th"`
+	Gallery              []*MGallery
+	Create_at            int64 `json:"create_at, Number"`
+	Update_at            int64 `json:"update_at, Number"`
 }
 type MerchantContentNoLang struct {
-	Username         string `json:"username"`
-	Email            string `json:"email"`
-	Shop_avatar      string `json:"shop_avatar"`
-	Merchant_uid     string `json:"merchant_uid"`
-	Lat              string `json:"lat"`
-	Lon              string `json:"lon"`
-	Phone_1          string `json:"phone_1"`
-	Phone_2          string `json:"phone_2"`
-	Fax              string `json:"fax"`
-	Line_id          string `json:"line_id"`
-	Facebook_link    string `json:"facebook_link"`
-	Website_link     string `json:"website_link"`
-	Merchant_status  string `json:"merchant_status"`
-	Name             string `json:"name"`
-	Shop_description string `json:"shop_description"`
-	Create_at        int64  `json:"create_at"`
-	Update_at        int64  `json:"update_at"`
+	Username             string `json:"username"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Merchant_uid         string `json:"merchant_uid"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `json:"province"`
+	Phone_1              string `json:"phone_1"`
+	Phone_2              string `json:"phone_2"`
+	Fax                  string `json:"fax"`
+	Line_id              string `json:"line_id"`
+	Facebook_link        string `json:"facebook_link"`
+	Website_link         string `json:"website_link"`
+	Merchant_status      string `json:"merchant_status"`
+	Merchant_category_id int64  `json:"merchant_category_id", Number`
+	Merchant_province    string `json:"merchant_province"`
+	Name                 string `json:"name"`
+	Shop_description     string `json:"shop_description"`
+	Create_at            int64  `json:"create_at, Number"`
+	Update_at            int64  `json:"update_at, Number"`
 }
 
 type MerchantContentNoLangGallery struct {
-	Username         string `json:"username"`
-	Email            string `json:"email"`
-	Shop_avatar      string `json:"shop_avatar"`
-	Merchant_uid     string `json:"merchant_uid"`
-	Lat              string `json:"lat"`
-	Lon              string `json:"lon"`
-	Phone_1          string `json:"phone_1"`
-	Phone_2          string `json:"phone_2"`
-	Fax              string `json:"fax"`
-	Line_id          string `json:"line_id"`
-	Facebook_link    string `json:"facebook_link"`
-	Website_link     string `json:"website_link"`
-	Merchant_status  string `json:"merchant_status"`
-	Name             string `json:"name"`
-	Shop_description string `json:"shop_description"`
-	Gallery          []*MGallery
-	Create_at        int64 `json:"create_at"`
-	Update_at        int64 `json:"update_at"`
+	Username             string `json:"username"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Merchant_uid         string `json:"merchant_uid"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `json:"province"`
+	Phone_1              string `json:"phone_1"`
+	Phone_2              string `json:"phone_2"`
+	Fax                  string `json:"fax"`
+	Line_id              string `json:"line_id"`
+	Facebook_link        string `json:"facebook_link"`
+	Website_link         string `json:"website_link"`
+	Merchant_status      string `json:"merchant_status"`
+	Merchant_category_id int64  `json:"merchant_category_id", Number`
+	Merchant_province    string `json:"merchant_province"`
+	Name                 string `json:"name"`
+	Shop_description     string `json:"shop_description"`
+	Gallery              []*MGallery
+	Create_at            int64 `json:"create_at"`
+	Update_at            int64 `json:"update_at"`
 }
 
 type MerchantContentTH struct {
@@ -135,12 +150,13 @@ func (m *MerchantMeta) Save(service_name string) (string, error) {
 		return "err", err
 	}
 	SQL_INSERT_MMETA := `INSERT INTO ` + merchant_meta + `
-											(merchant_uid, username,  password, email , shop_avatar, lat, lon, 
-											 phone_1, phone_2, fax, line_id, facebook_link, website_link, merchant_status, create_at, update_at) 
-											VALUES(?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+											(merchant_uid, username,  password, email , shop_avatar_s, shop_avatar_l, lat, lon, province,
+											 phone_1, phone_2, fax, line_id, facebook_link, website_link, merchant_status, 
+											 merchant_category, merchant_province, create_at, update_at) 
+											VALUES(?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
-	_, err1 := tx.Exec(SQL_INSERT_MMETA, m.Merchant_uid, m.Username, m.Password, m.Email, m.Shop_avatar, m.Lat, m.Lon,
-		m.Phone_1, m.Phone_2, m.Fax, m.Line_id, m.Facebook_link, m.Website_link, m.Merchant_status, m.Create_at, m.Update_at)
+	_, err1 := tx.Exec(SQL_INSERT_MMETA, m.Merchant_uid, m.Username, m.Password, m.Email, m.Shop_avatar_s, m.Shop_avatar_l, m.Lat, m.Lon, m.Province,
+		m.Phone_1, m.Phone_2, m.Fax, m.Line_id, m.Facebook_link, m.Website_link, m.Merchant_status, m.Merchant_category_id, m.Merchant_province, m.Create_at, m.Update_at)
 
 	if err1 != nil {
 		tx.Rollback()
@@ -182,12 +198,12 @@ func (m *MerchantMeta) Update(service_name string) (string, error) {
 		return "err", err
 	}
 
-	SQL_UPDATE_MERCAHANT_META := `UPDATE ` + merchant_meta + ` SET username=?, email=? , shop_avatar=?, lat=?, lon=?, 
-		phone_1=?, phone_2=?, fax=?, line_id=?, facebook_link=?, website_link=?, merchant_status=?, update_at=? WHERE merchant_uid=?`
+	SQL_UPDATE_MERCAHANT_META := `UPDATE ` + merchant_meta + ` SET username=?, email=? , shop_avatar_s=?, shop_avatar_l=?,  lat=?, lon=?, province=?
+		phone_1=?, phone_2=?, fax=?, line_id=?, facebook_link=?, website_link=?, merchant_status=?, merchant_category=?, merchant_province=?, update_at=? WHERE merchant_uid=?`
 	_, err3 := tx.Exec(SQL_UPDATE_MERCAHANT_META,
-		m.Username, m.Email, m.Shop_avatar, m.Lat, m.Lon,
+		m.Username, m.Email, m.Shop_avatar_s, m.Shop_avatar_l, m.Lat, m.Lon, m.Province,
 		m.Phone_1, m.Phone_2, m.Fax, m.Line_id, m.Facebook_link,
-		m.Website_link, m.Merchant_status, m.Update_at, m.Merchant_uid)
+		m.Website_link, m.Merchant_status, m.Merchant_category_id, m.Merchant_province, m.Update_at, m.Merchant_uid)
 
 	// log.Println(err3)
 	if err3 != nil {
@@ -297,9 +313,9 @@ func (m *MerchantMeta) MerchantShowInfoAllLang(service_name string) (string, str
 	var m_meta_content_th MerchantContentTH
 	// Merchants := make([]*MerchantMeta, 0, 19)
 	for rows.Next() {
-		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar,
-			&m_meta.Lat, &m_meta.Lon, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
-			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Create_at, &m_meta.Update_at)
+		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar_s, &m_meta.Shop_avatar_l,
+			&m_meta.Lat, &m_meta.Lon, &m_meta.Province, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
+			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Merchant_category_id, &m_meta.Merchant_province, &m_meta.Create_at, &m_meta.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -334,8 +350,8 @@ func (m *MerchantMeta) MerchantShowInfoAllLang(service_name string) (string, str
 		}
 	}
 	mm := MerchantMeta{
-		m_meta.Id, m_meta.Username, m_meta.Password, m_meta.Email, m_meta.Shop_avatar, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Phone_1, m_meta.Phone_2,
-		m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, m_meta_content_en.Name_en, m_meta_content_th.Name_th,
+		m_meta.Id, m_meta.Username, m_meta.Password, m_meta.Email, m_meta.Shop_avatar_s, m_meta.Shop_avatar_l, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Province, m_meta.Phone_1, m_meta.Phone_2,
+		m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, m_meta.Merchant_category_id, m_meta.Merchant_province, m_meta_content_en.Name_en, m_meta_content_th.Name_th,
 		m_meta_content_en.Shop_description_en, m_meta_content_th.Shop_description_th, m_meta.Create_at, m_meta.Update_at,
 	}
 
@@ -363,9 +379,9 @@ func (m *MerchantMeta) MerchantShowInfoByLang(service_name string, lang string) 
 	var mContent MerchantContent
 
 	for rows.Next() {
-		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar,
-			&m_meta.Lat, &m_meta.Lon, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
-			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Create_at, &m_meta.Update_at)
+		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar_s, &m_meta.Shop_avatar_l,
+			&m_meta.Lat, &m_meta.Lon, &m_meta.Province, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
+			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Merchant_category_id, &m_meta.Merchant_province, &m_meta.Create_at, &m_meta.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -382,16 +398,13 @@ func (m *MerchantMeta) MerchantShowInfoByLang(service_name string, lang string) 
 		}
 	}
 
-	// MerchantContentNoLangs := make([]*MerchantContentNoLang, 0, 16)
-	// MerchantContentNoLangs = append(MerchantContentNoLangs, &MerchantContentNoLang{
 	result := MerchantContentNoLang{
-		m_meta.Username, m_meta.Email, m_meta.Shop_avatar, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon,
+		m_meta.Username, m_meta.Email, m_meta.Shop_avatar_s, m_meta.Shop_avatar_l, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Province,
 		m_meta.Phone_1, m_meta.Phone_2, m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link,
-		m_meta.Merchant_status, mContent.Name, mContent.Shop_description, m_meta.Create_at, m_meta.Update_at,
+		m_meta.Merchant_status, m_meta.Merchant_category_id, m_meta.Merchant_province, mContent.Name, mContent.Shop_description, m_meta.Create_at, m_meta.Update_at,
 	}
 
 	s, _ := json.Marshal(result)
-	// log.Println(string(s))
 	merchentLists := string(s)
 	return merchentLists, "success", nil
 }
@@ -413,9 +426,9 @@ func MerchantListAllLang(service_name string) (string, string, error) {
 	var m_meta_content_th MerchantContentTH
 	Merchants := make([]*MerchantMeta, 0, 19)
 	for rows.Next() {
-		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar,
-			&m_meta.Lat, &m_meta.Lon, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
-			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Create_at, &m_meta.Update_at)
+		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar_s, &m_meta.Shop_avatar_l,
+			&m_meta.Lat, &m_meta.Lon, &m_meta.Province, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
+			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Merchant_category_id, &m_meta.Merchant_province, &m_meta.Create_at, &m_meta.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -445,8 +458,8 @@ func MerchantListAllLang(service_name string) (string, string, error) {
 		}
 
 		Merchants = append(Merchants, &MerchantMeta{
-			m_meta.Id, m_meta.Username, m_meta.Password, m_meta.Email, m_meta.Shop_avatar, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Phone_1, m_meta.Phone_2,
-			m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, m_meta_content_en.Name_en, m_meta_content_th.Name_th,
+			m_meta.Id, m_meta.Username, m_meta.Password, m_meta.Email, m_meta.Shop_avatar_s, m_meta.Shop_avatar_l, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Province, m_meta.Phone_1, m_meta.Phone_2,
+			m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, m_meta.Merchant_category_id, m_meta.Merchant_province, m_meta_content_en.Name_en, m_meta_content_th.Name_th,
 			m_meta_content_en.Shop_description_en, m_meta_content_th.Shop_description_th, m_meta.Create_at, m_meta.Update_at,
 		})
 
@@ -476,9 +489,9 @@ func MerchantListByLang(service_name string, lang string) (string, string, error
 	// Merchants := make([]*MerchantMeta, 0, 19)
 	MerchantContentNoLangs := make([]*MerchantContentNoLang, 0, 16)
 	for rows.Next() {
-		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar,
-			&m_meta.Lat, &m_meta.Lon, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
-			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Create_at, &m_meta.Update_at)
+		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar_s, &m_meta.Shop_avatar_l,
+			&m_meta.Lat, &m_meta.Lon, &m_meta.Province, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
+			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Merchant_category_id, &m_meta.Merchant_province, &m_meta.Create_at, &m_meta.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -497,9 +510,9 @@ func MerchantListByLang(service_name string, lang string) (string, string, error
 		}
 
 		MerchantContentNoLangs = append(MerchantContentNoLangs, &MerchantContentNoLang{
-			m_meta.Username, m_meta.Email, m_meta.Shop_avatar, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon,
+			m_meta.Username, m_meta.Email, m_meta.Shop_avatar_s, m_meta.Shop_avatar_l, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Province,
 			m_meta.Phone_1, m_meta.Phone_2, m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link,
-			m_meta.Merchant_status, mContent.Name, mContent.Shop_description, m_meta.Create_at, m_meta.Update_at,
+			m_meta.Merchant_status, m_meta.Merchant_category_id, m_meta.Merchant_province, mContent.Name, mContent.Shop_description, m_meta.Create_at, m_meta.Update_at,
 		})
 
 	}
@@ -530,9 +543,9 @@ func MerchantListWithGallery(service_name string) (string, string, error) {
 	Merchants := make([]*MerchantMetaGalley, 0, 20)
 
 	for rows.Next() {
-		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar,
-			&m_meta.Lat, &m_meta.Lon, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
-			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Create_at, &m_meta.Update_at)
+		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar_s, &m_meta.Shop_avatar_l,
+			&m_meta.Lat, &m_meta.Lon, &m_meta.Province, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
+			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Merchant_category_id, &m_meta.Merchant_province, &m_meta.Create_at, &m_meta.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -580,9 +593,9 @@ func MerchantListWithGallery(service_name string) (string, string, error) {
 		}
 
 		Merchants = append(Merchants, &MerchantMetaGalley{
-			m_meta.Id, m_meta.Username, m_meta.Password, m_meta.Email, m_meta.Shop_avatar, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Phone_1, m_meta.Phone_2,
-			m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, m_meta_content_en.Name_en, m_meta_content_th.Name_th,
-			m_meta_content_en.Shop_description_en, m_meta_content_th.Shop_description_th, mGallery, m_meta.Create_at, m_meta.Update_at,
+			m_meta.Id, m_meta.Username, m_meta.Password, m_meta.Email, m_meta.Shop_avatar_s, m_meta.Shop_avatar_l, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Province,
+			m_meta.Phone_1, m_meta.Phone_2, m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, m_meta.Merchant_category_id,
+			m_meta.Merchant_province, m_meta_content_en.Name_en, m_meta_content_th.Name_th, m_meta_content_en.Shop_description_en, m_meta_content_th.Shop_description_th, mGallery, m_meta.Create_at, m_meta.Update_at,
 		})
 
 	}
@@ -610,9 +623,9 @@ func MerchantListWithGalleryByLang(service_name string, lang string) (string, st
 	Merchants := make([]*MerchantContentNoLangGallery, 0, 19)
 
 	for rows.Next() {
-		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar,
-			&m_meta.Lat, &m_meta.Lon, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
-			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Create_at, &m_meta.Update_at)
+		err := rows.Scan(&m_meta.Id, &m_meta.Merchant_uid, &m_meta.Username, &m_meta.Password, &m_meta.Email, &m_meta.Shop_avatar_s, &m_meta.Shop_avatar_l,
+			&m_meta.Lat, &m_meta.Lon, &m_meta.Province, &m_meta.Phone_1, &m_meta.Phone_2, &m_meta.Fax, &m_meta.Line_id, &m_meta.Facebook_link,
+			&m_meta.Website_link, &m_meta.Merchant_status, &m_meta.Merchant_category_id, &m_meta.Merchant_province, &m_meta.Create_at, &m_meta.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -647,8 +660,8 @@ func MerchantListWithGalleryByLang(service_name string, lang string) (string, st
 		}
 
 		Merchants = append(Merchants, &MerchantContentNoLangGallery{
-			m_meta.Username, m_meta.Email, m_meta.Shop_avatar, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Phone_1, m_meta.Phone_2,
-			m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, mContent.Name,
+			m_meta.Username, m_meta.Email, m_meta.Shop_avatar_s, m_meta.Shop_avatar_l, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon, m_meta.Province, m_meta.Phone_1, m_meta.Phone_2,
+			m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link, m_meta.Merchant_status, m_meta.Merchant_category_id, m_meta.Merchant_province, mContent.Name,
 			mContent.Shop_description, mGallery, m_meta.Create_at, m_meta.Update_at,
 		})
 

@@ -12,145 +12,181 @@ import (
 type MerchantCollection []map[string]string
 type MerchantSigle map[string]interface{}
 type MerchantForm struct {
-	Username         string `form:"username" binding:"required"`
-	Name             string `form:"name" binding:"required"`
-	Password         string `form:"password" binding:"required"`
-	Email            string `form:"email" binding:"required"`
-	Shop_avatar      string `form:"shop_avatar" binding:"required"`
-	Shop_description string `form:"shop_description" binding:"required"`
-	Lat              string `form:"lat" binding:"required"`
-	Lon              string `form:"lon" binding:"required"`
+	Username             string `form:"username"`
+	Name                 string `form:"name"`
+	Password             string `form:"password"`
+	Email                string `form:"email"`
+	Shop_avatar_s        string `form:"shop_avatar_s"`
+	Shop_avatar_l        string `form:"shop_avatar_l"`
+	Shop_description     string `form:"shop_description"`
+	Lat                  string `form:"lat"`
+	Lon                  string `form:"lon"`
+	Merchant_category_id string `form:"merchant_category_id" `
+	Merchant_province    string `form:"merchant_province"`
 }
 
 type MerchantFormAllLang struct {
-	Username            string `form:"username"`
-	Password            string `form:"password"`
-	Email               string `form:"email"`
-	Shop_avatar         string `form:"shop_avatar"`
-	Lat                 string `form:"lat"`
-	Lon                 string `form:"lon"`
-	Phone_1             string `form:"phone_1"`
-	Phone_2             string `form:"phone_2"`
-	Fax                 string `form:"fax"`
-	Line_id             string `form:"line_id"`
-	Facebook_link       string `form:"facebook_link"`
-	Website_link        string `form:"website_link"`
-	Name_en             string `form:"name_en"`
-	Name_th             string `form:"name_th"`
-	Shop_description_en string `form:"shop_description_en"`
-	Shop_description_th string `form:"shop_description_th"`
-	Merchant_status     string `form:"merchant_status"`
+	Username             string `form:"username"`
+	Password             string `form:"password"`
+	Email                string `form:"email"`
+	Shop_avatar_s        string `form:"shop_avatar_s"`
+	Shop_avatar_l        string `form:"shop_avatar_l"`
+	Lat                  string `form:"lat"`
+	Lon                  string `form:"lon"`
+	Province             string `form:"province"`
+	Phone_1              string `form:"phone_1"`
+	Phone_2              string `form:"phone_2"`
+	Fax                  string `form:"fax"`
+	Line_id              string `form:"line_id"`
+	Facebook_link        string `form:"facebook_link"`
+	Website_link         string `form:"website_link"`
+	Name_en              string `form:"name_en"`
+	Name_th              string `form:"name_th"`
+	Shop_description_en  string `form:"shop_description_en"`
+	Shop_description_th  string `form:"shop_description_th"`
+	Merchant_status      string `form:"merchant_status"`
+	Merchant_category_id string `form:"merchant_category_id"`
+	Merchant_province    string `form:"merchant_province"`
 }
 
 type MerchantFormEdit struct {
-	Username         string `form:"username"`
-	Name             string `form:"name"`
-	Password         string `form:"password"`
-	Email            string `form:"email"`
-	Shop_avatar      string `form:"shop_avatar"`
-	Shop_description string `form:"shop_description"`
-	Lat              string `form:"lat"`
-	Lon              string `form:"lon"`
+	Username             string `form:"username"`
+	Name                 string `form:"name"`
+	Password             string `form:"password"`
+	Email                string `form:"email"`
+	Shop_avatar_s        string `form:"shop_avatar_s"`
+	Shop_avatar_l        string `form:"shop_avatar_l"`
+	Shop_description     string `form:"shop_description"`
+	Lat                  string `form:"lat"`
+	Lon                  string `form:"lon"`
+	Province             string `form:"province"`
+	Merchant_category_id string `form:"merchant_category_id"`
+	Merchant_province    string `form:"merchant_province"`
 }
+
 type MerchantAuthenForm struct {
 	Username string `form:"username" binding:"required"`
 	Password string `form:"password" binding:"required"`
 }
 
 type Merchants struct {
-	Id               int    `json:"id, Number"`
-	Username         string `json:"username"`
-	Name             string `json:"name"`
-	Password         string `json:"password"`
-	Email            string `json:"email"`
-	Shop_avatar      string `json:"shop_avatar"`
-	Shop_description string `json:"shop_description"`
-	Lat              string `json:"lat"`
-	Lon              string `json:"lon"`
-	Create_at        int    `json:"create_at, Number"`
-	Update_at        int    `json:"update_at, Number"`
+	Id                   int    `json:"id, Number"`
+	Username             string `json:"username"`
+	Name                 string `json:"name"`
+	Password             string `json:"password"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_s"`
+	Shop_description     string `json:"shop_description"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `form:"province"`
+	Create_at            int    `json:"create_at, Number"`
+	Update_at            int    `json:"update_at, Number"`
+	Merchant_category_id int    `json:"merchant_category_id, Number"`
+	Merchant_province    string `form:"merchant_province"`
 }
 type MerchantFormAllLangJson struct {
-	Id                  int    `json:"id, Number"`
-	Username            string `json:"username"`
-	Password            string `json:"password"`
-	Email               string `json:"email"`
-	Shop_avatar         string `json:"shop_avatar"`
-	Merchant_uid        string `json:"merchant_uid"`
-	Lat                 string `json:"lat"`
-	Lon                 string `json:"lon"`
-	Phone_1             string `json:"phone_1"`
-	Phone_2             string `json:"phone_2"`
-	Fax                 string `json:"fax"`
-	Line_id             string `json:"line_id"`
-	Facebook_link       string `json:"facebook_link"`
-	Website_link        string `json:"website_link"`
-	Name_en             string `json:"name_en"`
-	Name_th             string `json:"name_th"`
-	Shop_description_en string `json:"shop_description_en"`
-	Shop_description_th string `json:"shop_description_th"`
-	Merchant_status     string `json:"merchant_status"`
-	Create_at           int    `json:"create_at, Number"`
-	Update_at           int    `json:"update_at, Number"`
+	Id                   int    `json:"id, Number"`
+	Username             string `json:"username"`
+	Password             string `json:"password"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Merchant_uid         string `json:"merchant_uid"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `form:"province"`
+	Phone_1              string `json:"phone_1"`
+	Phone_2              string `json:"phone_2"`
+	Fax                  string `json:"fax"`
+	Line_id              string `json:"line_id"`
+	Facebook_link        string `json:"facebook_link"`
+	Website_link         string `json:"website_link"`
+	Name_en              string `json:"name_en"`
+	Name_th              string `json:"name_th"`
+	Shop_description_en  string `json:"shop_description_en"`
+	Shop_description_th  string `json:"shop_description_th"`
+	Merchant_status      string `json:"merchant_status"`
+	Merchant_category_id int    `json:"merchant_category_id, Number"`
+	Merchant_province    string `form:"merchant_province"`
+	Create_at            int    `json:"create_at, Number"`
+	Update_at            int    `json:"update_at, Number"`
 }
 
 type MerchantFormByLangJson struct {
-	Id               int    `json:"id, Number"`
-	Username         string `json:"username"`
-	Password         string `json:"password"`
-	Email            string `json:"email"`
-	Shop_avatar      string `json:"shop_avatar"`
-	Lat              string `json:"lat"`
-	Lon              string `json:"lon"`
-	Phone_1          string `json:"phone_1"`
-	Phone_2          string `json:"phone_2"`
-	Fax              string `json:"fax"`
-	Line_id          string `json:"line_id"`
-	Facebook_link    string `json:"facebook_link"`
-	Website_link     string `json:"website_link"`
-	Name             string `json:"name"`
-	Shop_description string `json:"shop_description"`
-	Merchant_status  string `json:"merchant_status"`
-	Create_at        int    `json:"create_at, Number"`
-	Update_at        int    `json:"update_at, Number"`
+	Id                   int    `json:"id, Number"`
+	Username             string `json:"username"`
+	Password             string `json:"password"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `form:"province"`
+	Phone_1              string `json:"phone_1"`
+	Phone_2              string `json:"phone_2"`
+	Fax                  string `json:"fax"`
+	Line_id              string `json:"line_id"`
+	Facebook_link        string `json:"facebook_link"`
+	Website_link         string `json:"website_link"`
+	Name                 string `json:"name"`
+	Shop_description     string `json:"shop_description"`
+	Merchant_status      string `json:"merchant_status"`
+	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
+	Merchant_province    string `form:"merchant_province"`
+	Create_at            int    `json:"create_at, Number"`
+	Update_at            int    `json:"update_at, Number"`
 }
 
 type MerchantMetaJSON struct {
-	Username         string `json:"username"`
-	Name             string `json:"name"`
-	Password         string `json:"password"`
-	Email            string `json:"email"`
-	Shop_avatar      string `json:"shop_avatar"`
-	Shop_description string `json:"shop_description"`
-	Lat              string `json:"lat"`
-	Lon              string `json:"lon"`
-	Create_at        int    `json:"create_at, Number"`
-	Update_at        int    `json:"update_at, Number"`
+	Username             string `json:"username"`
+	Name                 string `json:"name"`
+	Password             string `json:"password"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Shop_description     string `json:"shop_description"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `form:"province"`
+	Create_at            int    `json:"create_at, Number"`
+	Update_at            int    `json:"update_at, Number"`
+	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
+	Merchant_province    string `form:"merchant_province"`
 }
 type MerchantContentJSON struct {
-	Username         string `json:"username"`
-	Name             string `json:"name"`
-	Password         string `json:"password"`
-	Email            string `json:"email"`
-	Shop_avatar      string `json:"shop_avatar"`
-	Shop_description string `json:"shop_description"`
-	Lat              string `json:"lat"`
-	Lon              string `json:"lon"`
-	Create_at        int    `json:"create_at, Number"`
-	Update_at        int    `json:"update_at, Number"`
+	Username             string `json:"username"`
+	Name                 string `json:"name"`
+	Password             string `json:"password"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Shop_description     string `json:"shop_description"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `form:"province"`
+	Create_at            int    `json:"create_at, Number"`
+	Update_at            int    `json:"update_at, Number"`
+	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
+	Merchant_province    string `form:"merchant_province"`
 }
 
 type MerchantAllJSON struct {
-	Username         string `json:"username"`
-	Name             string `json:"name"`
-	Password         string `json:"password"`
-	Email            string `json:"email"`
-	Shop_avatar      string `json:"shop_avatar"`
-	Shop_description string `json:"shop_description"`
-	Lat              string `json:"lat"`
-	Lon              string `json:"lon"`
-	Create_at        int    `json:"create_at, Number"`
-	Update_at        int    `json:"update_at, Number"`
+	Username             string `json:"username"`
+	Name                 string `json:"name"`
+	Password             string `json:"password"`
+	Email                string `json:"email"`
+	Shop_avatar_s        string `json:"shop_avatar_s"`
+	Shop_avatar_l        string `json:"shop_avatar_l"`
+	Shop_description     string `json:"shop_description"`
+	Lat                  string `json:"lat"`
+	Lon                  string `json:"lon"`
+	Province             string `form:"province"`
+	Create_at            int    `json:"create_at, Number"`
+	Update_at            int    `json:"update_at, Number"`
+	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
+	Merchant_province    string `form:"merchant_province"`
 }
 
 // Action CRUD
@@ -161,26 +197,30 @@ func NewMerchant(c *gin.Context) {
 	c.Bind(&form)
 
 	merchant := &models.MerchantMeta{
-		Username:            form.Username,
-		Password:            form.Password,
-		Email:               form.Email,
-		Merchant_uid:        helpers.RandomStr(10),
-		Shop_avatar:         form.Shop_avatar,
-		Lat:                 form.Lat,
-		Lon:                 form.Lon,
-		Phone_1:             form.Phone_1,
-		Phone_2:             form.Phone_2,
-		Fax:                 form.Fax,
-		Line_id:             form.Line_id,
-		Facebook_link:       form.Facebook_link,
-		Website_link:        form.Website_link,
-		Name_en:             form.Name_en,
-		Name_th:             form.Name_th,
-		Shop_description_en: form.Shop_description_en,
-		Shop_description_th: form.Shop_description_th,
-		Merchant_status:     "active",
-		Create_at:           helpers.Unix_milisec_time_now(),
-		Update_at:           helpers.Unix_milisec_time_now(),
+		Username:             form.Username,
+		Password:             form.Password,
+		Email:                form.Email,
+		Merchant_uid:         helpers.RandomStr(10),
+		Shop_avatar_s:        form.Shop_avatar_s,
+		Shop_avatar_l:        form.Shop_avatar_l,
+		Lat:                  form.Lat,
+		Lon:                  form.Lon,
+		Province:             form.Province,
+		Phone_1:              form.Phone_1,
+		Phone_2:              form.Phone_2,
+		Fax:                  form.Fax,
+		Line_id:              form.Line_id,
+		Facebook_link:        form.Facebook_link,
+		Website_link:         form.Website_link,
+		Name_en:              form.Name_en,
+		Name_th:              form.Name_th,
+		Shop_description_en:  form.Shop_description_en,
+		Shop_description_th:  form.Shop_description_th,
+		Merchant_status:      "0",
+		Merchant_category_id: helpers.Convert_string_to_int(form.Merchant_category_id),
+		Merchant_province:    form.Merchant_province,
+		Create_at:            helpers.Unix_milisec_time_now(),
+		Update_at:            helpers.Unix_milisec_time_now(),
 	}
 
 	msg, err := merchant.Save(SERVICE_NAME)
@@ -204,25 +244,29 @@ func UpdateMerchant(c *gin.Context) {
 	var form MerchantFormAllLang
 	c.Bind(&form)
 	merchant := &models.MerchantMeta{
-		Username:            form.Username,
-		Email:               form.Email,
-		Merchant_uid:        uid_merchant,
-		Shop_avatar:         form.Shop_avatar,
-		Lat:                 form.Lat,
-		Lon:                 form.Lon,
-		Phone_1:             form.Phone_1,
-		Phone_2:             form.Phone_2,
-		Fax:                 form.Fax,
-		Line_id:             form.Line_id,
-		Facebook_link:       form.Facebook_link,
-		Website_link:        form.Website_link,
-		Name_en:             form.Name_en,
-		Name_th:             form.Name_th,
-		Merchant_status:     form.Merchant_status,
-		Shop_description_en: form.Shop_description_en,
-		Shop_description_th: form.Shop_description_th,
-		Create_at:           helpers.Unix_milisec_time_now(),
-		Update_at:           helpers.Unix_milisec_time_now(),
+		Username:             form.Username,
+		Email:                form.Email,
+		Merchant_uid:         uid_merchant,
+		Shop_avatar_s:        form.Shop_avatar_s,
+		Shop_avatar_l:        form.Shop_avatar_l,
+		Lat:                  form.Lat,
+		Lon:                  form.Lon,
+		Province:             form.Province,
+		Phone_1:              form.Phone_1,
+		Phone_2:              form.Phone_2,
+		Fax:                  form.Fax,
+		Line_id:              form.Line_id,
+		Facebook_link:        form.Facebook_link,
+		Website_link:         form.Website_link,
+		Name_en:              form.Name_en,
+		Name_th:              form.Name_th,
+		Merchant_status:      form.Merchant_status,
+		Merchant_category_id: helpers.Convert_string_to_int(form.Merchant_category_id),
+		Merchant_province:    form.Merchant_province,
+		Shop_description_en:  form.Shop_description_en,
+		Shop_description_th:  form.Shop_description_th,
+		Create_at:            helpers.Unix_milisec_time_now(),
+		Update_at:            helpers.Unix_milisec_time_now(),
 	}
 	msg, err := merchant.Update(SERVICE_NAME)
 
