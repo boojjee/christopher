@@ -5,7 +5,7 @@ import (
 	"christopher/models"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	// "log"
+	"log"
 )
 
 type ActivitiesObj map[string]interface{}
@@ -13,7 +13,6 @@ type ActivityForm struct {
 	Id                 string
 	Activity_uid       string `form:"activity_uid"`
 	User_uid           string `form:"user_uid"`
-	User_parse_id      string `form:"user_parse_id"`
 	Third_activity_id  string `form:"third_activity_id"`
 	Third_uri          string `form:"third_uri"`
 	Third_token_user   string `form:"third_token_user"`
@@ -32,7 +31,6 @@ type ActivityWithPoint struct {
 	Id                 int64             `json:"id, Number"`
 	Activity_uid       string            `json:"activity_uid"`
 	User_uid           string            `json:"user_uid"`
-	User_parse_id      string            `json:"user_parse_id"`
 	Third_activity_id  string            `json:"third_activity_id"`
 	Third_uri          string            `json:"third_uri"`
 	Third_token_user   string            `json:"third_token_user"`
@@ -65,15 +63,22 @@ func NewActivity(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
 	var form ActivityForm
 	c.Bind(&form)
+
+	province, msg1, err := helpers.GetProvinceFromBingMapByPoint(form.MyLocation_lat, form.MyLocation_lon)
+	if err != nil || msg1 == "err" {
+		log.Println(err)
+	}
+
+	mydistance := helpers.Convert_string_to_float(form.Distance)
+
 	activity := &models.ActivityContentForm{
 		Activity_uid:       helpers.RandomStr(10),
 		User_uid:           form.User_uid,
-		User_parse_id:      form.User_parse_id,
 		Third_activity_id:  form.Third_activity_id,
 		Third_uri:          form.Third_uri,
 		Third_token_user:   form.Third_token_user,
 		Source:             form.Source,
-		Distance:           helpers.Convert_string_to_float(form.Distance),
+		Distance:           mydistance,
 		Duration:           helpers.Convert_string_to_float(form.Duration),
 		Calories:           helpers.Convert_string_to_float(form.Calories),
 		Start_activity_lat: helpers.Convert_string_to_float(form.Start_activity_lat),
@@ -82,11 +87,14 @@ func NewActivity(c *gin.Context) {
 		Activity_status:    helpers.Convert_string_to_int(form.Activity_status),
 		MyLocation_lat:     helpers.Convert_string_to_float(form.MyLocation_lat),
 		MyLocation_lon:     helpers.Convert_string_to_float(form.MyLocation_lon),
+		Province:           province,
+		G_Point:            helpers.ConvertPoint(mydistance, 0.2),
 		Create_at:          helpers.Unix_milisec_time_now(),
 		Update_at:          helpers.Unix_milisec_time_now(),
 	}
 
 	msg, err := activity.Save(SERVICE_NAME)
+
 	if msg == "err" {
 		c.JSON(200, gin.H{
 			"status": 500,
@@ -108,7 +116,6 @@ func UpdateActivity(c *gin.Context) {
 	activity := &models.ActivityContent{
 		Activity_uid:       activity_uid,
 		User_uid:           form.User_uid,
-		User_parse_id:      form.User_parse_id,
 		Third_activity_id:  form.Third_activity_id,
 		Third_uri:          form.Third_uri,
 		Third_token_user:   form.Third_token_user,
@@ -279,37 +286,45 @@ func NextActivityList(c *gin.Context) {
 			"message": err,
 		})
 	} else {
-		// log.Println(data)
-		activities := []byte(data)
-		activities_slice := make([]ActivitiesObj, 0)
-		err_unmarshal := json.Unmarshal(activities, &activities_slice)
 
-		// log.Println(pagination)
-		actpagination := []byte(pagination)
-		actpage := &ActivityIdPagination{}
-		err_unmarshal1 := json.Unmarshal(actpagination, &actpage)
-
-		// log.Println(actpage)
-
-		if err_unmarshal1 != nil {
+		if data == "" {
 			c.JSON(200, gin.H{
-				"status":  500,
-				"message": "json error",
+				"status":  200,
+				"message": "Latest data",
+			})
+		} else {
+			// log.Println(data)
+			activities := []byte(data)
+			activities_slice := make([]ActivitiesObj, 0)
+			err_unmarshal := json.Unmarshal(activities, &activities_slice)
+
+			// log.Println(pagination)
+			actpagination := []byte(pagination)
+			actpage := &ActivityIdPagination{}
+			err_unmarshal1 := json.Unmarshal(actpagination, &actpage)
+
+			// log.Println(actpage)
+			if err_unmarshal1 != nil {
+				c.JSON(200, gin.H{
+					"status":  500,
+					"message": "json error",
+				})
+			}
+
+			if err_unmarshal != nil {
+				c.JSON(200, gin.H{
+					"status":  500,
+					"message": "json error",
+				})
+			}
+
+			c.JSON(200, gin.H{
+				"status":     200,
+				"message":    "Success!",
+				"pagination": actpage,
+				"data":       activities_slice,
 			})
 		}
-
-		if err_unmarshal != nil {
-			c.JSON(200, gin.H{
-				"status":  500,
-				"message": "json error",
-			})
-		}
-		c.JSON(200, gin.H{
-			"status":     200,
-			"message":    "Success!",
-			"pagination": actpage,
-			"data":       activities_slice,
-		})
 	}
 }
 
@@ -324,36 +339,43 @@ func PrevActivityList(c *gin.Context) {
 			"message": err,
 		})
 	} else {
-		// log.Println(data)
-		activities := []byte(data)
-		activities_slice := make([]ActivitiesObj, 0)
-		err_unmarshal := json.Unmarshal(activities, &activities_slice)
-
-		// log.Println(pagination)
-		actpagination := []byte(pagination)
-		actpage := &ActivityIdPagination{}
-		err_unmarshal1 := json.Unmarshal(actpagination, &actpage)
-
-		// log.Println(actpage)
-
-		if err_unmarshal1 != nil {
+		if data == "" {
 			c.JSON(200, gin.H{
-				"status":  500,
-				"message": "json error",
+				"status":  200,
+				"message": "no data",
+			})
+		} else {
+			// log.Println(data)
+			activities := []byte(data)
+			activities_slice := make([]ActivitiesObj, 0)
+			err_unmarshal := json.Unmarshal(activities, &activities_slice)
+
+			// log.Println(pagination)
+			actpagination := []byte(pagination)
+			actpage := &ActivityIdPagination{}
+			err_unmarshal1 := json.Unmarshal(actpagination, &actpage)
+
+			// log.Println(actpage)
+
+			if err_unmarshal1 != nil {
+				c.JSON(200, gin.H{
+					"status":  500,
+					"message": "json error",
+				})
+			}
+
+			if err_unmarshal != nil {
+				c.JSON(200, gin.H{
+					"status":  500,
+					"message": "json error",
+				})
+			}
+			c.JSON(200, gin.H{
+				"status":     200,
+				"message":    "Success!",
+				"pagination": actpage,
+				"data":       activities_slice,
 			})
 		}
-
-		if err_unmarshal != nil {
-			c.JSON(200, gin.H{
-				"status":  500,
-				"message": "json error",
-			})
-		}
-		c.JSON(200, gin.H{
-			"status":     200,
-			"message":    "Success!",
-			"pagination": actpage,
-			"data":       activities_slice,
-		})
 	}
 }

@@ -2,9 +2,9 @@ package helpers
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	// "log"
-	"errors"
 	"net/http"
 )
 
@@ -51,6 +51,7 @@ func GetProvinceFromBingMapByPoint(lat string, lon string) (string, string, erro
 		locationPoint = lat + `,` + lon
 		fixParam      = `?includeEntityTypes=Neighborhood&o=json&key=`
 		bingKey       = `AtxuaSKnnexxDeJ70Ha9ytdzzsvgB-793E03cm967jW5bPzg-Hj4nLUO-g3c5rdb`
+		province      string
 	)
 
 	URI := urlRequest + locationPoint + fixParam + bingKey
@@ -67,13 +68,14 @@ func GetProvinceFromBingMapByPoint(lat string, lon string) (string, string, erro
 	if err != nil {
 		return "", "err", err
 	}
-
 	if res.StatusCode != 200 {
-
 		return "", "err", errors.New("fail")
 	}
+	if jsbing.ResourceSets[0].EstimatedTotal == 0 {
+		return "", "err", errors.New("fail")
+	} else {
+		province = jsbing.ResourceSets[0].Resources[0].Address.AdminDistrict
+		return province, "", err
+	}
 
-	Province := jsbing.ResourceSets[0].Resources[0].Address.AdminDistrict
-
-	return Province, "", err
 }

@@ -3,12 +3,12 @@ package main
 import (
 	"christopher/controllers"
 	"christopher/generate"
-	"christopher/helpers"
+	// "christopher/helpers"
 	_ "expvar"
 	"flag"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"log"
+	// "log"
 )
 
 // var DB *sql.DB
@@ -22,17 +22,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
-			province, msg, err := helpers.GetProvinceFromBingMapByPoint(helpers.Convert_float_to_string(16.522531), helpers.Convert_float_to_string(102.522819))
-			if err != nil {
-				log.Println(err)
-			}
-			if msg == "err" {
-				log.Println(err)
-				c.JSON(200, gin.H{"status": "OK!", "build": "0.125", "province": err})
-			} else {
-				c.JSON(200, gin.H{"status": "OK!", "build": "0.125", "province": province})
-			}
-
+			c.JSON(200, gin.H{"status": "OK!", "build": "0.127"})
 		})
 
 		//# for Back End
@@ -49,17 +39,17 @@ func main() {
 
 		v1.GET("/:service_name/activity_lists_all/:user_uid", controllers.ActivityListsAll)         // done
 		v1.GET("/:service_name/latest_activity_list/:user_uid", controllers.LatestActivityList)     // done
-		v1.GET("/:service_name/next_activity_list/:user_uid/:max_id", controllers.NextActivityList) // doing + connect with point
-		v1.GET("/:service_name/prev_activity_list/:user_uid/:min_id", controllers.PrevActivityList) // doing
+		v1.GET("/:service_name/next_activity_list/:user_uid/:max_id", controllers.NextActivityList) // done
+		v1.GET("/:service_name/prev_activity_list/:user_uid/:min_id", controllers.PrevActivityList) // done
 
 		// Merchant
-		v1.GET("/:service_name/merchantinfo/:uid", controllers.GetMerchantInfo)                          // fixing
-		v1.POST("/:service_name/merchant", controllers.NewMerchant)                                      // fix
-		v1.PUT("/:service_name/merchant/:uid", controllers.UpdateMerchant)                               // fix
-		v1.DELETE("/:service_name/merchant/:uid", controllers.DeleteMerchant)                            // fix
-		v1.POST("/:service_name/merchant_authen", controllers.AuthenMechant)                             // fix
-		v1.GET("/:service_name/merchantlists", controllers.GetMerchantsLists_All)                        // fix
-		v1.GET("/:service_name/merchantlists_withgallery", controllers.GetMerchantsListsWithGallery_All) // fix
+		v1.GET("/:service_name/merchantinfo/:uid", controllers.GetMerchantInfo)                          // done
+		v1.POST("/:service_name/merchant", controllers.NewMerchant)                                      // done
+		v1.PUT("/:service_name/merchant/:uid", controllers.UpdateMerchant)                               // done
+		v1.DELETE("/:service_name/merchant/:uid", controllers.DeleteMerchant)                            // done
+		v1.POST("/:service_name/merchant_authen", controllers.AuthenMechant)                             // done
+		v1.GET("/:service_name/merchantlists", controllers.GetMerchantsLists_All)                        // done
+		v1.GET("/:service_name/merchantlists_withgallery", controllers.GetMerchantsListsWithGallery_All) // done
 
 		// Merchant Gallery
 		v1.GET("/:service_name/merchant_gallery/:uid", controllers.GetMerchantsGallery)     // done

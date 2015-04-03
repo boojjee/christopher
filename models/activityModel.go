@@ -10,7 +10,6 @@ type ActivityContentForm struct {
 	Id                 int64   `json:"id"`
 	Activity_uid       string  `json:"activity_uid"`
 	User_uid           string  `json:"user_uid"`
-	User_parse_id      string  `json:"user_parse_id"`
 	Third_activity_id  string  `json:"third_activity_id"`
 	Third_uri          string  `json:"third_uri"`
 	Third_token_user   string  `json:"third_token_user"`
@@ -25,6 +24,10 @@ type ActivityContentForm struct {
 	MyLocation_lat     float64 `json:"mylocation_lat"`
 	MyLocation_lon     float64 `json:"mylocation_lon"`
 	Province           string  `json:"province"`
+	Point_uid          string  `json:"point_uid"`
+	G_Point            float64 `json:"g_Point"`
+	G_point_status     int64   `json:"g_point_status"`
+	G_point_expire     int64   `json:"g_point_expire"`
 	Create_at          int64   `json:"create_at"`
 	Update_at          int64   `json:"update_at"`
 }
@@ -33,7 +36,6 @@ type ActivityContent struct {
 	Id                 int64   `json:"id"`
 	Activity_uid       string  `json:"activity_uid"`
 	User_uid           string  `json:"user_uid"`
-	User_parse_id      string  `json:"user_parse_id"`
 	Third_activity_id  string  `json:"third_activity_id"`
 	Third_uri          string  `json:"third_uri"`
 	Third_token_user   string  `json:"third_token_user"`
@@ -50,44 +52,43 @@ type ActivityContent struct {
 }
 
 type ActivityContentWithPoint struct {
-	Id                 int64   `json:"id"`
-	Activity_uid       string  `json:"activity_uid"`
-	User_uid           string  `json:"user_uid"`
-	User_parse_id      string  `json:"user_parse_id"`
-	Third_activity_id  string  `json:"third_activity_id"`
-	Third_uri          string  `json:"third_uri"`
-	Third_token_user   string  `json:"third_token_user"`
-	Source             string  `json:"source"`
-	Distance           float64 `json:"distance"`
-	Duration           float64 `json:"duration"`
-	Calories           float64 `json:"calories"`
-	G_Point            []*gpointForActivity
-	Start_activity_lat float64 `json:"start_activity_lat"`
-	Start_activity_lon float64 `json:"start_activity_lon"`
-	Activity_type      string  `json:"activity_type"`
-	Activity_status    int64   `json:"activity_status"`
-	Create_at          int64   `json:"create_at"`
-	Update_at          int64   `json:"update_at"`
+	Id                 int64                `json:"id"`
+	Activity_uid       string               `json:"activity_uid"`
+	User_uid           string               `json:"user_uid"`
+	Third_activity_id  string               `json:"third_activity_id"`
+	Third_uri          string               `json:"third_uri"`
+	Third_token_user   string               `json:"third_token_user"`
+	Source             string               `json:"source"`
+	Distance           float64              `json:"distance"`
+	Duration           float64              `json:"duration"`
+	Calories           float64              `json:"calories"`
+	G_Point            []*gpointForActivity `json:"g_point"`
+	Start_activity_lat float64              `json:"start_activity_lat"`
+	Start_activity_lon float64              `json:"start_activity_lon"`
+	Activity_type      string               `json:"activity_type"`
+	Activity_status    int64                `json:"activity_status"`
+	Create_at          int64                `json:"create_at"`
+	Update_at          int64                `json:"update_at"`
 }
+
 type ActivityInfoWithPoint struct {
-	Id                 int64   `json:"id"`
-	Activity_uid       string  `json:"activity_uid"`
-	User_uid           string  `json:"user_uid"`
-	User_parse_id      string  `json:"user_parse_id"`
-	Third_activity_id  string  `json:"third_activity_id"`
-	Third_uri          string  `json:"third_uri"`
-	Third_token_user   string  `json:"third_token_user"`
-	Source             string  `json:"source"`
-	Distance           float64 `json:"distance"`
-	Duration           float64 `json:"duration"`
-	Calories           float64 `json:"calories"`
-	G_Point            gpointForActivity
-	Start_activity_lat float64 `json:"start_activity_lat"`
-	Start_activity_lon float64 `json:"start_activity_lon"`
-	Activity_type      string  `json:"activity_type"`
-	Activity_status    int64   `json:"activity_status"`
-	Create_at          int64   `json:"create_at"`
-	Update_at          int64   `json:"update_at"`
+	Id                 int64             `json:"id"`
+	Activity_uid       string            `json:"activity_uid"`
+	User_uid           string            `json:"user_uid"`
+	Third_activity_id  string            `json:"third_activity_id"`
+	Third_uri          string            `json:"third_uri"`
+	Third_token_user   string            `json:"third_token_user"`
+	Source             string            `json:"source"`
+	Distance           float64           `json:"distance"`
+	Duration           float64           `json:"duration"`
+	Calories           float64           `json:"calories"`
+	G_Point            gpointForActivity `json:"g_point"`
+	Start_activity_lat float64           `json:"start_activity_lat"`
+	Start_activity_lon float64           `json:"start_activity_lon"`
+	Activity_type      string            `json:"activity_type"`
+	Activity_status    int64             `json:"activity_status"`
+	Create_at          int64             `json:"create_at"`
+	Update_at          int64             `json:"update_at"`
 }
 
 type gpointContent struct {
@@ -97,13 +98,17 @@ type gpointContent struct {
 	User_id           string  `json:"user_id"`
 	Distance          float64 `json:"distance"`
 	G_point           float64 `json:"g_point"`
+	G_point_status    int64   `json:"g_point_status"`
+	G_point_expire    int64   `json:"g_point_expire"`
 	Create_at         int64   `json:"create_at"`
 	Update_at         int64   `json:"update_at"`
 }
 type gpointForActivity struct {
-	G_point   float64 `json:"g_point"`
-	Create_at int64   `json:"create_at"`
-	Update_at int64   `json:"update_at"`
+	G_point        float64 `json:"g_point"`
+	G_point_status int64   `json:"g_point_status"`
+	G_point_expire int64   `json:"g_point_expire"`
+	Create_at      int64   `json:"create_at"`
+	Update_at      int64   `json:"update_at"`
 }
 
 type ActivityIdPagination struct {
@@ -114,6 +119,7 @@ type ActivityIdPagination struct {
 func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	activity_table := service_name + "_activity"
 	location_log_table := service_name + "_log_location"
+	point_table := service_name + "_point"
 	ConnectDb()
 	var (
 		err error
@@ -125,24 +131,36 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	}
 
 	SQL_INSERT_ACTIVITY := `INSERT INTO ` + activity_table + `
-  (activity_uid, user_uid, user_parse_id, third_activity_id, third_uri, third_token_user,
+  (activity_uid, user_uid, third_activity_id, third_uri, third_token_user,
    source, distance, duration, calories, start_activity_lat, start_activity_lon, activity_type,
-   activity_status, create_at, update_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+   activity_status, create_at, update_at) VALUES (?,?, ?,?,?,?,?,?,?,?,?,?,?,?,?)
   `
-	_, err1 := tx.Exec(SQL_INSERT_ACTIVITY, act.Activity_uid, act.User_uid, act.User_parse_id, act.Third_activity_id, act.Third_uri,
+	_, err1 := tx.Exec(SQL_INSERT_ACTIVITY, act.Activity_uid, act.User_uid, act.Third_activity_id, act.Third_uri,
 		act.Third_token_user, act.Source, act.Distance, act.Duration, act.Calories, act.Start_activity_lat, act.Start_activity_lon,
 		act.Activity_type, act.Activity_status, act.Create_at, act.Update_at)
+
 	if err1 != nil {
 		tx.Rollback()
 		return "err", err1
 	}
+	// insert point
+	SQL_INSERT_POINT := `INSERT INTO ` + point_table + `
+	(point_uid, activity_uid, g_point, g_point_status, g_point_expire, create_at, update_at )
+	VALUES (?, ?, ?, ?, ?, ?, ?)
+	`
+	_, err_p := tx.Exec(SQL_INSERT_POINT, act.Activity_uid, "gpoint", 1, 0, act.Create_at, act.Update_at)
+	if err_p != nil {
+		tx.Rollback()
+		return "err", err_p
+	}
 
 	// log location
 	SQL_INSERT_LOGLOCATION := `INSERT INTO ` + location_log_table + `
-	(user_uid, mylocation_lat, mylocation_lon, province,tag_log, create_at, update_at) VALUES 
-	(?, ?, ?, ?, ?, ?)
+	(user_uid, mylocation_lat, mylocation_lon, province, tag_log, create_at, update_at) VALUES 
+	(?, ?, ?, ?, ?, ?, ?)
 	`
-	_, err2 := tx.Exec(SQL_INSERT_LOGLOCATION, act.User_uid, act.MyLocation_lat, act.MyLocation_lon, act.Province, act.Create_at, act.Update_at)
+	_, err2 := tx.Exec(SQL_INSERT_LOGLOCATION, act.User_uid, act.MyLocation_lat, act.MyLocation_lon, act.Province, "Add Activity", act.Create_at, act.Update_at)
+
 	if err2 != nil {
 		tx.Rollback()
 		return "err", err2
@@ -164,11 +182,11 @@ func (act *ActivityContent) Update(service_name string) (string, error) {
 	if err != nil {
 		return "err", err
 	}
-	SQL_UPDATE_ACTIVITY := `UPDATE ` + activity_table + ` SET user_uid=?, user_parse_id=?, 
+	SQL_UPDATE_ACTIVITY := `UPDATE ` + activity_table + ` SET user_uid=?,  
    third_activity_id=?, third_uri=?, third_token_user=?, source=?, distance=?, duration=?, calories=?, 
    start_activity_lat=?, start_activity_lon=?, activity_type=?, activity_status=?, update_at=?
    WHERE activity_uid =?`
-	_, err1 := tx.Exec(SQL_UPDATE_ACTIVITY, act.User_uid, act.User_parse_id, act.Third_activity_id,
+	_, err1 := tx.Exec(SQL_UPDATE_ACTIVITY, act.User_uid, act.Third_activity_id,
 		act.Third_uri, act.Third_token_user, act.Source, act.Distance, act.Duration, act.Calories,
 		act.Start_activity_lat, act.Start_activity_lon, act.Activity_type, act.Activity_status,
 		act.Update_at, act.Activity_uid)
@@ -235,7 +253,7 @@ func GetLatestActivityList(service_name string, user_uid string) (string, string
 	// ActIdPagination := make([]*ActivityIdPagination, 0, 2)
 
 	for rows.Next() {
-		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid, &actContent.User_parse_id,
+		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid,
 			&actContent.Third_activity_id, &actContent.Third_uri, &actContent.Third_token_user, &actContent.Source,
 			&actContent.Distance, &actContent.Duration, &actContent.Calories, &actContent.Start_activity_lat, &actContent.Start_activity_lon,
 			&actContent.Activity_type, &actContent.Activity_status, &actContent.Create_at, &actContent.Update_at)
@@ -243,7 +261,7 @@ func GetLatestActivityList(service_name string, user_uid string) (string, string
 			return "", "", "err", err
 		}
 
-		ActivitiesContent = append(ActivitiesContent, &ActivityContent{actContent.Id, actContent.Activity_uid, actContent.User_uid, actContent.User_parse_id,
+		ActivitiesContent = append(ActivitiesContent, &ActivityContent{actContent.Id, actContent.Activity_uid, actContent.User_uid,
 			actContent.Third_activity_id, actContent.Third_uri, actContent.Third_token_user, actContent.Source,
 			actContent.Distance, actContent.Duration, actContent.Calories, actContent.Start_activity_lat, actContent.Start_activity_lon,
 			actContent.Activity_type, actContent.Activity_status, actContent.Create_at, actContent.Update_at})
@@ -263,8 +281,30 @@ func GetNextActivityList(service_name string, user_uid string, max_id string) (s
 	activity_table := service_name + "_activity"
 	ConnectDb()
 	var (
-		err error
+		err         error
+		counter_act int64
 	)
+	SQL_SELECT_COUNT := `SELECT COUNT(*) AS act_counting FROM ` + activity_table + ` 
+	 WHERE user_uid = ? AND  id > ? 
+   ORDER BY id desc
+   LIMIT 20 `
+
+	rows_count, err_count := DB.Query(SQL_SELECT_COUNT, user_uid, max_id)
+	if err_count != nil {
+		return "", "", "err", err
+	} else {
+		for rows_count.Next() {
+			err := rows_count.Scan(&counter_act)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}
+
+	if counter_act == 0 {
+		return "", max_id, "Latest data", nil
+	}
+
 	// helpers.Convert_string_to_int(max_id)
 	SQL_SELECT_LATESTAC := `
     SELECT *
@@ -285,10 +325,9 @@ func GetNextActivityList(service_name string, user_uid string, max_id string) (s
 	)
 
 	ActivitiesContent := make([]*ActivityContent, 0, 17)
-	// ActIdPagination := make([]*ActivityIdPagination, 0, 2)
 
 	for rows.Next() {
-		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid, &actContent.User_parse_id,
+		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid,
 			&actContent.Third_activity_id, &actContent.Third_uri, &actContent.Third_token_user, &actContent.Source,
 			&actContent.Distance, &actContent.Duration, &actContent.Calories, &actContent.Start_activity_lat, &actContent.Start_activity_lon,
 			&actContent.Activity_type, &actContent.Activity_status, &actContent.Create_at, &actContent.Update_at)
@@ -296,7 +335,7 @@ func GetNextActivityList(service_name string, user_uid string, max_id string) (s
 			return "", "", "err", err
 		}
 
-		ActivitiesContent = append(ActivitiesContent, &ActivityContent{actContent.Id, actContent.Activity_uid, actContent.User_uid, actContent.User_parse_id,
+		ActivitiesContent = append(ActivitiesContent, &ActivityContent{actContent.Id, actContent.Activity_uid, actContent.User_uid,
 			actContent.Third_activity_id, actContent.Third_uri, actContent.Third_token_user, actContent.Source,
 			actContent.Distance, actContent.Duration, actContent.Calories, actContent.Start_activity_lat, actContent.Start_activity_lon,
 			actContent.Activity_type, actContent.Activity_status, actContent.Create_at, actContent.Update_at})
@@ -309,6 +348,7 @@ func GetNextActivityList(service_name string, user_uid string, max_id string) (s
 	s, _ := json.Marshal(ActivitiesContent)
 	activityPaginate := string(p)
 	activitylist := string(s)
+
 	return activitylist, activityPaginate, "success", nil
 }
 
@@ -338,7 +378,7 @@ func GetActivityListsAll(service_name string, user_uid string) (string, string, 
 	ActivitiesContents := make([]*ActivityContentWithPoint, 0, 18)
 
 	for rows.Next() {
-		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid, &actContent.User_parse_id,
+		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid,
 			&actContent.Third_activity_id, &actContent.Third_uri, &actContent.Third_token_user, &actContent.Source,
 			&actContent.Distance, &actContent.Duration, &actContent.Calories, &actContent.Start_activity_lat, &actContent.Start_activity_lon,
 			&actContent.Activity_type, &actContent.Activity_status, &actContent.Create_at, &actContent.Update_at)
@@ -347,7 +387,7 @@ func GetActivityListsAll(service_name string, user_uid string) (string, string, 
 		}
 		gPointSlice := make([]*gpointForActivity, 0, 3)
 		SQL_SELECT_POINT := `
-	    SELECT g_point, create_at, update_at
+	    SELECT g_point, g_point_status, g_point_expire, create_at, update_at
 	    FROM ` + point_table + ` 
 	    WHERE activity_uid = ?
 	  `
@@ -357,15 +397,15 @@ func GetActivityListsAll(service_name string, user_uid string) (string, string, 
 			return "", "err", err
 		}
 		for rows.Next() {
-			err := rows.Scan(&gpointContents.G_point, &gpointContents.Create_at, &gpointContents.Update_at)
+			err := rows.Scan(&gpointContents.G_point, &gpointContents.G_point_status, &gpointContents.G_point_expire, &gpointContents.Create_at, &gpointContents.Update_at)
 			if err != nil {
 				return "", "err", err
 			}
-			gPointSlice = append(gPointSlice, &gpointForActivity{gpointContents.G_point, gpointContents.Create_at, gpointContents.Update_at})
+			gPointSlice = append(gPointSlice, &gpointForActivity{gpointContents.G_point, gpointContents.G_point_status, gpointContents.G_point_expire, gpointContents.Create_at, gpointContents.Update_at})
 
 		}
 
-		ActivitiesContents = append(ActivitiesContents, &ActivityContentWithPoint{actContent.Id, actContent.Activity_uid, actContent.User_uid, actContent.User_parse_id,
+		ActivitiesContents = append(ActivitiesContents, &ActivityContentWithPoint{actContent.Id, actContent.Activity_uid, actContent.User_uid,
 			actContent.Third_activity_id, actContent.Third_uri, actContent.Third_token_user, actContent.Source,
 			actContent.Distance, actContent.Duration, actContent.Calories, gPointSlice, actContent.Start_activity_lat, actContent.Start_activity_lon,
 			actContent.Activity_type, actContent.Activity_status, actContent.Create_at, actContent.Update_at})
@@ -381,8 +421,29 @@ func GetPrevActivityList(service_name string, user_uid string, min_id string) (s
 	activity_table := service_name + "_activity"
 	ConnectDb()
 	var (
-		err error
+		err         error
+		counter_act int64
 	)
+
+	SQL_SELECT_COUNT := `SELECT COUNT(*) AS act_counting FROM ` + activity_table + ` 
+	 WHERE user_uid = ? AND  id < ? 
+   ORDER BY id desc
+   LIMIT 20 `
+	rows_count, err_count := DB.Query(SQL_SELECT_COUNT, user_uid, min_id)
+	if err_count != nil {
+		return "", "", "err", err
+	} else {
+		for rows_count.Next() {
+			err := rows_count.Scan(&counter_act)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}
+	if counter_act == 0 {
+		return "", min_id, "no data", nil
+	}
+
 	// helpers.Convert_string_to_int(max_id)
 	SQL_SELECT_LATESTAC := `
     SELECT *
@@ -406,7 +467,7 @@ func GetPrevActivityList(service_name string, user_uid string, min_id string) (s
 	// ActIdPagination := make([]*ActivityIdPagination, 0, 2)
 
 	for rows.Next() {
-		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid, &actContent.User_parse_id,
+		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid,
 			&actContent.Third_activity_id, &actContent.Third_uri, &actContent.Third_token_user, &actContent.Source,
 			&actContent.Distance, &actContent.Duration, &actContent.Calories, &actContent.Start_activity_lat, &actContent.Start_activity_lon,
 			&actContent.Activity_type, &actContent.Activity_status, &actContent.Create_at, &actContent.Update_at)
@@ -414,7 +475,7 @@ func GetPrevActivityList(service_name string, user_uid string, min_id string) (s
 			return "", "", "err", err
 		}
 
-		ActivitiesContent = append(ActivitiesContent, &ActivityContent{actContent.Id, actContent.Activity_uid, actContent.User_uid, actContent.User_parse_id,
+		ActivitiesContent = append(ActivitiesContent, &ActivityContent{actContent.Id, actContent.Activity_uid, actContent.User_uid,
 			actContent.Third_activity_id, actContent.Third_uri, actContent.Third_token_user, actContent.Source,
 			actContent.Distance, actContent.Duration, actContent.Calories, actContent.Start_activity_lat, actContent.Start_activity_lon,
 			actContent.Activity_type, actContent.Activity_status, actContent.Create_at, actContent.Update_at})
@@ -455,7 +516,7 @@ func GetActivityByAcUID(service_name string, activity_uid string) (string, strin
 	// ActivitiesContents := make([]*ActivityContentWithPoint, 0, 18)
 	// gPointSlice := make([]*gpointForActivity, 0, 3)
 	for rows.Next() {
-		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid, &actContent.User_parse_id,
+		err := rows.Scan(&actContent.Id, &actContent.Activity_uid, &actContent.User_uid,
 			&actContent.Third_activity_id, &actContent.Third_uri, &actContent.Third_token_user, &actContent.Source,
 			&actContent.Distance, &actContent.Duration, &actContent.Calories, &actContent.Start_activity_lat, &actContent.Start_activity_lon,
 			&actContent.Activity_type, &actContent.Activity_status, &actContent.Create_at, &actContent.Update_at)
@@ -464,7 +525,7 @@ func GetActivityByAcUID(service_name string, activity_uid string) (string, strin
 		}
 
 		SQL_SELECT_POINT := `
-	    SELECT g_point, create_at, update_at
+	    SELECT g_point, g_point_status, g_point_expire, create_at, update_at
 	    FROM ` + point_table + ` 
 	    WHERE activity_uid = ?
 	  `
@@ -474,7 +535,7 @@ func GetActivityByAcUID(service_name string, activity_uid string) (string, strin
 			return "", "err", err
 		}
 		for rows.Next() {
-			err := rows.Scan(&gpointContents.G_point, &gpointContents.Create_at, &gpointContents.Update_at)
+			err := rows.Scan(&gpointContents.G_point, &gpointContents.G_point_status, &gpointContents.G_point_expire, &gpointContents.Create_at, &gpointContents.Update_at)
 			if err != nil {
 				return "", "err", err
 			}
@@ -486,9 +547,10 @@ func GetActivityByAcUID(service_name string, activity_uid string) (string, strin
 		return "", "err", errors.New(`{ Message :"No Data" }`)
 	}
 
-	myAc := ActivityInfoWithPoint{actContent.Id, actContent.Activity_uid, actContent.User_uid, actContent.User_parse_id,
+	myAc := ActivityInfoWithPoint{actContent.Id, actContent.Activity_uid, actContent.User_uid,
 		actContent.Third_activity_id, actContent.Third_uri, actContent.Third_token_user, actContent.Source,
-		actContent.Distance, actContent.Duration, actContent.Calories, gpointForActivity{gpointContents.G_point, gpointContents.Create_at, gpointContents.Update_at}, actContent.Start_activity_lat, actContent.Start_activity_lon,
+		actContent.Distance, actContent.Duration, actContent.Calories, gpointForActivity{gpointContents.G_point, gpointContents.G_point_status,
+			gpointContents.G_point_expire, gpointContents.Create_at, gpointContents.Update_at}, actContent.Start_activity_lat, actContent.Start_activity_lon,
 		actContent.Activity_type, actContent.Activity_status, actContent.Create_at, actContent.Update_at}
 
 	s, _ := json.Marshal(myAc)

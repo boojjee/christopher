@@ -33,7 +33,8 @@ type MerchantFormAllLang struct {
 	Shop_avatar_l        string `form:"shop_avatar_l"`
 	Lat                  string `form:"lat"`
 	Lon                  string `form:"lon"`
-	Province             string `form:"province"`
+	Address_en           string `form:"address_en"`
+	Address_th           string `form:"address_th"`
 	Phone_1              string `form:"phone_1"`
 	Phone_2              string `form:"phone_2"`
 	Fax                  string `form:"fax"`
@@ -59,7 +60,7 @@ type MerchantFormEdit struct {
 	Shop_description     string `form:"shop_description"`
 	Lat                  string `form:"lat"`
 	Lon                  string `form:"lon"`
-	Province             string `form:"province"`
+	Address              string `form:"address"`
 	Merchant_category_id string `form:"merchant_category_id"`
 	Merchant_province    string `form:"merchant_province"`
 }
@@ -80,7 +81,7 @@ type Merchants struct {
 	Shop_description     string `json:"shop_description"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Province             string `form:"province"`
+	Address              string `form:"address"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 	Merchant_category_id int    `json:"merchant_category_id, Number"`
@@ -96,7 +97,8 @@ type MerchantFormAllLangJson struct {
 	Merchant_uid         string `json:"merchant_uid"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Province             string `form:"province"`
+	Address_en           string `form:"address_en"`
+	Address_th           string `form:"address_th"`
 	Phone_1              string `json:"phone_1"`
 	Phone_2              string `json:"phone_2"`
 	Fax                  string `json:"fax"`
@@ -107,7 +109,7 @@ type MerchantFormAllLangJson struct {
 	Name_th              string `json:"name_th"`
 	Shop_description_en  string `json:"shop_description_en"`
 	Shop_description_th  string `json:"shop_description_th"`
-	Merchant_status      string `json:"merchant_status"`
+	Merchant_status      int    `json:"merchant_status"`
 	Merchant_category_id int    `json:"merchant_category_id, Number"`
 	Merchant_province    string `form:"merchant_province"`
 	Create_at            int    `json:"create_at, Number"`
@@ -123,7 +125,7 @@ type MerchantFormByLangJson struct {
 	Shop_avatar_l        string `json:"shop_avatar_l"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Province             string `form:"province"`
+	Address              string `form:"address"`
 	Phone_1              string `json:"phone_1"`
 	Phone_2              string `json:"phone_2"`
 	Fax                  string `json:"fax"`
@@ -132,7 +134,7 @@ type MerchantFormByLangJson struct {
 	Website_link         string `json:"website_link"`
 	Name                 string `json:"name"`
 	Shop_description     string `json:"shop_description"`
-	Merchant_status      string `json:"merchant_status"`
+	Merchant_status      int    `json:"merchant_status"`
 	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
 	Merchant_province    string `form:"merchant_province"`
 	Create_at            int    `json:"create_at, Number"`
@@ -149,7 +151,7 @@ type MerchantMetaJSON struct {
 	Shop_description     string `json:"shop_description"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Province             string `form:"province"`
+	Address              string `form:"address"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
@@ -165,7 +167,7 @@ type MerchantContentJSON struct {
 	Shop_description     string `json:"shop_description"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Province             string `form:"province"`
+	Address              string `form:"address"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
@@ -182,7 +184,7 @@ type MerchantAllJSON struct {
 	Shop_description     string `json:"shop_description"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Province             string `form:"province"`
+	Address              string `form:"address"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
@@ -205,7 +207,8 @@ func NewMerchant(c *gin.Context) {
 		Shop_avatar_l:        form.Shop_avatar_l,
 		Lat:                  form.Lat,
 		Lon:                  form.Lon,
-		Province:             form.Province,
+		Address_en:           form.Address_en,
+		Address_th:           form.Address_th,
 		Phone_1:              form.Phone_1,
 		Phone_2:              form.Phone_2,
 		Fax:                  form.Fax,
@@ -216,7 +219,7 @@ func NewMerchant(c *gin.Context) {
 		Name_th:              form.Name_th,
 		Shop_description_en:  form.Shop_description_en,
 		Shop_description_th:  form.Shop_description_th,
-		Merchant_status:      "0",
+		Merchant_status:      0,
 		Merchant_category_id: helpers.Convert_string_to_int(form.Merchant_category_id),
 		Merchant_province:    form.Merchant_province,
 		Create_at:            helpers.Unix_milisec_time_now(),
@@ -251,7 +254,8 @@ func UpdateMerchant(c *gin.Context) {
 		Shop_avatar_l:        form.Shop_avatar_l,
 		Lat:                  form.Lat,
 		Lon:                  form.Lon,
-		Province:             form.Province,
+		Address_en:           form.Address_en,
+		Address_th:           form.Address_th,
 		Phone_1:              form.Phone_1,
 		Phone_2:              form.Phone_2,
 		Fax:                  form.Fax,
@@ -260,7 +264,7 @@ func UpdateMerchant(c *gin.Context) {
 		Website_link:         form.Website_link,
 		Name_en:              form.Name_en,
 		Name_th:              form.Name_th,
-		Merchant_status:      form.Merchant_status,
+		Merchant_status:      helpers.Convert_string_to_int(form.Merchant_status),
 		Merchant_category_id: helpers.Convert_string_to_int(form.Merchant_category_id),
 		Merchant_province:    form.Merchant_province,
 		Shop_description_en:  form.Shop_description_en,
