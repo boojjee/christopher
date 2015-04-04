@@ -15,7 +15,7 @@ type UserContent struct {
 	Update_at   int64
 }
 
-func (u *UserContent) Save(service_name string) (string, error) {
+func (u *UserContent) Save(service_name string) (string, string, error) {
 	user_table := service_name + "_user"
 	ConnectDb()
 	var (
@@ -24,19 +24,21 @@ func (u *UserContent) Save(service_name string) (string, error) {
 
 	tx, err := DB.Begin()
 	if err != nil {
-		return "err", err
+		return "", "err", err
 	}
+	defer tx.Rollback()
 	SQL_INSERT_MMETA := `INSERT INTO ` + user_table + ` 
   (user_uid, pin, parse_id, user_status, create_at, update_at) VALUES (?, ?, ?, ?, ?, ?)
   `
 	_, err1 := tx.Exec(SQL_INSERT_MMETA, u.User_uid, u.Pin, u.Parse_id, u.User_status, u.Create_at, u.Update_at)
 	if err1 != nil {
 		tx.Rollback()
-		return "err", err1
+		return "", "err", err1
 	}
+	log.Println(u.User_uid)
 	tx.Commit()
 	defer CloseDb()
-	return "success", nil
+	return u.User_uid, "success", nil
 }
 
 func (u *UserContent) UpdatePin(service_name string, user_uid string) (string, error) {

@@ -3,7 +3,7 @@ package controllers
 import (
 	"christopher/helpers"
 	"christopher/models"
-	// "encoding/json"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"log"
 	// "strconv"
@@ -15,6 +15,10 @@ type UserForm struct {
 	Pin         string `form:"pin"`
 	Parse_id    string `form:"parse_id"`
 	User_status string `form:"user_status"`
+}
+
+type UserRJSON struct {
+	User_uid string `json:"user_uid"`
 }
 
 func NewUser(c *gin.Context) {
@@ -30,8 +34,10 @@ func NewUser(c *gin.Context) {
 		Create_at:   helpers.Unix_milisec_time_now(),
 		Update_at:   helpers.Unix_milisec_time_now(),
 	}
-	log.Println(user)
-	msg, err := user.Save(SERVICE_NAME)
+	data, msg, err := user.Save(SERVICE_NAME)
+	jsondata := `{ "user_uid": "` + data + `"}`
+	res := &UserRJSON{}
+	json.Unmarshal([]byte(jsondata), &res)
 	if msg == "err" {
 		c.JSON(200, gin.H{
 			"status": 500,
@@ -40,6 +46,7 @@ func NewUser(c *gin.Context) {
 	} else {
 		c.JSON(200, gin.H{
 			"status":  200,
+			"data":    res,
 			"message": "Created!",
 		})
 	}
