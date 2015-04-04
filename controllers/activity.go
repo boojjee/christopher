@@ -65,6 +65,7 @@ func NewActivity(c *gin.Context) {
 	c.Bind(&form)
 
 	province, msg1, err := helpers.GetProvinceFromBingMapByPoint(form.MyLocation_lat, form.MyLocation_lon)
+
 	if err != nil || msg1 == "err" {
 		log.Println(err)
 	}
@@ -94,7 +95,6 @@ func NewActivity(c *gin.Context) {
 		Create_at:          helpers.Unix_milisec_time_now(),
 		Update_at:          helpers.Unix_milisec_time_now(),
 	}
-
 	msg, err := activity.Save(SERVICE_NAME)
 
 	if msg == "err" {

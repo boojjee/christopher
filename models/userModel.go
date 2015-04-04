@@ -41,6 +41,28 @@ func (u *UserContent) Save(service_name string) (string, string, error) {
 	return u.User_uid, "success", nil
 }
 
+func (u *UserContent) GetUIDByParseID(service_name string) (string, string, error) {
+	user_table := service_name + "_user"
+	ConnectDb()
+	var (
+		err      error
+		user_uid string
+	)
+	SQL_SELECT_USRID := `SELECT user_uid FROM ` + user_table + ` where parse_id = ? LIMIT 1`
+	rows, err := DB.Query(SQL_SELECT_USRID, u.Parse_id)
+	if err != nil {
+		return "", "err", err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&user_uid)
+		if err != nil {
+			return "", "err", err
+		}
+	}
+	return user_uid, "success", nil
+}
+
 func (u *UserContent) UpdatePin(service_name string, user_uid string) (string, error) {
 	user_table := service_name + "_user"
 	ConnectDb()

@@ -38,6 +38,7 @@ func NewUser(c *gin.Context) {
 	jsondata := `{ "user_uid": "` + data + `"}`
 	res := &UserRJSON{}
 	json.Unmarshal([]byte(jsondata), &res)
+
 	if msg == "err" {
 		c.JSON(200, gin.H{
 			"status": 500,
@@ -124,6 +125,33 @@ func DeleteUser(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  200,
 			"message": "Deleted!",
+		})
+	}
+}
+
+func GetUserUID(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	parse_id := c.Params.ByName("parse_id")
+	var form UserForm
+	c.Bind(&form)
+
+	user := &models.UserContent{
+		Parse_id: parse_id,
+	}
+	data, msg, err := user.GetUIDByParseID(SERVICE_NAME)
+	jsondata := `{ "user_uid": "` + data + `"}`
+	res := &UserRJSON{}
+	json.Unmarshal([]byte(jsondata), &res)
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"data":    res,
+			"message": "Created!",
 		})
 	}
 }

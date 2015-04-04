@@ -136,7 +136,7 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	SQL_INSERT_ACTIVITY := `INSERT INTO ` + activity_table + `
   (activity_uid, user_uid, third_activity_id, third_uri, third_token_user,
    source, distance, duration, calories, start_activity_lat, start_activity_lon, activity_type,
-   activity_status, create_at, update_at) VALUES (?,?, ?,?,?,?,?,?,?,?,?,?,?,?,?)
+   activity_status, create_at, update_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
   `
 	_, err1 := tx.Exec(SQL_INSERT_ACTIVITY, act.Activity_uid, act.User_uid, act.Third_activity_id, act.Third_uri,
 		act.Third_token_user, act.Source, act.Distance, act.Duration, act.Calories, act.Start_activity_lat, act.Start_activity_lon,
@@ -151,30 +151,35 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	(point_uid, user_uid, activity_uid, g_point, g_point_status, g_point_expire, create_at, update_at )
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 	`
-	_, err_p := tx.Exec(SQL_INSERT_POINT, act.User_uid, act.Point_uid, act.Activity_uid, act.G_Point, 1, 0, act.Create_at, act.Update_at)
+
+	_, err_p := tx.Exec(SQL_INSERT_POINT, act.Point_uid, act.User_uid, act.Activity_uid, act.G_Point, 1, 0, act.Create_at, act.Update_at)
 	if err_p != nil {
 		tx.Rollback()
 		return "err", err_p
 	}
-
+	log.Println(".......#1")
 	SQL_SELECT_BPOINT := `SELECT blance_point FROM ` + point_balance_table + ` WHERE user_uid=?`
 	rows1, err := DB.Query(SQL_SELECT_BPOINT, act.User_uid)
+
 	if err != nil {
 		return "err", err
 	}
 	for rows1.Next() {
-		err := rows1.Scan(myblance_point)
+		err := rows1.Scan(&myblance_point)
+		log.Println(err)
 		if err != nil {
 			return "err", err
 		}
 	}
 
 	if myblance_point == 0 {
+		log.Println("------1")
 		// insert point
 		SQL_INSERT_BLPOINT := `INSERT INTO ` + point_balance_table + ` 
 		( user_uid, blance_point, create_at, update_at ) VALUES (?, ?, ?, ?)
 		`
 		_, err_i := tx.Exec(SQL_INSERT_BLPOINT, act.User_uid, act.G_Point, act.Create_at, act.Update_at)
+
 		if err_i != nil {
 			tx.Rollback()
 			return "err", err_i
@@ -182,9 +187,7 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	} else {
 		UPDATE_BLPOINT := `UPDATE ` + point_balance_table + ` SET 
 		blance_point = blance_point + ? , update_at=? WHERE user_uid=?`
-
 		_, err_up := tx.Exec(UPDATE_BLPOINT, act.G_Point, act.Update_at, act.User_uid)
-
 		if err_up != nil {
 			tx.Rollback()
 			return "err", err_up
@@ -198,7 +201,7 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	(?, ?, ?, ?, ?, ?, ?)
 	`
 	_, err2 := tx.Exec(SQL_INSERT_LOGLOCATION, act.User_uid, act.MyLocation_lat, act.MyLocation_lon, act.Province, "Add Activity", act.Create_at, act.Update_at)
-
+	log.Println(err2)
 	if err2 != nil {
 		tx.Rollback()
 		return "err", err2
