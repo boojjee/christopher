@@ -5,7 +5,7 @@ import (
 	"christopher/models"
 	// "encoding/json"
 	"github.com/gin-gonic/gin"
-	// "log"
+	"log"
 	// "strconv"
 )
 
@@ -26,11 +26,11 @@ func NewUser(c *gin.Context) {
 		Pin:         form.Pin,
 		User_uid:    helpers.RandomStr(10),
 		Parse_id:    form.Parse_id,
-		User_status: helpers.Convert_string_to_int(form.User_status),
+		User_status: 1,
 		Create_at:   helpers.Unix_milisec_time_now(),
 		Update_at:   helpers.Unix_milisec_time_now(),
 	}
-
+	log.Println(user)
 	msg, err := user.Save(SERVICE_NAME)
 	if msg == "err" {
 		c.JSON(200, gin.H{
@@ -41,6 +41,32 @@ func NewUser(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"status":  200,
 			"message": "Created!",
+		})
+	}
+}
+
+func UpdateUserPin(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	user_uid := c.Params.ByName("user_uid")
+	var form UserForm
+	c.Bind(&form)
+
+	log.Println(user_uid)
+	log.Println("DDDDD")
+	user := &models.UserContent{
+		Pin:       form.Pin,
+		Update_at: helpers.Unix_milisec_time_now(),
+	}
+	msg, err := user.UpdatePin(SERVICE_NAME, user_uid)
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"message": "Updated!",
 		})
 	}
 }

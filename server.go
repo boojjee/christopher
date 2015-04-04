@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	// "log"
+	// "time"
 )
 
 // var DB *sql.DB
@@ -27,9 +28,13 @@ func main() {
 
 		//# for Back End
 		// User
-		v1.POST("/:service_name/user", controllers.NewUser)                // done
-		v1.PUT("/:service_name/user/:user_uid", controllers.UpdateUser)    // done
-		v1.DELETE("/:service_name/user/:user_uid", controllers.DeleteUser) // done
+		v1.POST("/:service_name/user", controllers.NewUser)                    // done
+		v1.PUT("/:service_name/user/:user_uid", controllers.UpdateUser)        // done
+		v1.PUT("/:service_name/user/:user_uid/pin", controllers.UpdateUserPin) // done
+		v1.DELETE("/:service_name/user/:user_uid", controllers.DeleteUser)     // done
+
+		// DashBoard
+		v1.GET("/:service_name/my_point/:user_uid", controllers.GetActivity) // done
 
 		// Activity
 		v1.GET("/:service_name/activity/:activity_uid", controllers.GetActivity)       // done

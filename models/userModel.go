@@ -1,8 +1,8 @@
 package models
 
 import (
-// "encoding/json"
-// "log"
+	// "encoding/json"
+	"log"
 )
 
 type UserContent struct {
@@ -36,6 +36,32 @@ func (u *UserContent) Save(service_name string) (string, error) {
 	}
 	tx.Commit()
 	defer CloseDb()
+	return "success", nil
+}
+
+func (u *UserContent) UpdatePin(service_name string, user_uid string) (string, error) {
+	user_table := service_name + "_user"
+	ConnectDb()
+	var (
+		err error
+	)
+
+	SQL_UPDATE_USER := `UPDATE ` + user_table + ` SET pin=?, update_at=? WHERE user_uid = ?`
+	tx, err := DB.Begin()
+	if err != nil {
+		return "err", err
+	}
+	log.Println(SQL_UPDATE_USER)
+	_, err1 := tx.Exec(SQL_UPDATE_USER, u.Pin, u.Update_at, user_uid)
+
+	log.Println(err1)
+	if err != nil {
+		return "err", err1
+	}
+
+	tx.Commit()
+	defer CloseDb()
+
 	return "success", nil
 }
 

@@ -70,6 +70,7 @@ func NewActivity(c *gin.Context) {
 	}
 
 	mydistance := helpers.Convert_string_to_float(form.Distance)
+	constant_point := models.GetConstantPoint(SERVICE_NAME, form.Activity_type)
 
 	activity := &models.ActivityContentForm{
 		Activity_uid:       helpers.RandomStr(10),
@@ -88,7 +89,8 @@ func NewActivity(c *gin.Context) {
 		MyLocation_lat:     helpers.Convert_string_to_float(form.MyLocation_lat),
 		MyLocation_lon:     helpers.Convert_string_to_float(form.MyLocation_lon),
 		Province:           province,
-		G_Point:            helpers.ConvertPoint(mydistance, 0.2),
+		Point_uid:          helpers.RandomStr(10),
+		G_Point:            helpers.ConvertPoint(mydistance, constant_point),
 		Create_at:          helpers.Unix_milisec_time_now(),
 		Update_at:          helpers.Unix_milisec_time_now(),
 	}

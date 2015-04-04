@@ -25,6 +25,7 @@ type ActivityContentForm struct {
 	MyLocation_lon     float64 `json:"mylocation_lon"`
 	Province           string  `json:"province"`
 	Point_uid          string  `json:"point_uid"`
+	Ponit_uid          float64 `json:"ponit_uid"`
 	G_Point            float64 `json:"g_Point"`
 	G_point_status     int64   `json:"g_point_status"`
 	G_point_expire     int64   `json:"g_point_expire"`
@@ -120,9 +121,11 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	activity_table := service_name + "_activity"
 	location_log_table := service_name + "_log_location"
 	point_table := service_name + "_point"
+	point_balance_table := service_name + "_point_balance"
 	ConnectDb()
 	var (
-		err error
+		err            error
+		myblance_point float64
 	)
 
 	tx, err := DB.Begin()
@@ -145,13 +148,48 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	}
 	// insert point
 	SQL_INSERT_POINT := `INSERT INTO ` + point_table + `
-	(point_uid, activity_uid, g_point, g_point_status, g_point_expire, create_at, update_at )
-	VALUES (?, ?, ?, ?, ?, ?, ?)
+	(point_uid, user_uid, activity_uid, g_point, g_point_status, g_point_expire, create_at, update_at )
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 	`
-	_, err_p := tx.Exec(SQL_INSERT_POINT, act.Activity_uid, "gpoint", 1, 0, act.Create_at, act.Update_at)
+	_, err_p := tx.Exec(SQL_INSERT_POINT, act.User_uid, act.Point_uid, act.Activity_uid, act.G_Point, 1, 0, act.Create_at, act.Update_at)
 	if err_p != nil {
 		tx.Rollback()
 		return "err", err_p
+	}
+
+	SQL_SELECT_BPOINT := `SELECT blance_point FROM ` + point_balance_table + ` WHERE user_uid=?`
+	rows1, err := DB.Query(SQL_SELECT_BPOINT, act.User_uid)
+	if err != nil {
+		return "err", err
+	}
+	for rows1.Next() {
+		err := rows1.Scan(myblance_point)
+		if err != nil {
+			return "err", err
+		}
+	}
+
+	if myblance_point == 0 {
+		// insert point
+		SQL_INSERT_BLPOINT := `INSERT INTO ` + point_balance_table + ` 
+		( user_uid, blance_point, create_at, update_at ) VALUES (?, ?, ?, ?)
+		`
+		_, err_i := tx.Exec(SQL_INSERT_BLPOINT, act.User_uid, act.G_Point, act.Create_at, act.Update_at)
+		if err_i != nil {
+			tx.Rollback()
+			return "err", err_i
+		}
+	} else {
+		UPDATE_BLPOINT := `UPDATE ` + point_balance_table + ` SET 
+		blance_point = blance_point + ? , update_at=? WHERE user_uid=?`
+
+		_, err_up := tx.Exec(UPDATE_BLPOINT, act.G_Point, act.Update_at, act.User_uid)
+
+		if err_up != nil {
+			tx.Rollback()
+			return "err", err_up
+		}
+
 	}
 
 	// log location
