@@ -395,13 +395,13 @@ func (m *MerchantMeta) MerchantShowInfoByLang(service_name string, lang string) 
 			return "", "err", err
 		}
 	}
-	SELECT_QUERY_MCONTENT := "SELECT name, shop_description FROM " + merchant_content + " WHERE lang=?"
+	SELECT_QUERY_MCONTENT := "SELECT name, shop_description, address FROM " + merchant_content + " WHERE lang=?"
 	rows2, err := DB.Query(SELECT_QUERY_MCONTENT, lang)
 	if err != nil {
 		return "", "err", err
 	}
 	for rows2.Next() {
-		err := rows2.Scan(&mContent.Name, &mContent.Shop_description)
+		err := rows2.Scan(&mContent.Name, &mContent.Shop_description, &mContent.Address)
 		if err != nil {
 			return "", "err", err
 		}
@@ -508,14 +508,14 @@ func MerchantListByLang(service_name string, lang string) (string, string, error
 			return "", "err", err
 		}
 
-		SELECT_QUERY_MCONTENT := "SELECT name, shop_description FROM " + merchant_content + " WHERE lang='" + lang + "' AND merchant_uid = '" + m_meta.Merchant_uid + "'"
+		SELECT_QUERY_MCONTENT := "SELECT name, shop_description, address FROM " + merchant_content + " WHERE lang='" + lang + "' AND merchant_uid = '" + m_meta.Merchant_uid + "'"
 		rows2, err := DB.Query(SELECT_QUERY_MCONTENT)
 		if err != nil {
 			return "", "err", err
 		}
 
 		for rows2.Next() {
-			err := rows2.Scan(&mContent.Name, &mContent.Shop_description)
+			err := rows2.Scan(&mContent.Name, &mContent.Shop_description, &mContent.Address)
 			if err != nil {
 				return "", "err", err
 			}
