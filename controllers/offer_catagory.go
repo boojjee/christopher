@@ -11,22 +11,16 @@ import (
 type categoriesForm struct {
 	Offer_category_name string `form:"offer_category_name"`
 	Slug                string `form:"slug"`
-	Value               string `form:"value"`
-	Offer_type          string `form:"offer_type"`
 }
 type categoriesFormEdit struct {
 	Id                  int64  `form:"Id"`
 	Offer_category_name string `form:"offer_category_name"`
 	Slug                string `form:"slug"`
-	Value               string `form:"value"`
-	Offer_type          string `form:"offer_type"`
 }
 type offerCategory struct {
 	Id                  int64  `json:"id", Number`
 	Offer_category_name string `json:"offer_category_name"`
 	Slug                string `json:"slug"`
-	Value               string `form:"value"`
-	Offer_type          string `form:"offer_type"`
 	Create_at           int64  `json:"create_at"`
 	Update_at           int64  `json:"update_at"`
 }
@@ -66,8 +60,6 @@ func NewCategoriesOffer(c *gin.Context) {
 	Cat_offer := &models.OfferCategory{
 		Offer_category_name: form.Offer_category_name,
 		Slug:                form.Slug,
-		Value:               form.Value,
-		Offer_type:          form.Offer_type,
 		Create_at:           helpers.Unix_milisec_time_now(),
 		Update_at:           helpers.Unix_milisec_time_now(),
 	}
@@ -98,8 +90,6 @@ func UpdateCategoriesOffer(c *gin.Context) {
 		Id:                  helpers.Convert_string_to_int(offer_cat_id),
 		Offer_category_name: form.Offer_category_name,
 		Slug:                form.Slug,
-		Value:               form.Value,
-		Offer_type:          form.Offer_type,
 		Create_at:           helpers.Unix_milisec_time_now(),
 		Update_at:           helpers.Unix_milisec_time_now(),
 	}

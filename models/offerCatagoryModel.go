@@ -11,8 +11,6 @@ type OfferCategory struct {
 	Id                  int64  `form:"id"`
 	Offer_category_name string `form:"offer_category_name"`
 	Slug                string `form:"slug"`
-	Value               string `form:"value"`
-	Offer_type          string `form:"offer_type"`
 	Create_at           int64  `form:"create_at"`
 	Update_at           int64  `form:"update_at"`
 }
@@ -30,11 +28,11 @@ func ListAllCategoriesOffer(service_name string) (string, string, error) {
 	var offcat OfferCategory
 	offers_cat := make([]*OfferCategory, 0, 17)
 	for rows.Next() {
-		err := rows.Scan(&offcat.Id, &offcat.Offer_category_name, &offcat.Slug, &offcat.Value, &offcat.Offer_type, &offcat.Create_at, &offcat.Update_at)
+		err := rows.Scan(&offcat.Id, &offcat.Offer_category_name, &offcat.Slug, &offcat.Create_at, &offcat.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
-		offers_cat = append(offers_cat, &OfferCategory{offcat.Id, offcat.Offer_category_name, offcat.Slug, offcat.Value, offcat.Offer_type, offcat.Create_at, offcat.Update_at})
+		offers_cat = append(offers_cat, &OfferCategory{offcat.Id, offcat.Offer_category_name, offcat.Slug, offcat.Create_at, offcat.Update_at})
 	}
 	// log.Println(offers_cat)
 	s, _ := json.Marshal(offers_cat)
@@ -52,10 +50,10 @@ func (catoffer *OfferCategory) Save(service_name string) (string, error) {
 	}
 
 	SQL_INSERT_offerCat_table := `INSERT INTO ` + offerCat_table + `
-  (offer_category_name, slug, value, offer_type, create_at, update_at) 
-  VALUES (?, ?, ?, ?, ?, ?)
+  (offer_category_name, slug, create_at, update_at) 
+  VALUES (?, ?, ?, ?)
   `
-	_, err1 := tx.Exec(SQL_INSERT_offerCat_table, catoffer.Offer_category_name, catoffer.Slug, catoffer.Value, catoffer.Offer_type, catoffer.Create_at, catoffer.Update_at)
+	_, err1 := tx.Exec(SQL_INSERT_offerCat_table, catoffer.Offer_category_name, catoffer.Slug, catoffer.Create_at, catoffer.Update_at)
 	if err1 != nil {
 		tx.Rollback()
 		return "err", err1
@@ -75,10 +73,10 @@ func (catoffer *OfferCategory) Update(service_name string) (string, error) {
 	}
 
 	UPDATE_OFFER_CAT := `UPDATE ` + offerCat_table + ` SET 
-  offer_category_name=? , slug=?, value=?, offer_type=?,  update_at=? 
+  offer_category_name=? , slug=?, update_at=? 
   WHERE id=?`
 
-	_, err1 := tx.Exec(UPDATE_OFFER_CAT, catoffer.Offer_category_name, catoffer.Slug, catoffer.Value, catoffer.Offer_type, catoffer.Update_at, catoffer.Id)
+	_, err1 := tx.Exec(UPDATE_OFFER_CAT, catoffer.Offer_category_name, catoffer.Slug, catoffer.Update_at, catoffer.Id)
 	if err1 != nil {
 		tx.Rollback()
 		return "err", err1

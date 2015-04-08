@@ -31,7 +31,7 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 	// 	return "", "err", err
 	// }
 
-	SQL_SELECTPIN := `SELECT pin From ` + user_table + ` WHERE user_uid = ?`
+	SQL_SELECTPIN := `SELECT pin From ` + user_table + ` WHERE user_uid = ? AND pin = ?`
 	rows, err := DB.Query(SQL_SELECTPIN, r.User_uid)
 	if err != nil {
 		return "", "err", err

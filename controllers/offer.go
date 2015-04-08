@@ -26,6 +26,8 @@ type offerFormAllLang struct {
 	Description_en     string `form:"description_en" `
 	Description_th     string `form:"description_th"`
 	Lang               string `form:"lang"`
+	Value              string `form:"value"`
+	Offer_type         string `form:"offer_type"`
 }
 type offerFormAllLang2 struct {
 	Id                 int    `json:"id", Number`
@@ -43,6 +45,8 @@ type offerFormAllLang2 struct {
 	Condition_offer_th string `json:"condition_offer_th"`
 	Description_en     string `json:"description_en" `
 	Description_th     string `json:"description_th"`
+	Value              string `json:"value"`
+	Offer_type         string `json:"offer_type"`
 	Create_at          int    `json:"Create_at"`
 	Update_at          int    `json:"Update_at"`
 }
@@ -67,6 +71,8 @@ func NewOffer(c *gin.Context) {
 		Condition_offer_th: form.Condition_offer_th,
 		Description_en:     form.Description_en,
 		Description_th:     form.Description_th,
+		Value:              form.Value,
+		Offer_type:         form.Offer_type,
 		Create_at:          helpers.Unix_milisec_time_now(),
 		Update_at:          helpers.Unix_milisec_time_now(),
 	}
@@ -105,6 +111,8 @@ func UpdateOffer(c *gin.Context) {
 		Condition_offer_th: form.Condition_offer_th,
 		Description_en:     form.Description_en,
 		Description_th:     form.Description_th,
+		Value:              form.Value,
+		Offer_type:         form.Offer_type,
 		Create_at:          helpers.Unix_milisec_time_now(),
 		Update_at:          helpers.Unix_milisec_time_now(),
 	}
