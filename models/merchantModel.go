@@ -359,7 +359,7 @@ func (m *MerchantMeta) MerchantShowInfoAllLang(service_name string) (string, str
 	}
 	mm := MerchantMeta{
 		m_meta.Id, m_meta.Username, m_meta.Password, m_meta.Email, m_meta.Shop_avatar_s, m_meta.Shop_avatar_l, m_meta.Merchant_uid, m_meta.Lat, m_meta.Lon,
-		m_meta.Address_en, m_meta.Address_th, m_meta.Phone_1, m_meta.Phone_2, m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link,
+		m_meta_content_th.Shop_description_th, m_meta_content_th.Address_th, m_meta.Phone_1, m_meta.Phone_2, m_meta.Fax, m_meta.Line_id, m_meta.Facebook_link, m_meta.Website_link,
 		m_meta.Merchant_status, m_meta.Merchant_category_id, m_meta.Merchant_province, m_meta_content_en.Name_en, m_meta_content_th.Name_th,
 		m_meta_content_en.Shop_description_en, m_meta_content_th.Shop_description_th, m_meta.Create_at, m_meta.Update_at,
 	}
