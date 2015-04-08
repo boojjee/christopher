@@ -23,7 +23,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{"status": "OK!", "build": "0.128"})
+			c.JSON(200, gin.H{"status": "OK!", "build": "0.130"})
 		})
 
 		//# for Back End
@@ -36,6 +36,10 @@ func main() {
 
 		// DashBoard
 		v1.GET("/:service_name/my_point/:user_uid", controllers.GetMyPoint) // done
+
+		// For frontEnd
+		v1.GET("/:service_name/workout", controllers.GetWorkOut) // done
+		v1.GET("/:service_name/gpoint", controllers.GetPoints)   // done
 
 		// Activity
 		v1.GET("/:service_name/activity/:activity_uid", controllers.GetActivity)       // done
@@ -86,6 +90,12 @@ func main() {
 		v1.POST("/:service_name/ ", controllers.NewCategoriesOffer)                            // done
 		v1.PUT("/:service_name/offer_category/:cat_id", controllers.UpdateCategoriesOffer)     // done
 		v1.DELETE("/:service_name/offer_category/:cat_id", controllers.DelelteCategoriesOffer) // done
+
+		// Point Setting
+		v1.GET("/:service_name/setting_point", controllers.ListAllPointSetting) // doing
+		v1.POST("/:service_name/setting_point", controllers.NewPointSetting)
+		v1.PUT("/:service_name/setting_point/:uid", controllers.UpdatePointSetting)
+		v1.DELETE("/:service_name/setting_point/:uid", controllers.DeletePointSetting)
 
 	}
 

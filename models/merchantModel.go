@@ -3,7 +3,7 @@ package models
 import (
 	"encoding/json"
 	"errors"
-	"log"
+	// "log"
 )
 
 type MerchantMeta struct {
@@ -324,6 +324,7 @@ func (m *MerchantMeta) MerchantShowInfoAllLang(service_name string) (string, str
 		if err != nil {
 			return "", "err", err
 		}
+
 	}
 
 	if m_meta.Id == 0 {
@@ -333,6 +334,7 @@ func (m *MerchantMeta) MerchantShowInfoAllLang(service_name string) (string, str
 	SELECT_QUERY_MCONTENT_TH := "SELECT name, shop_description, address FROM " + merchant_content + " WHERE lang='th' AND merchant_uid = '" + m.Merchant_uid + "'"
 	// log.Println(SELECT_QUERY_MCONTENT_TH)
 	rows2, err := DB.Query(SELECT_QUERY_MCONTENT_TH)
+	// log.Println(rows2)
 	if err != nil {
 		return "", "err", err
 	}
@@ -345,11 +347,12 @@ func (m *MerchantMeta) MerchantShowInfoAllLang(service_name string) (string, str
 
 	SELECT_QUERY_MCONTENT_EN := "SELECT name, shop_description, address FROM " + merchant_content + " WHERE lang='en' AND merchant_uid = '" + m.Merchant_uid + "'"
 	rows3, err := DB.Query(SELECT_QUERY_MCONTENT_EN)
+	// log.Println(rows3)
 	if err != nil {
 		return "", "err", err
 	}
 	for rows3.Next() {
-		err := rows3.Scan(&m_meta_content_en.Name_en, &m_meta_content_en.Shop_description_en, &m_meta_content_en)
+		err := rows3.Scan(&m_meta_content_en.Name_en, &m_meta_content_en.Shop_description_en, &m_meta_content_en.Address_en)
 		if err != nil {
 			return "", "err", err
 		}
@@ -360,10 +363,10 @@ func (m *MerchantMeta) MerchantShowInfoAllLang(service_name string) (string, str
 		m_meta.Merchant_status, m_meta.Merchant_category_id, m_meta.Merchant_province, m_meta_content_en.Name_en, m_meta_content_th.Name_th,
 		m_meta_content_en.Shop_description_en, m_meta_content_th.Shop_description_th, m_meta.Create_at, m_meta.Update_at,
 	}
-
+	// log.Println(mm)
 	b, err := json.Marshal(mm)
 
-	log.Println("")
+	// log.Println("sadf")
 	merchentLists := string(b)
 	return merchentLists, "success", nil
 }

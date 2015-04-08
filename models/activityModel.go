@@ -133,15 +133,20 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 		return "err", err
 	}
 
-	SQL_INSERT_ACTIVITY := `INSERT INTO ` + activity_table + `
+	SQL_INSERT_ACTIVITY := `INSERTss INTO ` + activity_table + `
   (activity_uid, user_uid, third_activity_id, third_uri, third_token_user,
    source, distance, duration, calories, start_activity_lat, start_activity_lon, activity_type,
    activity_status, create_at, update_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
   `
+
+	if act.User_uid == "" {
+		tx.Rollback()
+		return "err", errors.New("sql: no rows in result set")
+	}
+
 	_, err1 := tx.Exec(SQL_INSERT_ACTIVITY, act.Activity_uid, act.User_uid, act.Third_activity_id, act.Third_uri,
 		act.Third_token_user, act.Source, act.Distance, act.Duration, act.Calories, act.Start_activity_lat, act.Start_activity_lon,
 		act.Activity_type, act.Activity_status, act.Create_at, act.Update_at)
-
 	if err1 != nil {
 		tx.Rollback()
 		return "err", err1

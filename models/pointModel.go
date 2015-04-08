@@ -31,3 +31,45 @@ func (mp *MyBPoint) GetMyCurrentPoint(service_name string) (float64, string, err
 	}
 	return blance_point, "success", err
 }
+
+func GetWorkOut(service_name string) (float64, string, error) {
+	// SELECT  SUM(distance) as total FROM ginkgo_point
+	activity_table := service_name + "_activity"
+	var totalPoint float64
+
+	ConnectDb()
+	SQL_SELECT_BPOINT := "SELECT SUM(distance) FROM " + activity_table
+	rows, err := DB.Query(SQL_SELECT_BPOINT)
+	if err != nil {
+		return 0, "err", err
+	}
+	for rows.Next() {
+		err := rows.Scan(&totalPoint)
+		if err != nil {
+			return 0, "err", err
+		}
+	}
+	return totalPoint, "success", err
+
+}
+
+func GetPoints(service_name string) (float64, string, error) {
+	// SELECT  SUM(distance) as total FROM ginkgo_point
+	point_table := service_name + "_point"
+	var totalPoint float64
+
+	ConnectDb()
+	SQL_SELECT_BPOINT := "SELECT SUM(g_point) FROM " + point_table
+	rows, err := DB.Query(SQL_SELECT_BPOINT)
+	if err != nil {
+		return 0, "err", err
+	}
+	for rows.Next() {
+		err := rows.Scan(&totalPoint)
+		if err != nil {
+			return 0, "err", err
+		}
+	}
+	return totalPoint, "success", err
+
+}

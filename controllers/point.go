@@ -5,7 +5,7 @@ import (
 	"christopher/models"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"log"
+	// "log"
 )
 
 type BalancePointForm struct {
@@ -15,6 +15,9 @@ type BalancePointForm struct {
 }
 type Mygpoint struct {
 	G_Point float64 `json:"g_point"`
+}
+type WorkOutAll struct {
+	Workout float64 `json:"workout"`
 }
 
 func GetMyPoint(c *gin.Context) {
@@ -32,7 +35,53 @@ func GetMyPoint(c *gin.Context) {
 	mapB, _ := json.Marshal(mapD)
 	res := &Mygpoint{}
 	json.Unmarshal(mapB, &res)
-	log.Println(res)
+
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"data":    res,
+			"message": "Success!",
+		})
+	}
+}
+
+func GetWorkOut(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+
+	result, msg, err := models.GetWorkOut(SERVICE_NAME)
+	mapD := map[string]float64{"workout": result}
+	mapB, _ := json.Marshal(mapD)
+	res := &WorkOutAll{}
+	json.Unmarshal(mapB, &res)
+
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"data":    res,
+			"message": "Success!",
+		})
+	}
+}
+
+func GetPoints(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+
+	result, msg, err := models.GetPoints(SERVICE_NAME)
+	mapD := map[string]float64{"g_point": result}
+	mapB, _ := json.Marshal(mapD)
+	res := &Mygpoint{}
+	json.Unmarshal(mapB, &res)
+
 	if msg == "err" {
 		c.JSON(200, gin.H{
 			"status": 500,

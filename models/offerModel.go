@@ -53,16 +53,13 @@ func (offer *OfferAllContent) Save(service_name string) (string, error) {
 		return "err", err1
 	}
 
-	log.Println(offer)
-
 	SQL_INSERT_OFCONTENT_EN := `INSERT INTO ` + offerContent_table + `
 	(name, offer_uid, condition_offer, description, lang, create_at, update_at) 
 	VALUES (?, ?, ?, ?, ?, ?, ?)
 	`
-	log.Println(offer.Name_th)
+
 	_, err2 := tx.Exec(SQL_INSERT_OFCONTENT_EN, offer.Name_en, offer.Offer_uid, offer.Condition_offer_en,
 		offer.Description_en, "en", offer.Create_at, offer.Update_at)
-	log.Println(err2)
 	if err2 != nil {
 		tx.Rollback()
 		return "err", err1
@@ -74,7 +71,6 @@ func (offer *OfferAllContent) Save(service_name string) (string, error) {
 	`
 	_, err3 := tx.Exec(SQL_INSERT_OFCONTENT_TH, offer.Name_th, offer.Offer_uid, offer.Condition_offer_th,
 		offer.Description_th, "th", offer.Create_at, offer.Update_at)
-	log.Println(err3)
 	if err3 != nil {
 		tx.Rollback()
 		return "err", err1
