@@ -23,7 +23,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{"status": "OK!", "build": "0.132"})
+			c.JSON(200, gin.H{"status": "OK!", "build": "0.133"})
 		})
 
 		//# for Back End
@@ -88,7 +88,7 @@ func main() {
 		v1.DELETE("/:service_name/offer/:uid", controllers.DeleteOffer)                          // done
 
 		v1.GET("/:service_name/offer_categories", controllers.ListAllCategoriesOffer)          // done
-		v1.POST("/:service_name/ ", controllers.NewCategoriesOffer)                            // done
+		v1.POST("/:service_name/offer_category", controllers.NewCategoriesOffer)               // done
 		v1.PUT("/:service_name/offer_category/:cat_id", controllers.UpdateCategoriesOffer)     // done
 		v1.DELETE("/:service_name/offer_category/:cat_id", controllers.DelelteCategoriesOffer) // done
 

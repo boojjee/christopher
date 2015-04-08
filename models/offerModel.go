@@ -2,9 +2,7 @@ package models
 
 import (
 	"encoding/json"
-	// "github.com/elgs/gosqljson"
 	"log"
-	// "strings"
 )
 
 type OfferAllContent struct {
@@ -23,6 +21,7 @@ type OfferAllContent struct {
 	Condition_offer_th string
 	Description_en     string
 	Description_th     string
+	Status             int64
 	Create_at          int64
 	Update_at          int64
 }
@@ -41,12 +40,12 @@ func (offer *OfferAllContent) Save(service_name string) (string, error) {
 	}
 
 	SQL_INSERT_OFMETA := `INSERT INTO ` + offerMeta_table + `
-	(offer_uid, offer_point, merchant_uid, offer_cat_id, offer_image_banner, offer_image_poster, used, quantity, create_at, update_at) 
+	(offer_uid, offer_point, merchant_uid, offer_cat_id, offer_image_banner, offer_image_poster, used, quantity, status ,create_at, update_at) 
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 	_, err1 := tx.Exec(SQL_INSERT_OFMETA, offer.Offer_uid, offer.Offer_point, offer.Merchant_uid,
 		offer.Offer_cat_id, offer.Offer_image_banner, offer.Offer_image_poster,
-		offer.Used, offer.Quantity, offer.Create_at, offer.Update_at)
+		offer.Used, offer.Quantity, offer.Status, offer.Create_at, offer.Update_at)
 	log.Println(err1)
 	if err1 != nil {
 		tx.Rollback()
@@ -97,12 +96,12 @@ func (offer *OfferAllContent) Update(service_name string) (string, error) {
 
 	UPDATE_OFFER_META := `UPDATE ` + offerMeta_table + ` SET 
 	offer_point=? , offer_cat_id=?, offer_image_banner=?,
-	offer_image_poster=?, used=?, quantity=?, update_at=? 
+	offer_image_poster=?, used=?, quantity=?, status=?, update_at=? 
 	WHERE offer_uid=?`
 
 	_, err1 := tx.Exec(UPDATE_OFFER_META,
 		offer.Offer_point, offer.Offer_cat_id, offer.Offer_image_banner,
-		offer.Offer_image_poster, offer.Used, offer.Quantity, offer.Update_at, offer.Offer_uid)
+		offer.Offer_image_poster, offer.Used, offer.Quantity, offer.Status, offer.Update_at, offer.Offer_uid)
 
 	if err1 != nil {
 		tx.Rollback()
@@ -184,7 +183,7 @@ func (offer *OfferAllContent) ListsOfferByMerchant(service_name string) (string,
 	for rows.Next() {
 		err := rows.Scan(&oac.Id, &oac.Offer_uid, &oac.Offer_point, &oac.Merchant_uid,
 			&oac.Offer_cat_id, &oac.Offer_image_banner, &oac.Offer_image_poster,
-			&oac.Used, &oac.Quantity, &oac.Create_at, &oac.Update_at)
+			&oac.Used, &oac.Quantity, &oac.Status, &oac.Create_at, &oac.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -216,10 +215,10 @@ func (offer *OfferAllContent) ListsOfferByMerchant(service_name string) (string,
 		offers = append(offers, &OfferAllContent{
 			oac.Id, oac.Offer_uid, oac.Merchant_uid, oac.Offer_point, oac.Offer_cat_id, oac.Offer_image_banner, oac.Offer_image_poster,
 			oac.Used, oac.Quantity, oac.Name_en, oac.Name_th, oac.Condition_offer_en, oac.Condition_offer_th,
-			oac.Description_en, oac.Description_th, oac.Create_at, oac.Update_at,
+			oac.Description_en, oac.Description_th, oac.Status, oac.Create_at, oac.Update_at,
 		})
 	}
-	log.Println(offers)
+	// log.Println(offers)
 	s, _ := json.Marshal(offers)
 	offers_of_merchant := string(s)
 	return offers_of_merchant, "success", err
@@ -240,7 +239,7 @@ func ListsAllOffer(service_name string) (string, string, error) {
 	for rows.Next() {
 		err := rows.Scan(&oac.Id, &oac.Offer_uid, &oac.Offer_point, &oac.Merchant_uid,
 			&oac.Offer_cat_id, &oac.Offer_image_banner, &oac.Offer_image_poster,
-			&oac.Used, &oac.Quantity, &oac.Create_at, &oac.Update_at)
+			&oac.Used, &oac.Quantity, &oac.Status, &oac.Create_at, &oac.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -272,10 +271,10 @@ func ListsAllOffer(service_name string) (string, string, error) {
 		offers = append(offers, &OfferAllContent{
 			oac.Id, oac.Offer_uid, oac.Merchant_uid, oac.Offer_point, oac.Offer_cat_id, oac.Offer_image_banner, oac.Offer_image_poster,
 			oac.Used, oac.Quantity, oac.Name_en, oac.Name_th, oac.Condition_offer_en, oac.Condition_offer_th,
-			oac.Description_en, oac.Description_th, oac.Create_at, oac.Update_at,
+			oac.Description_en, oac.Description_th, oac.Status, oac.Create_at, oac.Update_at,
 		})
 	}
-	log.Println(offers)
+	// log.Println(offers)
 	s, _ := json.Marshal(offers)
 	offers_of_merchant := string(s)
 	return offers_of_merchant, "success", err
@@ -300,7 +299,7 @@ func (offer *OfferAllContent) ShowOfferInfo(service_name string) (string, string
 	for rows.Next() {
 		err := rows.Scan(&oac.Id, &oac.Offer_uid, &oac.Offer_point, &oac.Merchant_uid,
 			&oac.Offer_cat_id, &oac.Offer_image_banner, &oac.Offer_image_poster,
-			&oac.Used, &oac.Quantity, &oac.Create_at, &oac.Update_at)
+			&oac.Used, &oac.Quantity, &oac.Status, &oac.Create_at, &oac.Update_at)
 		if err != nil {
 			return "", "err", err
 		}
@@ -333,7 +332,7 @@ func (offer *OfferAllContent) ShowOfferInfo(service_name string) (string, string
 	result := OfferAllContent{
 		oac.Id, oac.Offer_uid, oac.Merchant_uid, oac.Offer_point, oac.Offer_cat_id, oac.Offer_image_banner, oac.Offer_image_poster,
 		oac.Used, oac.Quantity, oac.Name_en, oac.Name_th, oac.Condition_offer_en, oac.Condition_offer_th,
-		oac.Description_en, oac.Description_th, oac.Create_at, oac.Update_at,
+		oac.Description_en, oac.Description_th, oac.Status, oac.Create_at, oac.Update_at,
 	}
 	s, _ := json.Marshal(result)
 	offers_info := string(s)
