@@ -2,6 +2,7 @@ package models
 
 import (
 	// "encoding/json"
+	"errors"
 	"log"
 )
 
@@ -13,6 +14,34 @@ type UserContent struct {
 	User_status int64
 	Create_at   int64
 	Update_at   int64
+}
+
+func (u *UserContent) CheckHadPin(service_name string) (string, string, error) {
+	user_table := service_name + "_user"
+	ConnectDb()
+	var (
+		err      error
+		user_pin string
+	)
+	SQL_SELECTPIN := `SELECT pin FROM ` + user_table + ` WHERE user_uid = ?`
+	rows, err := DB.Query(SQL_SELECTPIN, u.User_uid)
+	if err != nil {
+		return "", "err", err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&user_pin)
+		if err != nil {
+			return "", "err", err
+		}
+	}
+	log.Println(user_pin)
+	if user_pin == "" {
+		return "no", "err", errors.New("mypackage: invalid parameter")
+	} else {
+		return user_pin, "success", err
+	}
+
 }
 
 func (u *UserContent) Save(service_name string) (string, string, error) {

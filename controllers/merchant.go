@@ -81,11 +81,11 @@ type Merchants struct {
 	Shop_description     string `json:"shop_description"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Address              string `form:"address"`
+	Address              string `json:"address"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 	Merchant_category_id int    `json:"merchant_category_id, Number"`
-	Merchant_province    string `form:"merchant_province"`
+	Merchant_province    string `json:"merchant_province"`
 }
 type MerchantFormAllLangJson struct {
 	Id                   int    `json:"id, Number"`
@@ -97,8 +97,8 @@ type MerchantFormAllLangJson struct {
 	Merchant_uid         string `json:"merchant_uid"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Address_en           string `form:"address_en"`
-	Address_th           string `form:"address_th"`
+	Address_en           string `json:"address_en"`
+	Address_th           string `json:"address_th"`
 	Phone_1              string `json:"phone_1"`
 	Phone_2              string `json:"phone_2"`
 	Fax                  string `json:"fax"`
@@ -111,7 +111,7 @@ type MerchantFormAllLangJson struct {
 	Shop_description_th  string `json:"shop_description_th"`
 	Merchant_status      int    `json:"merchant_status"`
 	Merchant_category_id int    `json:"merchant_category_id, Number"`
-	Merchant_province    string `form:"merchant_province"`
+	Merchant_province    string `json:"merchant_province"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 }
@@ -125,7 +125,7 @@ type MerchantFormByLangJson struct {
 	Shop_avatar_l        string `json:"shop_avatar_l"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Address              string `form:"address"`
+	Address              string `json:"address"`
 	Phone_1              string `json:"phone_1"`
 	Phone_2              string `json:"phone_2"`
 	Fax                  string `json:"fax"`
@@ -136,7 +136,7 @@ type MerchantFormByLangJson struct {
 	Shop_description     string `json:"shop_description"`
 	Merchant_status      int    `json:"merchant_status"`
 	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
-	Merchant_province    string `form:"merchant_province"`
+	Merchant_province    string `json:"merchant_province"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 }
@@ -151,11 +151,11 @@ type MerchantMetaJSON struct {
 	Shop_description     string `json:"shop_description"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Address              string `form:"address"`
+	Address              string `json:"address"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
-	Merchant_province    string `form:"merchant_province"`
+	Merchant_province    string `json:"merchant_province"`
 }
 type MerchantContentJSON struct {
 	Username             string `json:"username"`
@@ -167,11 +167,11 @@ type MerchantContentJSON struct {
 	Shop_description     string `json:"shop_description"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Address              string `form:"address"`
+	Address              string `json:"address"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
-	Merchant_province    string `form:"merchant_province"`
+	Merchant_province    string `json:"merchant_province"`
 }
 
 type MerchantAllJSON struct {
@@ -184,11 +184,11 @@ type MerchantAllJSON struct {
 	Shop_description     string `json:"shop_description"`
 	Lat                  string `json:"lat"`
 	Lon                  string `json:"lon"`
-	Address              string `form:"address"`
+	Address              string `json:"address"`
 	Create_at            int    `json:"create_at, Number"`
 	Update_at            int    `json:"update_at, Number"`
 	Merchant_category_id int    `json:"merchant_category_id_id, Number"`
-	Merchant_province    string `form:"merchant_province"`
+	Merchant_province    string `json:"merchant_province"`
 }
 
 // Action CRUD

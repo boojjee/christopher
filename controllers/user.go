@@ -4,6 +4,7 @@ import (
 	"christopher/helpers"
 	"christopher/models"
 	"encoding/json"
+	// "fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	// "strconv"
@@ -19,6 +20,9 @@ type UserForm struct {
 
 type UserRJSON struct {
 	User_uid string `json:"user_uid"`
+}
+type PinRJSON struct {
+	Pin string `json:"pin"`
 }
 
 func NewUser(c *gin.Context) {
@@ -152,6 +156,35 @@ func GetUserUID(c *gin.Context) {
 			"status":  200,
 			"data":    res,
 			"message": "Created!",
+		})
+	}
+}
+
+func CheckHadPin(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	user_uid := c.Params.ByName("user_uid")
+	var form UserForm
+	c.Bind(&form)
+
+	user := &models.UserContent{
+		User_uid: user_uid,
+	}
+
+	data, msg, err := user.CheckHadPin(SERVICE_NAME)
+
+	jsondata := `{ "pin": "` + data + `"}`
+	res := &PinRJSON{}
+	json.Unmarshal([]byte(jsondata), &res)
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err.Error(),
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"status":  200,
+			"data":    res,
+			"message": "Success!",
 		})
 	}
 }

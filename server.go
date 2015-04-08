@@ -33,6 +33,7 @@ func main() {
 		v1.PUT("/:service_name/user/:user_uid/pin", controllers.UpdateUserPin) // done
 		v1.DELETE("/:service_name/user/:user_uid", controllers.DeleteUser)     // done
 		v1.GET("/:service_name/user/:parse_id/parse", controllers.GetUserUID)  // done
+		v1.GET("/:service_name/checkpin/:user_uid", controllers.CheckHadPin)   // done
 
 		// DashBoard
 		v1.GET("/:service_name/my_point/:user_uid", controllers.GetMyPoint) // done
@@ -92,11 +93,13 @@ func main() {
 		v1.DELETE("/:service_name/offer_category/:cat_id", controllers.DelelteCategoriesOffer) // done
 
 		// Point Setting
-		v1.GET("/:service_name/setting_point", controllers.ListAllPointSetting) // doing
-		v1.POST("/:service_name/setting_point", controllers.NewPointSetting)
-		v1.PUT("/:service_name/setting_point/:uid", controllers.UpdatePointSetting)
-		v1.DELETE("/:service_name/setting_point/:uid", controllers.DeletePointSetting)
+		v1.GET("/:service_name/setting_point", controllers.ListAllPointSetting)        // done
+		v1.POST("/:service_name/setting_point", controllers.NewPointSetting)           // done
+		v1.PUT("/:service_name/setting_point/:uid", controllers.UpdatePointSetting)    // done
+		v1.DELETE("/:service_name/setting_point/:uid", controllers.DeletePointSetting) // done
 
+		// Redeem
+		v1.POST("/:service_name/redeem", controllers.RedeemOffer) // doing
 	}
 
 	gen := router.Group("/generate")
