@@ -64,6 +64,7 @@ func NewOffer(c *gin.Context) {
 		Offer_image_banner: form.Offer_image_banner,
 		Offer_image_poster: form.Offer_image_poster,
 		Used:               0,
+		Status:             1,
 		Quantity:           helpers.Convert_string_to_int(form.Quantity),
 		Name_en:            form.Name_en,
 		Name_th:            form.Name_th,

@@ -44,7 +44,7 @@ func (offer *OfferAllContent) Save(service_name string) (string, error) {
 	SQL_INSERT_OFMETA := `INSERT INTO ` + offerMeta_table + `
 	(offer_uid, offer_point, merchant_uid, offer_cat_id, offer_image_banner, offer_image_poster, 
 	 used, quantity, status ,value, offer_type, create_at, update_at) 
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 	_, err1 := tx.Exec(SQL_INSERT_OFMETA, offer.Offer_uid, offer.Offer_point, offer.Merchant_uid,
 		offer.Offer_cat_id, offer.Offer_image_banner, offer.Offer_image_poster,
