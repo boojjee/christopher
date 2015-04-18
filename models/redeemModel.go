@@ -236,6 +236,7 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 				tx.Rollback()
 				return "", "err", err_loglocation
 			}
+			tx.Commit()
 
 			SQL_SELECT_MYPOINT2 := `SELECT blance_point FROM ` + point_balance_table + ` WHERE user_uid =?`
 			rows_cr, err_cr := DB.Query(SQL_SELECT_MYPOINT2, r.User_uid)
@@ -255,8 +256,6 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 
 			s, _ := json.Marshal(my_redeem)
 			result := string(s)
-			tx.Commit()
-			// log.Println(result)
 			defer CloseDb()
 			return result, "Success", nil
 		} else {

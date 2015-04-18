@@ -37,7 +37,7 @@ func (u *UserContent) CheckHadPin(service_name string) (string, string, error) {
 	}
 	log.Println(user_pin)
 	if user_pin == "" {
-		return "no", "err", errors.New("no data")
+		return "no", "err", errors.New("no data ")
 	} else {
 		return user_pin, "success", err
 	}
