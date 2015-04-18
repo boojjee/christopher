@@ -112,7 +112,7 @@ func UpdateCategoriesMerchant(c *gin.Context) {
 func DelelteCategoriesMerchant(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
 	merchant_cat_id := c.Params.ByName("cat_id")
-	merchantCate := &models.OfferCategory{
+	merchantCate := &models.MerchantCategory{
 		Id: helpers.Convert_string_to_int(merchant_cat_id),
 	}
 

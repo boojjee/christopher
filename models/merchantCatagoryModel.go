@@ -96,6 +96,7 @@ func (catmerchant *MerchantCategory) Delete(service_name string) (string, error)
 	}
 	SQL_DELETE_OFFERCAT := "DELETE FROM " + merchantCat_table + " WHERE id=?"
 	_, err = tx.Exec(SQL_DELETE_OFFERCAT, catmerchant.Id)
+	log.Println(err)
 	if err != nil {
 		tx.Rollback()
 		return "err", err
