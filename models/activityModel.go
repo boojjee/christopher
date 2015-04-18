@@ -133,7 +133,7 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 		return "err", err
 	}
 
-	SQL_INSERT_ACTIVITY := `INSERTss INTO ` + activity_table + `
+	SQL_INSERT_ACTIVITY := `INSERT INTO ` + activity_table + `
   (activity_uid, user_uid, third_activity_id, third_uri, third_token_user,
    source, distance, duration, calories, start_activity_lat, start_activity_lon, activity_type,
    activity_status, create_at, update_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
@@ -162,7 +162,7 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 		tx.Rollback()
 		return "err", err_p
 	}
-	log.Println(".......#1")
+	// log.Println(".......#1")
 	SQL_SELECT_BPOINT := `SELECT blance_point FROM ` + point_balance_table + ` WHERE user_uid=?`
 	rows1, err := DB.Query(SQL_SELECT_BPOINT, act.User_uid)
 
@@ -178,7 +178,7 @@ func (act *ActivityContentForm) Save(service_name string) (string, error) {
 	}
 
 	if myblance_point == 0 {
-		log.Println("------1")
+		// log.Println("------1")
 		// insert point
 		SQL_INSERT_BLPOINT := `INSERT INTO ` + point_balance_table + ` 
 		( user_uid, blance_point, create_at, update_at ) VALUES (?, ?, ?, ?)
