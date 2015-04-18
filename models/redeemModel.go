@@ -7,6 +7,15 @@ import (
 	"log"
 )
 
+type RedeemC struct {
+	Redeem_uid   string
+	Redeem_point float64
+	Code         string
+	Expiry_date  int64
+	Status       int64
+	Create_at    int64
+	Update_at    int64
+}
 type RedeemContent struct {
 	Offer_uid      string
 	User_uid       string
@@ -30,6 +39,74 @@ type RedeemJSON struct {
 	Blance_point float64 `json:"blance_point"`
 	Expire_date  int64   `json:"expire_date"`
 	Redeem_date  int64   `json:"redeem_date"`
+}
+
+func GetRedeemLists(service_name string) (string, string, error) {
+	redeem_table := service_name + "_redeem"
+	var (
+		redeem_uid     string
+		redeemed_point float64
+		code           string
+		expire_date    int64
+		create_at      int64
+		status         int64
+		update_at      int64
+	)
+	SQL_SELECTPIN := `SELECT redeem_uid, redeem_point, code, expiry_date, status, create_at, update_at FROM  ` + redeem_table
+	ConnectDb()
+	rows, err := DB.Query(SQL_SELECTPIN)
+	if err != nil {
+		return "", "err", err
+	}
+	redeemC := make([]*RedeemC, 0, 7)
+	for rows.Next() {
+		err := rows.Scan(&redeem_uid, &redeemed_point, &code, &expire_date, &status, &create_at, &update_at)
+		if err != nil {
+			return "", "err", err
+		}
+
+		redeemC = append(redeemC, &RedeemC{
+			redeem_uid, redeemed_point, code, expire_date, status, create_at, update_at,
+		})
+	}
+	s, _ := json.Marshal(redeemC)
+	redeemList := string(s)
+	return redeemList, "success", nil
+}
+
+func (r *RedeemContent) GetHistoryRedeem(service_name string) (string, string, error) {
+	redeem_table := service_name + "_redeem"
+	var (
+		redeem_uid     string
+		redeemed_point float64
+		code           string
+		expire_date    int64
+		create_at      int64
+		status         int64
+		update_at      int64
+	)
+	SQL_SELECTPIN := `SELECT redeem_uid, redeem_point, code, expiry_date, status, create_at, update_at FROM  ` + redeem_table + ` WHERE user_uid = ? `
+	ConnectDb()
+	rows, err := DB.Query(SQL_SELECTPIN, r.User_uid)
+	if err != nil {
+		return "", "err", err
+	}
+	redeemC := make([]*RedeemC, 0, 7)
+	for rows.Next() {
+		err := rows.Scan(&redeem_uid, &redeemed_point, &code, &expire_date, &status, &create_at, &update_at)
+		if err != nil {
+			return "", "err", err
+		}
+
+		redeemC = append(redeemC, &RedeemC{
+			redeem_uid, redeemed_point, code, expire_date, status, create_at, update_at,
+		})
+	}
+	s, _ := json.Marshal(redeemC)
+	// log.Println(string(s))
+	redeemList := string(s)
+	return redeemList, "success", nil
+
 }
 
 func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, error) {
@@ -68,7 +145,7 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 	if user_pin_count == 0 {
 		return "", "err", errors.New("the pin code is not correct")
 	} else {
-		log.Println("Debug: pin is ok")
+		// log.Println("Debug: pin is ok")
 		// GET OFFER Data
 		SQL_SELECT_OFFER := `SELECT offer_point, quantity, used FROM ` + offer_table + ` 
 			WHERE offer_uid =? AND status =? `
@@ -84,12 +161,15 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 			}
 		}
 
-		log.Println(offer_point)
-		log.Println(quantity)
-		log.Println(used)
+		if offer_point == 0 {
+			return "", "err", errors.New("no offer data")
+		}
+		// log.Println(offer_point)
+		// log.Println(quantity)
+		// log.Println(used)
 
 		totalQuantityBalance = quantity - used
-		log.Println(totalQuantityBalance)
+		// log.Println(totalQuantityBalance)
 		// check offer condition
 		if totalQuantityBalance > 0 {
 			log.Println("Debug: totalQuantityBalance > 0  ")
@@ -108,10 +188,10 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 					return "", "err", err
 				}
 			}
-			log.Println(myPoint)
+			// log.Println(myPoint)
 			expr_date := helpers.UnixTimeAddMinFromNow(30)
-			log.Println("Redeem EXPire : ")
-			log.Println(expr_date)
+			// log.Println("Redeem EXPire : ")
+			// log.Println(expr_date)
 			// insert to redeem
 			tx, err := DB.Begin()
 			if err != nil {
@@ -176,7 +256,7 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 			s, _ := json.Marshal(my_redeem)
 			result := string(s)
 			tx.Commit()
-			log.Println(result)
+			// log.Println(result)
 			defer CloseDb()
 			return result, "Success", nil
 		} else {

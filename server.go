@@ -3,13 +3,10 @@ package main
 import (
 	"christopher/controllers"
 	"christopher/generate"
-	// "christopher/helpers"
 	_ "expvar"
 	"flag"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	// "log"
-	// "time"
 )
 
 // var DB *sql.DB
@@ -17,9 +14,7 @@ var minversion string
 
 func main() {
 	flag.Parse()
-	// fmt.Println(minversion)
 	router := gin.Default()
-	// Simple group: v1
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
@@ -74,7 +69,7 @@ func main() {
 		v1.PUT("/:service_name/merchant_category/:cat_id", controllers.UpdateCategoriesMerchant)     // done
 		v1.DELETE("/:service_name/merchant_category/:cat_id", controllers.DelelteCategoriesMerchant) // done
 
-		//# for Client iOS, Android
+		//# Merchant for Client iOS, Android
 		v1.GET("/:service_name/merchantinfo/:uid/:lang", controllers.GetMerchantInfoByLang)                             // done
 		v1.GET("/:service_name/merchantlistsbylang/:lang", controllers.GetMerchantsListsByLang)                         // done
 		v1.GET("/:service_name/merchantlists_withgallery_bylang/:lang", controllers.GetMerchantsListsWithGalleryByLang) // done
@@ -99,7 +94,12 @@ func main() {
 		v1.DELETE("/:service_name/setting_point/:uid", controllers.DeletePointSetting) // done
 
 		// Redeem
-		v1.POST("/:service_name/redeem", controllers.RedeemOffer) // doing
+		v1.POST("/:service_name/redeem", controllers.RedeemOffer)           // done
+		v1.GET("/:service_name/redeem", controllers.RedeemList)             // doing
+		v1.GET("/:service_name/myredeem/:uid", controllers.MyRedeemHistory) // doing
+
+		//
+
 	}
 
 	gen := router.Group("/generate")
