@@ -259,7 +259,7 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 			defer CloseDb()
 			return result, "Success", nil
 		} else {
-			return "", "err", errors.New("Offer is finish")
+			return "", "err", errors.New("Offer is finished")
 		}
 
 	}
