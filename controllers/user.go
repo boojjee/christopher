@@ -49,11 +49,20 @@ func NewUser(c *gin.Context) {
 			"error":  err,
 		})
 	} else {
-		c.JSON(200, gin.H{
-			"status":  200,
-			"data":    res,
-			"message": "Created!",
-		})
+		if msg == "success" {
+			c.JSON(200, gin.H{
+				"status":  200,
+				"data":    res,
+				"message": "success!",
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"status":  200,
+				"data":    res,
+				"message": "Created!",
+			})
+		}
+
 	}
 }
 

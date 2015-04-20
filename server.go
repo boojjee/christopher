@@ -18,7 +18,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{"status": "OK!", "build": "0.139"})
+			c.JSON(200, gin.H{"status": "OK!", "build": "0.140"})
 		})
 
 		//# for Back End

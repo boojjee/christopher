@@ -48,7 +48,8 @@ func (u *UserContent) Save(service_name string) (string, string, error) {
 	user_table := service_name + "_user"
 	ConnectDb()
 	var (
-		err error
+		err      error
+		user_uid string
 	)
 
 	tx, err := DB.Begin()
@@ -56,18 +57,38 @@ func (u *UserContent) Save(service_name string) (string, string, error) {
 		return "", "err", err
 	}
 	defer tx.Rollback()
-	SQL_INSERT_MMETA := `INSERT INTO ` + user_table + ` 
+
+	SQL_SELECT_USRID := `SELECT user_uid FROM ` + user_table + ` where parse_id = ? LIMIT 1`
+	rows, err := DB.Query(SQL_SELECT_USRID, u.Parse_id)
+	if err != nil {
+		return "", "err", err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&user_uid)
+		if err != nil {
+			return "", "err", err
+		}
+	}
+
+	if user_uid == "0" {
+		SQL_INSERT_MMETA := `INSERT INTO ` + user_table + ` 
   (user_uid, pin, parse_id, user_status, create_at, update_at) VALUES (?, ?, ?, ?, ?, ?)
   `
-	_, err1 := tx.Exec(SQL_INSERT_MMETA, u.User_uid, u.Pin, u.Parse_id, u.User_status, u.Create_at, u.Update_at)
-	if err1 != nil {
-		tx.Rollback()
-		return "", "err", err1
+		_, err1 := tx.Exec(SQL_INSERT_MMETA, u.User_uid, u.Pin, u.Parse_id, u.User_status, u.Create_at, u.Update_at)
+		if err1 != nil {
+			tx.Rollback()
+			return "", "err", err1
+		}
+		// log.Println(u.User_uid)
+		tx.Commit()
+		defer CloseDb()
+		return u.User_uid, "success to created", nil
+	} else {
+		// log.Println("had")
+		return user_uid, "success", nil
 	}
-	log.Println(u.User_uid)
-	tx.Commit()
-	defer CloseDb()
-	return u.User_uid, "success", nil
+
 }
 
 func (u *UserContent) GetUIDByParseID(service_name string) (string, string, error) {
