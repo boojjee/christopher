@@ -60,6 +60,7 @@ func (u *UserContent) Save(service_name string) (string, string, error) {
 
 	SQL_SELECT_USRID := `SELECT user_uid FROM ` + user_table + ` where parse_id = ? LIMIT 1`
 	rows, err := DB.Query(SQL_SELECT_USRID, u.Parse_id)
+
 	if err != nil {
 		return "", "err", err
 	}
@@ -70,8 +71,7 @@ func (u *UserContent) Save(service_name string) (string, string, error) {
 			return "", "err", err
 		}
 	}
-
-	if user_uid == "0" {
+	if user_uid == "" {
 		SQL_INSERT_MMETA := `INSERT INTO ` + user_table + ` 
   (user_uid, pin, parse_id, user_status, create_at, update_at) VALUES (?, ?, ?, ?, ?, ?)
   `
