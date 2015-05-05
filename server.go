@@ -18,7 +18,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{"status": "OK!", "build": "0.141"})
+			c.JSON(200, gin.H{"status": "OK!", "build": "0.142"})
 		})
 
 		//# for Back End
@@ -92,6 +92,8 @@ func main() {
 		v1.POST("/:service_name/setting_point", controllers.NewPointSetting)           // done
 		v1.PUT("/:service_name/setting_point/:uid", controllers.UpdatePointSetting)    // done
 		v1.DELETE("/:service_name/setting_point/:uid", controllers.DeletePointSetting) // done
+
+		v1.POST("/:service_name/convert_point", controllers.ConvertPoint) // done
 
 		// Redeem
 		v1.POST("/:service_name/redeem", controllers.RedeemOffer)           // done

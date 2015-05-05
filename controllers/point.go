@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	// "christopher/helpers"
+	"christopher/helpers"
 	"christopher/models"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
@@ -18,6 +18,12 @@ type Mygpoint struct {
 }
 type WorkOutAll struct {
 	Workout float64 `json:"workout"`
+}
+
+type UserConvertPointForm struct {
+	Id            string
+	Distance      string `form:"distance"`
+	Activity_type string `form:"activity_type"`
 }
 
 func GetMyPoint(c *gin.Context) {
@@ -73,6 +79,7 @@ func GetWorkOut(c *gin.Context) {
 	}
 }
 
+// get total point
 func GetPoints(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
 
@@ -94,4 +101,26 @@ func GetPoints(c *gin.Context) {
 			"message": "Success!",
 		})
 	}
+}
+
+// get Point
+func ConvertPoint(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	var form UserConvertPointForm
+	c.Bind(&form)
+	mydistance := helpers.Convert_string_to_float(form.Distance)
+	constant_point := models.GetConstantPoint(SERVICE_NAME, form.Activity_type)
+	result := helpers.ConvertPoint(mydistance, constant_point)
+
+	mapD := map[string]float64{"g_point": result}
+	mapB, _ := json.Marshal(mapD)
+	res := &Mygpoint{}
+	json.Unmarshal(mapB, &res)
+
+	c.JSON(200, gin.H{
+		"status":  200,
+		"data":    res,
+		"message": "Success!",
+	})
+
 }

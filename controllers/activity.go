@@ -97,6 +97,16 @@ func NewActivity(c *gin.Context) {
 	}
 	msg, err := activity.Save(SERVICE_NAME)
 
+	myBPoint := &models.MyBPoint{
+		User_uid: form.User_uid,
+	}
+
+	result, msg, err := myBPoint.GetMyCurrentPoint(SERVICE_NAME)
+	mapD := map[string]float64{"g_point": result}
+	mapB, _ := json.Marshal(mapD)
+	res := &Mygpoint{}
+	json.Unmarshal(mapB, &res)
+
 	if msg == "err" {
 		c.JSON(200, gin.H{
 			"status": 500,
@@ -105,6 +115,7 @@ func NewActivity(c *gin.Context) {
 	} else {
 		c.JSON(200, gin.H{
 			"status":  200,
+			"data":    res,
 			"message": "Created!",
 		})
 	}
