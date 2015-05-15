@@ -18,7 +18,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{"status": "OK!", "build": "0.142"})
+			c.JSON(200, gin.H{"status": "OK!", "build": "0.143"})
 		})
 
 		//# for Back End
@@ -100,7 +100,7 @@ func main() {
 		v1.GET("/:service_name/redeem", controllers.RedeemList)             // doing
 		v1.GET("/:service_name/myredeem/:uid", controllers.MyRedeemHistory) // doing
 
-		//
+		//Event
 
 	}
 

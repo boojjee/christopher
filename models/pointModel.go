@@ -32,6 +32,24 @@ func (mp *MyBPoint) GetMyCurrentPoint(service_name string) (float64, string, err
 	return blance_point, "success", err
 }
 
+func (mp *MyBPoint) GetTotalDistance(service_name string) (float64, string, error) {
+	activity_table := service_name + "_activity"
+	var totalDistance float64
+
+	ConnectDb()
+	SQL_SELECT_totalDistance := "SELECT SUM(distance) FROM " + activity_table + " WHERE user_uid=?"
+	rows, err := DB.Query(SQL_SELECT_totalDistance, mp.User_uid)
+	if err != nil {
+		return 0, "err", err
+	}
+	for rows.Next() {
+		err := rows.Scan(&totalDistance)
+		if err != nil {
+			return 0, "err", err
+		}
+	}
+	return totalDistance, "success", err
+}
 func GetWorkOut(service_name string) (float64, string, error) {
 	// SELECT  SUM(distance) as total FROM ginkgo_point
 	activity_table := service_name + "_activity"

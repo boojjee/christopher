@@ -14,7 +14,8 @@ type BalancePointForm struct {
 	Blance_point string `form:"blance_point"`
 }
 type Mygpoint struct {
-	G_Point float64 `json:"g_point"`
+	G_Point        float64 `json:"g_point"`
+	Total_Distance float64 `json:"total_distance"`
 }
 type WorkOutAll struct {
 	Workout float64 `json:"workout"`
@@ -37,7 +38,15 @@ func GetMyPoint(c *gin.Context) {
 	}
 
 	result, msg, err := myBPoint.GetMyCurrentPoint(SERVICE_NAME)
-	mapD := map[string]float64{"g_point": result}
+	resultDistance, msg2, err2 := myBPoint.GetMyCurrentPoint(SERVICE_NAME)
+	if msg2 == "err" {
+		c.JSON(200, gin.H{
+			"status": 500,
+			"error":  err2,
+		})
+	}
+
+	mapD := map[string]float64{"g_point": result, "total_distance": resultDistance}
 	mapB, _ := json.Marshal(mapD)
 	res := &Mygpoint{}
 	json.Unmarshal(mapB, &res)
@@ -84,6 +93,7 @@ func GetPoints(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
 
 	result, msg, err := models.GetPoints(SERVICE_NAME)
+
 	mapD := map[string]float64{"g_point": result}
 	mapB, _ := json.Marshal(mapD)
 	res := &Mygpoint{}

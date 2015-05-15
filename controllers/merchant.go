@@ -87,6 +87,7 @@ type Merchants struct {
 	Merchant_category_id int    `json:"merchant_category_id, Number"`
 	Merchant_province    string `json:"merchant_province"`
 }
+
 type MerchantFormAllLangJson struct {
 	Id                   int    `json:"id, Number"`
 	Username             string `json:"username"`
