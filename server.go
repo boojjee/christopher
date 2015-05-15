@@ -18,7 +18,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{"status": "OK!", "build": "0.143"})
+			c.JSON(200, gin.H{"status": "OK!", "build": "0.144"})
 		})
 
 		//# for Back End
@@ -38,10 +38,11 @@ func main() {
 		v1.GET("/:service_name/gpoint", controllers.GetPoints)   // done
 
 		// Activity
-		v1.GET("/:service_name/activity/:activity_uid", controllers.GetActivity)       // done
-		v1.POST("/:service_name/activity", controllers.NewActivity)                    // done
-		v1.PUT("/:service_name/activity/:activity_uid", controllers.UpdateActivity)    // done
-		v1.DELETE("/:service_name/activity/:activity_uid", controllers.DeleteActivity) // done
+		v1.GET("/:service_name/check_activity/:user_uid/:source/:third_activity_id", controllers.CheckIsGetPointActivity) // doing
+		v1.GET("/:service_name/activity/:activity_uid", controllers.GetActivity)                                          // done
+		v1.POST("/:service_name/activity", controllers.NewActivity)                                                       // done
+		v1.PUT("/:service_name/activity/:activity_uid", controllers.UpdateActivity)                                       // done
+		v1.DELETE("/:service_name/activity/:activity_uid", controllers.DeleteActivity)                                    // done
 
 		v1.GET("/:service_name/activity_lists_all/:user_uid", controllers.ActivityListsAll)         // done
 		v1.GET("/:service_name/latest_activity_list/:user_uid", controllers.LatestActivityList)     // done

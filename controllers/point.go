@@ -38,7 +38,7 @@ func GetMyPoint(c *gin.Context) {
 	}
 
 	result, msg, err := myBPoint.GetMyCurrentPoint(SERVICE_NAME)
-	resultDistance, msg2, err2 := myBPoint.GetMyCurrentPoint(SERVICE_NAME)
+	resultDistance, msg2, err2 := myBPoint.GetTotalDistance(SERVICE_NAME)
 	if msg2 == "err" {
 		c.JSON(200, gin.H{
 			"status": 500,

@@ -392,3 +392,23 @@ func PrevActivityList(c *gin.Context) {
 		}
 	}
 }
+
+func CheckIsGetPointActivity(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	USER_UID := c.Params.ByName("user_uid")
+	SOURCE := c.Params.ByName("source")
+	THIRD_ACTIVITY_ID := c.Params.ByName("third_activity_id")
+	data, msg, err := models.CheckHadActivity(SERVICE_NAME, THIRD_ACTIVITY_ID, USER_UID, SOURCE)
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": err,
+		})
+	} else if msg == "success" {
+		c.JSON(200, gin.H{
+			"status":          200,
+			"message":         "Success!",
+			"activity_status": data,
+		})
+	}
+}

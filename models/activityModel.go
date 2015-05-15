@@ -603,3 +603,28 @@ func GetActivityByAcUID(service_name string, activity_uid string) (string, strin
 	activitylist := string(s)
 	return activitylist, "success", nil
 }
+
+func CheckHadActivity(service_name string, third_activity_id string, user_uid string, source string) (int64, string, error) {
+	activity_table := service_name + "_activity"
+	var activity_status int64
+
+	ConnectDb()
+	SQL_CHECK_ACTV := "SELECT activity_status FROM " + activity_table + " WHERE user_uid=? AND source=? AND third_activity_id=?"
+	log.Println(SQL_CHECK_ACTV)
+	rows, err := DB.Query(SQL_CHECK_ACTV, user_uid, source, third_activity_id)
+	if err != nil {
+		return 0, "err", err
+	}
+	for rows.Next() {
+		err := rows.Scan(&activity_status)
+		if err != nil {
+			return 0, "err", err
+		}
+	}
+	log.Println(activity_status)
+	if activity_status == 0 {
+		return 0, "success", err
+	}
+
+	return 1, "success", err
+}
