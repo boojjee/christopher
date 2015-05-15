@@ -27,6 +27,13 @@ type ActivityForm struct {
 	MyLocation_lat     string `form:"mylocation_lat"`
 	MyLocation_lon     string `form:"mylocation_lon"`
 }
+
+type ActivitiesCheckForm struct {
+	User_uid          string `form:"user_uid"`
+	Third_activity_id string `form:"third_activity_id"`
+	Source            string `form:"source"`
+}
+
 type ActivityWithPoint struct {
 	Id                 int64             `json:"id, Number"`
 	Activity_uid       string            `json:"activity_uid"`
@@ -73,10 +80,12 @@ func NewActivity(c *gin.Context) {
 	mydistance := helpers.Convert_string_to_float(form.Distance)
 	constant_point := models.GetConstantPoint(SERVICE_NAME, form.Activity_type)
 
+	third_activity_id := helpers.Substr_thirdid(form.Third_activity_id, form.Source)
+
 	activity := &models.ActivityContentForm{
 		Activity_uid:       helpers.RandomStr(10),
 		User_uid:           form.User_uid,
-		Third_activity_id:  form.Third_activity_id,
+		Third_activity_id:  third_activity_id,
 		Third_uri:          form.Third_uri,
 		Third_token_user:   form.Third_token_user,
 		Source:             form.Source,
@@ -95,30 +104,38 @@ func NewActivity(c *gin.Context) {
 		Create_at:          helpers.Unix_milisec_time_now(),
 		Update_at:          helpers.Unix_milisec_time_now(),
 	}
+
 	msg, err := activity.Save(SERVICE_NAME)
-
-	myBPoint := &models.MyBPoint{
-		User_uid: form.User_uid,
-	}
-
-	result, msg, err := myBPoint.GetMyCurrentPoint(SERVICE_NAME)
-	mapD := map[string]float64{"g_point": result}
-	mapB, _ := json.Marshal(mapD)
-	res := &Mygpoint{}
-	json.Unmarshal(mapB, &res)
-
 	if msg == "err" {
 		c.JSON(200, gin.H{
 			"status": 500,
 			"error":  err,
 		})
 	} else {
-		c.JSON(200, gin.H{
-			"status":  200,
-			"data":    res,
-			"message": "Created!",
-		})
+		myBPoint := &models.MyBPoint{
+			User_uid: form.User_uid,
+		}
+
+		result, msg, err := myBPoint.GetMyCurrentPoint(SERVICE_NAME)
+		mapD := map[string]float64{"g_point": result}
+		mapB, _ := json.Marshal(mapD)
+		res := &Mygpoint{}
+		json.Unmarshal(mapB, &res)
+
+		if msg == "err" {
+			c.JSON(200, gin.H{
+				"status": 500,
+				"error":  err,
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"status":  200,
+				"data":    res,
+				"message": "Created!",
+			})
+		}
 	}
+
 }
 
 func UpdateActivity(c *gin.Context) {

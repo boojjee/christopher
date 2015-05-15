@@ -14,6 +14,9 @@ type BalancePointForm struct {
 	Blance_point string `form:"blance_point"`
 }
 type Mygpoint struct {
+	G_Point float64 `json:"g_point"`
+}
+type MygpointDistance struct {
 	G_Point        float64 `json:"g_point"`
 	Total_Distance float64 `json:"total_distance"`
 }
@@ -48,7 +51,7 @@ func GetMyPoint(c *gin.Context) {
 
 	mapD := map[string]float64{"g_point": result, "total_distance": resultDistance}
 	mapB, _ := json.Marshal(mapD)
-	res := &Mygpoint{}
+	res := &MygpointDistance{}
 	json.Unmarshal(mapB, &res)
 
 	if msg == "err" {
