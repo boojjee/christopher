@@ -6,26 +6,26 @@ import (
 )
 
 type OfferAllContent struct {
-	Id                 int64
-	Offer_uid          string
-	Merchant_uid       string
-	Offer_point        float64
-	Offer_cat_id       int64
-	Offer_image_banner string
-	Offer_image_poster string
-	Used               int64
-	Quantity           int64
-	Name_en            string
-	Name_th            string
-	Condition_offer_en string
-	Condition_offer_th string
-	Description_en     string
-	Description_th     string
-	Status             int64
-	Value              string
-	Offer_type         string
-	Create_at          int64
-	Update_at          int64
+	Id                 int64   `json:"id"`
+	Offer_uid          string  `json:"offer_uid"`
+	Merchant_uid       string  `json:"merchant_uid"`
+	Offer_point        float64 `json:"offer_point"`
+	Offer_cat_id       int64   `json:"offer_cat_id"`
+	Offer_image_banner string  `json:"offer_image_banner"`
+	Offer_image_poster string  `json:"offer_image_poster"`
+	Used               int64   `json:"used"`
+	Quantity           int64   `json:"quantity"`
+	Name_en            string  `json:"name_en"`
+	Name_th            string  `json:"name_th"`
+	Condition_offer_en string  `json:"condition_offer_en"`
+	Condition_offer_th string  `json:"condition_offer_th"`
+	Description_en     string  `json:"description_en"`
+	Description_th     string  `json:"description_th"`
+	Status             int64   `json:"status"`
+	Value              string  `json:"value"`
+	Offer_type         string  `json:"offer_type"`
+	Create_at          int64   `json:"create_at"`
+	Update_at          int64   `json:"update_at"`
 }
 
 func (offer *OfferAllContent) Save(service_name string) (string, error) {
