@@ -422,7 +422,9 @@ func CheckIsGetPointActivity(c *gin.Context) {
 
 	USER_UID := form.User_uid
 	SOURCE := form.Source
-	THIRD_ACTIVITY_ID := form.Third_activity_id
+
+	THIRD_ACTIVITY_ID := helpers.Substr_thirdid(form.Third_activity_id, form.Source)
+
 	data, msg, err := models.CheckHadActivity(SERVICE_NAME, THIRD_ACTIVITY_ID, USER_UID, SOURCE)
 	if msg == "err" {
 		c.JSON(200, gin.H{
