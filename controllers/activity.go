@@ -81,6 +81,7 @@ func NewActivity(c *gin.Context) {
 	constant_point := models.GetConstantPoint(SERVICE_NAME, form.Activity_type)
 
 	third_activity_id := helpers.Substr_thirdid(form.Third_activity_id, form.Source)
+	// log.Println(third_activity_id)
 
 	activity := &models.ActivityContentForm{
 		Activity_uid:       helpers.RandomStr(10),
@@ -105,10 +106,10 @@ func NewActivity(c *gin.Context) {
 		Update_at:          helpers.Unix_milisec_time_now(),
 	}
 
-	msg, err := activity.Save(SERVICE_NAME)
+	msg, err_save := activity.Save(SERVICE_NAME)
+
 	if msg == "err" {
-		switch err.Error() {
-		case "Error 1062: Duplicate entry 'none' for key 'third_activity_id'":
+		if helpers.ErrCode(err_save.Error()) == "1062" {
 			c.JSON(200, gin.H{
 				"status":  202,
 				"message": "activity already",
