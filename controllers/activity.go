@@ -107,10 +107,14 @@ func NewActivity(c *gin.Context) {
 
 	msg, err := activity.Save(SERVICE_NAME)
 	if msg == "err" {
-		c.JSON(200, gin.H{
-			"status": 500,
-			"error":  err,
-		})
+		switch err.Error() {
+		case "Error 1062: Duplicate entry 'none' for key 'third_activity_id'":
+			c.JSON(200, gin.H{
+				"status":  202,
+				"message": "activity already",
+			})
+		}
+
 	} else {
 		myBPoint := &models.MyBPoint{
 			User_uid: form.User_uid,
@@ -128,8 +132,8 @@ func NewActivity(c *gin.Context) {
 				"error":  err,
 			})
 		} else {
-			c.JSON(200, gin.H{
-				"status":  200,
+			c.JSON(201, gin.H{
+				"status":  201,
 				"data":    res,
 				"message": "Created!",
 			})
@@ -410,11 +414,15 @@ func PrevActivityList(c *gin.Context) {
 	}
 }
 
+///:user_uid/:source/:third_activity_id
 func CheckIsGetPointActivity(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
-	USER_UID := c.Params.ByName("user_uid")
-	SOURCE := c.Params.ByName("source")
-	THIRD_ACTIVITY_ID := c.Params.ByName("third_activity_id")
+	var form ActivitiesCheckForm
+	c.Bind(&form)
+
+	USER_UID := form.User_uid
+	SOURCE := form.Source
+	THIRD_ACTIVITY_ID := form.Third_activity_id
 	data, msg, err := models.CheckHadActivity(SERVICE_NAME, THIRD_ACTIVITY_ID, USER_UID, SOURCE)
 	if msg == "err" {
 		c.JSON(200, gin.H{
