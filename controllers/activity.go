@@ -80,13 +80,12 @@ func NewActivity(c *gin.Context) {
 	mydistance := helpers.Convert_string_to_float(form.Distance)
 	constant_point := models.GetConstantPoint(SERVICE_NAME, form.Activity_type)
 
-	third_activity_id := helpers.Substr_thirdid(form.Third_activity_id, form.Source)
-	// log.Println(third_activity_id)
+	third_activity_id1 := helpers.Substr_thirdid(form.Third_activity_id, form.Source)
 
 	activity := &models.ActivityContentForm{
 		Activity_uid:       helpers.RandomStr(10),
 		User_uid:           form.User_uid,
-		Third_activity_id:  third_activity_id,
+		Third_activity_id:  third_activity_id1,
 		Third_uri:          form.Third_uri,
 		Third_token_user:   form.Third_token_user,
 		Source:             form.Source,
@@ -107,12 +106,11 @@ func NewActivity(c *gin.Context) {
 	}
 
 	msg, err_save := activity.Save(SERVICE_NAME)
-
 	if msg == "err" {
 		if helpers.ErrCode(err_save.Error()) == "1062" {
 			c.JSON(200, gin.H{
 				"status":  202,
-				"message": "activity already",
+				"message": "used",
 			})
 		}
 
@@ -425,8 +423,8 @@ func CheckIsGetPointActivity(c *gin.Context) {
 	SOURCE := form.Source
 
 	THIRD_ACTIVITY_ID := helpers.Substr_thirdid(form.Third_activity_id, form.Source)
-
 	data, msg, err := models.CheckHadActivity(SERVICE_NAME, THIRD_ACTIVITY_ID, USER_UID, SOURCE)
+
 	if msg == "err" {
 		c.JSON(200, gin.H{
 			"status":  500,
