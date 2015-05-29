@@ -18,7 +18,7 @@ func main() {
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{"status": "OK!", "build": "0.148"})
+			c.JSON(200, gin.H{"status": "OK!", "build": "0.149"})
 		})
 
 		//# for Back End
@@ -77,6 +77,7 @@ func main() {
 
 		//# Offers API RESTful
 		v1.GET("/:service_name/offers", controllers.ListOffersAll)                               // done
+		v1.GET("/:service_name/offers/:status", controllers.ListOffersAllByStatus)               // done
 		v1.GET("/:service_name/offer/:uid", controllers.ViewOffer)                               // done
 		v1.GET("/:service_name/offermerchant/:merchant_uid", controllers.ListOffersByMerchantID) // done
 		v1.POST("/:service_name/offer", controllers.NewOffer)                                    // done

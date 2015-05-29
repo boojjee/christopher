@@ -188,13 +188,19 @@ func (r *RedeemContent) GetCodeRedeem(service_name string) (string, string, erro
 					return "", "err", err
 				}
 			}
-			// log.Println(myPoint)
+			log.Println(myPoint)
+			// check point offer must more mypoint
+			if offer_point > myPoint {
+				return "", "err", errors.New("Not enough points for redeem")
+			}
+
 			expr_date := helpers.UnixTimeAddMinFromNow(30)
 			// log.Println("Redeem EXPire : ")
 			// log.Println(expr_date)
 			// insert to redeem
 			tx, err := DB.Begin()
 			if err != nil {
+				tx.Rollback()
 				return "", "err", err
 			}
 

@@ -211,6 +211,33 @@ func ListOffersAll(c *gin.Context) {
 		}
 	}
 }
+func ListOffersAllByStatus(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	status := c.Params.ByName("status")
+	data, msg, err := models.ListsAllOfferByStatus(SERVICE_NAME, status)
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": err,
+		})
+	} else {
+		offers := []byte(data)
+		OfferSlice := make([]OfferSingle, 0)
+		err_unmarshal := json.Unmarshal(offers, &OfferSlice)
+		if err_unmarshal != nil {
+			c.JSON(200, gin.H{
+				"status": 500,
+				"error":  err,
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"status":  200,
+				"message": "Success!",
+				"data":    OfferSlice,
+			})
+		}
+	}
+}
 
 func ViewOffer(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
