@@ -183,6 +183,36 @@ func ListOffersByMerchantID(c *gin.Context) {
 		}
 	}
 }
+func ListOffersMerchantIDWithStatus(c *gin.Context) {
+	SERVICE_NAME := c.Params.ByName("service_name")
+	Merchant_uid := c.Params.ByName("merchant_uid")
+	offer := &models.OfferAllContent{
+		Merchant_uid: Merchant_uid,
+	}
+	data, msg, err := offer.ListsOffersMerchantStatus(SERVICE_NAME)
+	if msg == "err" {
+		c.JSON(200, gin.H{
+			"status":  500,
+			"message": err,
+		})
+	} else {
+		offers := []byte(data)
+		OfferSlice := make([]OfferSingle, 0)
+		err_unmarshal := json.Unmarshal(offers, &OfferSlice)
+		if err_unmarshal != nil {
+			c.JSON(200, gin.H{
+				"status": 500,
+				"error":  err,
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"status":  200,
+				"message": "Success!",
+				"data":    OfferSlice,
+			})
+		}
+	}
+}
 
 func ListOffersAll(c *gin.Context) {
 	SERVICE_NAME := c.Params.ByName("service_name")
